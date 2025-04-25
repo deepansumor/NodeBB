@@ -1,0 +1,12 @@
+const router = require('express').Router();
+const middleware = require('../../middleware');
+const routeHelpers = require('../helpers');
+const { setupApiRoute } = routeHelpers;
+
+module.exports = function () {
+    const middlewares = [middleware.ensureLoggedIn];
+
+    setupApiRoute(router, 'post', '/ping', [], (req, res) => res.send({ message: "working" }));
+
+    return router;
+}
