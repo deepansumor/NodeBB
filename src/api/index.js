@@ -14,4 +14,5 @@ module.exports = {
 	activitypub: require('./activitypub'),
 	files: require('./files'),
 	utils: require('./utils'),
+	escalations: require('./escalations'),
 };

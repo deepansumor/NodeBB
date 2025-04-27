@@ -7,7 +7,7 @@ module.exports = function (module) {
 
 	module.objectCache = cache;
 
-	module.setObject = async function (key, data) {
+	module.setObject = async function (key, data, collection = 'objects') {
 		const isArray = Array.isArray(key);
 		if (!key || !data || (isArray && !key.length)) {
 			return;
@@ -19,16 +19,16 @@ module.exports = function (module) {
 		}
 		try {
 			if (isArray) {
-				const bulk = module.client.collection('objects').initializeUnorderedBulkOp();
+				const bulk = module.client.collection(collection).initializeUnorderedBulkOp();
 				key.forEach(key => bulk.find({ _key: key }).upsert().updateOne({ $set: writeData }));
 				await bulk.execute();
 			} else {
-				await module.client.collection('objects').updateOne({ _key: key }, { $set: writeData }, { upsert: true });
+				await module.client.collection(collection).updateOne({ _key: key }, { $set: writeData }, { upsert: true });
 			}
 		} catch (err) {
 			if (err && err.message.includes('E11000 duplicate key error')) {
 				console.log(new Error('e11000').stack, key, data);
-				return await module.setObject(key, data);
+				return await module.setObject(key, data, collection);
 			}
 			throw err;
 		}
@@ -72,26 +72,26 @@ module.exports = function (module) {
 		cache.del(data.map(item => item[0]));
 	};
 
-	module.setObjectField = async function (key, field, value) {
+	module.setObjectField = async function (key, field, value, collection="objects") {
 		if (!field) {
 			return;
 		}
 		const data = {};
 		data[field] = value;
-		await module.setObject(key, data);
+		await module.setObject(key, data, collection);
 	};
 
-	module.getObject = async function (key, fields = []) {
+	module.getObject = async function (key, fields = [], collection="objects") {
 		if (!key) {
 			return null;
 		}
 
-		const data = await module.getObjects([key], fields);
+		const data = await module.getObjects([key], fields, collection);
 		return data && data.length ? data[0] : null;
 	};
 
-	module.getObjects = async function (keys, fields = []) {
-		return await module.getObjectsFields(keys, fields);
+	module.getObjects = async function (keys, fields = [], collection="objects") {
+		return await module.getObjectsFields(keys, fields, collection);
 	};
 
 	module.getObjectField = async function (key, field) {
@@ -111,15 +111,15 @@ module.exports = function (module) {
 		return item.hasOwnProperty(field) ? item[field] : null;
 	};
 
-	module.getObjectFields = async function (key, fields) {
+	module.getObjectFields = async function (key, fields, collection="objects") {
 		if (!key) {
 			return null;
 		}
-		const data = await module.getObjectsFields([key], fields);
+		const data = await module.getObjectsFields([key], fields, collection);
 		return data ? data[0] : null;
 	};
 
-	module.getObjectsFields = async function (keys, fields) {
+	module.getObjectsFields = async function (keys, fields, collection="objects") {
 		if (!Array.isArray(keys) || !keys.length) {
 			return [];
 		}
@@ -127,7 +127,7 @@ module.exports = function (module) {
 		const unCachedKeys = cache.getUnCachedKeys(keys, cachedData);
 
 		if (unCachedKeys.length >= 1) {
-			let data = await module.client.collection('objects').find(
+			let data = await module.client.collection(collection).find(
 				{ _key: unCachedKeys.length === 1 ? unCachedKeys[0] : { $in: unCachedKeys } },
 				{ projection: { _id: 0 } }
 			).toArray();

@@ -15,12 +15,12 @@ module.exports = function (module) {
 	require('./sorted/union')(module);
 	require('./sorted/intersect')(module);
 
-	module.getSortedSetRange = async function (key, start, stop) {
-		return await getSortedSetRange(key, start, stop, '-inf', '+inf', 1, false);
+	module.getSortedSetRange = async function (key, start, stop, collection="objects") {
+		return await getSortedSetRange(key, start, stop, '-inf', '+inf', 1, false, collection="objects");
 	};
 
-	module.getSortedSetRevRange = async function (key, start, stop) {
-		return await getSortedSetRange(key, start, stop, '-inf', '+inf', -1, false);
+	module.getSortedSetRevRange = async function (key, start, stop, collection="objects") {
+		return await getSortedSetRange(key, start, stop, '-inf', '+inf', -1, false, collection);
 	};
 
 	module.getSortedSetRangeWithScores = async function (key, start, stop) {
@@ -31,7 +31,7 @@ module.exports = function (module) {
 		return await getSortedSetRange(key, start, stop, '-inf', '+inf', -1, true);
 	};
 
-	async function getSortedSetRange(key, start, stop, min, max, sort, withScores) {
+	async function getSortedSetRange(key, start, stop, min, max, sort, withScores, collection="objects") {
 		if (!key) {
 			return;
 		}
@@ -84,7 +84,7 @@ module.exports = function (module) {
 
 		let result = [];
 		async function doQuery(_key, fields, skip, limit) {
-			return await module.client.collection('objects').find({
+			return await module.client.collection(collection).find({
 				...query, ...{ _key: _key },
 			}, { projection: fields })
 				.sort({ score: sort })
