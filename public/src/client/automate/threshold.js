@@ -1,19 +1,19 @@
-define("forum/automate/thresholds", ["jquery","api"], function (api) {
+define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 	const accountForm = {};
 
 	accountForm.init = function () {
 		const accountSelect = $("#account_name");
-        
+
 		// Dummy accounts fallback
-		const dummyAccounts = [
-			{ account_id: "123", account_name: "Account One" },
-			{ account_id: "456", account_name: "Account Two" },
-		];
+		// const dummyAccounts = [
+		// 	{ account_id: "123", account_name: "Account One" },
+		// 	{ account_id: "456", account_name: "Account Two" },
+		// ];
 
 		// API endpoints
 		const API = {
-			GET_ACCOUNTS: "/api/v3/automate/get-accounts",
-			SUBMIT_THRESHOLDS: "/api/v3/automate/update-thresholds",
+			GET_ACCOUNTS: "/automate/get-accounts",
+			SUBMIT_THRESHOLDS: "/automate/update-thresholds",
 		};
 
 		// Set loading state
@@ -23,35 +23,34 @@ define("forum/automate/thresholds", ["jquery","api"], function (api) {
 
 		// Populate account dropdown
 		function populateAccounts(accounts) {
-			
 			accountSelect.empty().append('<option value="">Select Account</option>');
 			accounts.forEach((account) => {
 				accountSelect.append(
-					`<option value="${account.groupSlug}">${account.groupName}</option>`
+					`<option value="${account.profileId}">${account.groupName}</option>`
 				);
 			});
 		}
 
 		// Load accounts from API
 		function loadAccounts() {
-			
 			setLoadingState(accountSelect, "Loading accounts...");
-		
-				// setTableLoading();
-				
-				api
-					.get(API.GET_ACCOUNTS)
-					.then((data) => {
-						console.log("Loading threshold...");
-						console.log("data from the threshold -->",data)
-						populateAccounts(data);
-						
-					})
-					.catch((err) => {
-						console.error("Error loading threshold:", err);
-						throw new Error("error -->",err);
-						;
-					});
+
+			// setTableLoading();
+
+			api
+				.get(API.GET_ACCOUNTS)
+				.then((data) => {
+					console.log("Loading threshold...");
+					console.log("data from the threshold -->", data);
+					if (!data || !Array.isArray(data))
+						return console.error("No Matching Accounts Found");
+					data = data.filter((account) => account.profileId);
+					populateAccounts(data);
+				})
+				.catch((err) => {
+					console.error("Error loading threshold:", err);
+					throw new Error("error -->", err);
+				});
 		}
 		// Bind account select change
 		function bindAccountSelect() {
@@ -84,35 +83,33 @@ define("forum/automate/thresholds", ["jquery","api"], function (api) {
 						}
 					});
 
-				$.ajax({
-					url: API.SUBMIT_THRESHOLDS,
-					method: "POST",
-					contentType: "application/json",
-					data: JSON.stringify(formData),
-					success: function (data) {
-						console.log("Server Response:", data.message);
-						alert(data.message);
-					},
-					error: function () {
+				let profileId = formData.account_id;
+				delete formData.account_id;
+				delete formData.account_name;
+
+				api
+					.post(API.SUBMIT_THRESHOLDS, {
+						profileId,
+						thresholds: formData,
+					})
+					.then((res) => {
+						console.log("Server Response:", res.message);
+						alert(res.message);
+					})
+					.catch((err) => {
 						console.error("Error submitting form.");
 						alert("Failed to submit data. Please try again.");
-					},
-				});
+					});
 			});
 		}
 
 		// Initialize everything
-		console.log("this is working")
+		console.log("this is working");
 		loadAccounts();
 		bindAccountSelect();
 		bindCheckboxListeners();
 		bindFormSubmit();
 	};
-
-	$(document).ready(function () {
-		console.log("this is working")
-		accountForm.init();
-	});
 
 	return accountForm;
 });
