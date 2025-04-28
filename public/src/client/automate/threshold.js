@@ -1,9 +1,9 @@
-define("forum/automate/thresholds", ["jquery"], function ($) {
+define("forum/automate/thresholds", ["jquery","api"], function (api) {
 	const accountForm = {};
 
 	accountForm.init = function () {
 		const accountSelect = $("#account_name");
-
+        
 		// Dummy accounts fallback
 		const dummyAccounts = [
 			{ account_id: "123", account_name: "Account One" },
@@ -12,8 +12,8 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 
 		// API endpoints
 		const API = {
-			GET_ACCOUNTS: "/get_accounts",
-			SUBMIT_THRESHOLDS: "/api/v3/thresholds",
+			GET_ACCOUNTS: "/api/v3/automate/get-accounts",
+			SUBMIT_THRESHOLDS: "/api/v3/automate/update-thresholds",
 		};
 
 		// Set loading state
@@ -23,27 +23,36 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 
 		// Populate account dropdown
 		function populateAccounts(accounts) {
+			
 			accountSelect.empty().append('<option value="">Select Account</option>');
 			accounts.forEach((account) => {
 				accountSelect.append(
-					`<option value="${account.account_id}">${account.account_name}</option>`
+					`<option value="${account.groupSlug}">${account.groupName}</option>`
 				);
 			});
 		}
 
 		// Load accounts from API
 		function loadAccounts() {
+			
 			setLoadingState(accountSelect, "Loading accounts...");
-			$.getJSON(API.GET_ACCOUNTS)
-				.done(function (accounts) {
-					populateAccounts(accounts);
-				})
-				.fail(function () {
-					console.error("Error fetching accounts.");
-					populateAccounts(dummyAccounts);
-				});
+		
+				// setTableLoading();
+				
+				api
+					.get(API.GET_ACCOUNTS)
+					.then((data) => {
+						console.log("Loading threshold...");
+						console.log("data from the threshold -->",data)
+						populateAccounts(data);
+						
+					})
+					.catch((err) => {
+						console.error("Error loading threshold:", err);
+						throw new Error("error -->",err);
+						;
+					});
 		}
-
 		// Bind account select change
 		function bindAccountSelect() {
 			accountSelect.on("change", function () {
@@ -93,6 +102,7 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 		}
 
 		// Initialize everything
+		console.log("this is working")
 		loadAccounts();
 		bindAccountSelect();
 		bindCheckboxListeners();
@@ -100,6 +110,7 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 	};
 
 	$(document).ready(function () {
+		console.log("this is working")
 		accountForm.init();
 	});
 
