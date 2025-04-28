@@ -7,7 +7,7 @@ const COLLECTIONS = require("../../database/mongo/collections");
 
 thresholdsAPI.getAccounts = async (req, res) => {
 	try {
-		const uid = req.body.uid;
+		const uid = req.uid;
 		if (!uid) {
 			return { error: "Unauthorized: UID missing" };
 		}

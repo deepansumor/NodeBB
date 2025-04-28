@@ -63,12 +63,12 @@ escalationsAPI.updateEscalation = async (req, res) => {
 			throw new Error("Not a member of group");
 		}
 
-		// Check if user has low privilege (cannot moderate)
-		const canModerate = await privileges.global.can("topics:moderate", uid);
+		// // Check if user has low privilege (cannot moderate)
+		// const canModerate = await privileges.global.can("topics:moderate", uid);
 
-		if (!canModerate && body.status != escalation.status) {
-			return "You are not authorized to update status";
-		}
+		// if (body.status != escalation.status) {
+		// 	return "You are not authorized to update status";
+		// }
 
 		Object.keys(body).forEach((key) => {
 			if (!FIELDS.includes(key)) {
@@ -103,14 +103,14 @@ escalationsAPI.updateEscalation = async (req, res) => {
 // // escation:groupId:userid, now, escationId
 // // escation:userid, now, escationId
 
-(async () => {
-	console.log("Test");
-	const payload = {
-		_key: "test:data:1",
-		params: { 1: 1 },
-	};
-	await db.setObject(payload._key, payload, "escalations");
+// (async () => {
+// 	console.log("Test");
+// 	const payload = {
+// 		_key: "test:data:1",
+// 		params: { 1: 1 },
+// 	};
+// 	await db.setObject(payload._key, payload, "escalations");
 
-	let data = await db.getObject(payload._key, null, "escalations");
-	console.log(data);
-})();
+// 	let data = await db.getObject(payload._key, null, "escalations");
+// 	console.log(data);
+// })();
