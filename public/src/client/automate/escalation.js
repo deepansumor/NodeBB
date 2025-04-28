@@ -1,36 +1,19 @@
 "use strict";
 
-define("forum/automate/escalation", ["jquery"], function ($) {
+define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 	const escalations = {};
 
 	escalations.init = function () {
 		const accountFilter = document.getElementById("accountFilter");
 		const escalationTable = document.getElementById("escalationTable");
+		let escalationsData;
 
 		// API Endpoints
 		const API = {
-			ACCOUNTS: "/get_accounts",
-			ESCALATIONS: "/get_escalations",
-			UPDATE_STATUS: "/update_escalation_status",
-			UPDATE_REMARKS: "/update_escalation_remarks",
+			ESCALATIONS: "/automate/get-escalations",
+			GET_ACCOUNTS: "/api/v3/automate/get-accounts",
+			UPDATE_ESCALATIONS: "/automate/update-escalations",
 		};
-		//dummy data
-		const escalationsData = [
-			{
-				escalation_id: "001",
-				escalation_name: "shubham",
-				account_id: "123",
-				status: "pending_at_am",
-				file_link_url: "#",
-			},
-			{
-				escalation_id: "002",
-				escalation_name: "rahul",
-				account_id: "456",
-				status: "resolved",
-				file_link_url: "#",
-			},
-		];
 
 		// Helper: Set loading state for dropdown
 		function setLoadingState(selectElement, message) {
@@ -46,40 +29,49 @@ define("forum/automate/escalation", ["jquery"], function ($) {
 			});
 		}
 
-		// Load accounts
-		function loadAccounts() {
-			setLoadingState(accountFilter, "Loading accounts...");
-			fetch(API.ACCOUNTS)
-				.then((res) => res.json())
-				.then((data) => populateAccounts(data))
-				.catch(() => setLoadingState(accountFilter, "Error loading accounts"));
-		}
-
-		// Load escalations
+		// Load escalations from API
 		function loadEscalations() {
 			setTableLoading();
-
-			fetch(API.ESCALATIONS)
-				.then((res) => res.json())
-				.then((data) => renderEscalations(data))
-				.catch(() =>
-					// showError("Error loading escalations. Please try again later.")
-					renderEscalations(escalationsData)
-				);
+			console.log("Loading escalations...");
+			api
+				.get(API.ESCALATIONS)
+				.then((data) => {
+					escalationsData = data;
+					renderEscalations(data);
+				})
+				.catch((err) => {
+					console.error("Error loading escalations:", err);
+					showError("Error loading data from the server.");
+				});
 		}
 
 		// Table loading state
 		function setTableLoading() {
 			escalationTable.innerHTML = `
-				<tr><td colspan="6" class="text-center py-4 text-gray-500">Loading...</td></tr>
-			`;
+        <tr><td colspan="6" class="text-center py-4 text-gray-500">Loading...</td></tr>
+      `;
 		}
 
 		// Show error in table
 		function showError(message) {
 			escalationTable.innerHTML = `
-				<tr><td colspan="6" class="text-center py-4 text-red-500">${message}</td></tr>
-			`;
+        <tr><td colspan="6" class="text-center py-4 text-red-500">${message}</td></tr>
+      `;
+		}
+		// Render the static options (fixed status options)
+		function renderStatusOptions(currentStatus) {
+			const statusOptions = [
+				"resolved",
+				"unresolved",
+				"in-progress",
+				"pending",
+			]; // Static options
+			return statusOptions
+				.map((status) => {
+					const isSelected = status === currentStatus ? "selected" : ""; // Mark current status as selected
+					return `<option value="${status}" ${isSelected}>${status}</option>`;
+				})
+				.join("");
 		}
 
 		// Render escalations table
@@ -90,35 +82,39 @@ define("forum/automate/escalation", ["jquery"], function ($) {
 			}
 
 			escalationTable.innerHTML = "";
-
 			escalationsList.forEach((escalation) => {
+				// console.log("escalation data", escalationsData);
+				// console.log("id:", escalation._id);
+
 				const row = document.createElement("tr");
-				row.dataset.account = escalation.account_id;
+				row.dataset.account = escalation._id;
+
 				row.innerHTML = `
-					<td class="text-center">${escalation.escalation_id}</td>
-					<td class="text-center">${escalation.escalation_name}</td>
-					<td class="text-center">${escalation.account_id}</td>
-					<td class="text-center">
-						<select class="status-dropdown form-select px-3 py-1 rounded border-2" data-escalation="${
-							escalation.escalation_id
-						}">
-							${renderStatusOptions(escalation.status)}
-						</select>
-					</td>
-					<td class="text-center">
-						<a href="${
-							escalation.file_link_url
-						}" class="text-primary hover:underline" target="_blank">View File</a>
-					</td>
-					<td class="text-center">
-						<textarea class="remarks-input form-control w-full p-2 mb-2" rows="2"></textarea>
-						<button class="update-remarks-btn btn btn-primary btn-sm mt-1" data-escalation="${
-							escalation.escalation_id
-						}">
-							Send
-						</button>
-					</td>
-				`;
+      <td class="text-center">${escalation._id}</td>
+      <td class="text-center">${escalation.name}</td>
+      <td class="text-center">12345</td>
+      <td class="text-center">
+        <select class="status-dropdown form-select px-3 py-1 rounded border-2" data-escalation-id="${
+					escalation._id
+				}">
+         ${renderStatusOptions(escalation.status)}
+        </select>
+      </td>
+      <td class="text-center">
+        <a href="${
+					escalation.file_link_url
+				}" class="text-primary hover:underline" target="_blank">View File</a>
+      </td>
+      <td class="text-center">
+        <textarea class="remarks-input form-control w-full p-2 mb-2" rows="2"></textarea>
+        <button class="update-remarks-btn btn btn-primary btn-sm mt-1" data-escalation="${
+					escalation._id
+				}">
+          Send
+        </button>
+      </td>
+    `;
+
 				escalationTable.appendChild(row);
 			});
 
@@ -126,46 +122,45 @@ define("forum/automate/escalation", ["jquery"], function ($) {
 			bindRemarksListeners();
 		}
 
-		// Render status options
-		function renderStatusOptions(selectedStatus) {
-			const options = [
-				{ value: "resolved", label: "Resolved" },
-				{ value: "mail_sent_to_am", label: "Mail Sent to AM" },
-				{ value: "pending_at_am", label: "Pending at AM" },
-			];
+		// Render status options based on an array of status values
+		// function renderStatusOptions(statusArray, selectedStatus) {
+		// 	if (!Array.isArray(statusArray) || !statusArray.length) {
+		// 		return "<option>No status available</option>";
+		// 	}
 
-			return options
-				.map((opt) => {
-					const selected = opt.value === selectedStatus ? "selected" : "";
-					return `<option value="${opt.value}" ${selected}>${opt.label}</option>`;
-				})
-				.join("");
-		}
+		// 	return statusArray
+		// 		.map((status) => {
+		// 			const isSelected = status === selectedStatus ? "selected" : "";
+		// 			return `<option value="${status}" ${isSelected}>${status}</option>`;
+		// 		})
+		// 		.join("");
+		// }
 
 		// Bind change event to status dropdown
 		function bindStatusListeners() {
 			document.querySelectorAll(".status-dropdown").forEach((dropdown) => {
 				dropdown.addEventListener("change", function () {
-					const originalValue = this.value;
-					this.disabled = true;
-					this.classList.add("opacity-50");
+					const selectedStatus = this.value; // the new status
 
-					fetch(API.UPDATE_STATUS, {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							escalation_id: this.dataset.escalation,
-							status: this.value,
-						}),
-					})
-						.then((res) => res.json())
+					const escalationId = this.getAttribute("data-escalation-id"); // escalation key
+					console.log("this is escalation Id", escalationId);
+
+					//send the updated status to the backend
+					api
+						.post(API.UPDATE_ESCALATIONS, {
+							_id: escalationId,
+							status: selectedStatus,
+						})
 						.then(() => {
+							console.log("Status updated for escalation:", escalationId);
 							showFeedback(this, "Status updated", "text-green-500");
 							setTimeout(() => location.reload(), 500);
 						})
-						.catch(() => {
-							this.value = originalValue;
+						.catch((err) => {
+							console.error("Failed to update status:", err);
+
 							showFeedback(this, "Failed to update", "text-red-500");
+							this.value = selectedStatus;
 						})
 						.finally(() => {
 							this.disabled = false;
@@ -189,19 +184,21 @@ define("forum/automate/escalation", ["jquery"], function ($) {
 						return;
 					}
 
-					fetch(API.UPDATE_REMARKS, {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							escalation_id: escalationId,
+					console.log("Updating remarks for escalation:", escalationId);
+
+					api
+						.post(API.UPDATE_ESCALATIONS, {
+							_id: escalationId,
 							remarks: remarks,
-						}),
-					})
-						.then((res) => res.json())
-						.then(() => showFeedback(this, "Remarks updated", "text-green-500"))
-						.catch(() =>
-							showFeedback(this, "Failed to update remarks", "text-red-500")
-						);
+						})
+						.then(() => {
+							console.log("Remarks updated for escalation:", escalationId);
+							showFeedback(this, "Remarks updated", "text-green-500");
+						})
+						.catch((err) => {
+							console.error("Failed to update remarks:", err);
+							showFeedback(this, "Failed to update remarks", "text-red-500");
+						});
 				});
 			});
 		}
@@ -225,7 +222,6 @@ define("forum/automate/escalation", ["jquery"], function ($) {
 		});
 
 		// Initialize
-		loadAccounts();
 		loadEscalations();
 	};
 

@@ -1,3 +1,4 @@
+"use strict";
 define("forum/automate/thresholds", ["jquery"], function ($) {
 	const accountForm = {};
 
@@ -12,8 +13,8 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 
 		// API endpoints
 		const API = {
-			GET_ACCOUNTS: "/get_accounts",
-			SUBMIT_THRESHOLDS: "/api/v3/thresholds",
+			GET_ACCOUNTS: "/api/v3/automate/get-accounts",
+			SUBMIT_THRESHOLDS: "/api/v3/automate/update-thresholds",
 		};
 
 		// Set loading state
@@ -36,6 +37,7 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 			setLoadingState(accountSelect, "Loading accounts...");
 			$.getJSON(API.GET_ACCOUNTS)
 				.done(function (accounts) {
+					console.log(accounts);
 					populateAccounts(accounts);
 				})
 				.fail(function () {
