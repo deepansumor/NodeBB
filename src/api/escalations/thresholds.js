@@ -18,15 +18,18 @@ thresholdsAPI.getAccounts = async (req, res) => {
 			return { message: "No thresholds found for this user." };
 		}
 
-		let results = await Promise.all(userGroups.map(async (group) => {
-			let profileObj = await db.getObject(`group:${group.slug}:profileId`) || {};
-			console.log(group.slug,profileObj)
-			return {
-				groupName: group.name,
-				groupSlug: group.slug,
-				profileId: profileObj.profileId || profileObj.profile_id
-			}
-		}))
+		let results = await Promise.all(
+			userGroups.map(async (group) => {
+				let profileObj =
+					(await db.getObject(`group:${group.slug}:profileId`)) || {};
+				console.log(group.slug, profileObj);
+				return {
+					groupName: group.name,
+					groupSlug: group.slug,
+					profileId: profileObj.profileId || profileObj.profile_id,
+				};
+			})
+		);
 
 		return results;
 	} catch (err) {
