@@ -18,14 +18,14 @@ module.exports = function () {
 		router,
 		"post",
 		"/update-escalations",
-		[...middlewares],
+		[],
 		controllers.write.escalations.updateEscalations
 	);
 	setupApiRoute(
 		router,
 		"get",
 		"/get-accounts",
-		[],
+		[...middlewares],
 		controllers.write.escalations.getAccounts
 	);
 	setupApiRoute(

@@ -15,18 +15,14 @@ escalationsAPI.getEscalations = async (req, res) => {
 	try {
 		const uid = req.uid;
 
-		const page = parseInt(req.query.page) || 1; // default page = 1
-		const limit = parseInt(req.query.limit) || 10; // default limit = 10
+		const page = parseInt(req.query.page) || 1;
+		const limit = parseInt(req.query.limit) || 10;
 		const skip = (page - 1) * limit;
-		console.log(limit);
 
-		const key = `user:${uid}:`;
 		const escalations = await db.find(
 			{
-				_key: {
-					$regex: new RegExp(key),
-				},
-				status: { $ne: "resolved" },
+				users: uid, // checks if uid exists inside users array
+				status: { $ne: "resolved" }, // status not resolved
 			},
 			skip,
 			limit,
@@ -45,11 +41,13 @@ escalationsAPI.updateEscalation = async (req, res) => {
 		const uid = req.uid;
 		const body = req.body;
 
-		if (ObjectId.isValid(body._id)) {
+		if (!ObjectId.isValid(body._id)) {
 			throw new Error("Escalation id is not valid ");
 		}
-		const escalation = await db.getObject(
-			body._id,
+		const escalation = await db.find(
+			{_id: body._id},
+			0,
+			1,
 			COLLECTIONS.ESCALATIONS
 		);
 		if (!escalation) {
@@ -63,10 +61,10 @@ escalationsAPI.updateEscalation = async (req, res) => {
 			throw new Error("Not a member of group");
 		}
 
-		// // Check if user has low privilege (cannot moderate)
+		// Check if user has low privilege (cannot moderate)
 		// const canModerate = await privileges.global.can("topics:moderate", uid);
 
-		// if (body.status != escalation.status) {
+		// if (!canModerate && body.status != escalation.status) {
 		// 	return "You are not authorized to update status";
 		// }
 
