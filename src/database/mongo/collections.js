@@ -1,3 +1,4 @@
-export const ESCALATIONS = "escalations";
-export const THRESHOLDS = "thresholds";
-export const ACCOUNTS = "accounts";
+const collections = module.exports;
+collections.ESCALATIONS = "escalations";
+collections.THRESHOLDS = "thresholds";
+collections.ACCOUNTS = "accounts";
