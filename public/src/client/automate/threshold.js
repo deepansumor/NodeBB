@@ -26,7 +26,7 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 			accountSelect.empty().append('<option value="">Select Account</option>');
 			accounts.forEach((account) => {
 				accountSelect.append(
-					<option value="${account.profileId}">${account.groupName}</option>
+					`<option value="${account.profileId}">${account.groupName}</option>`
 				);
 			});
 		}
