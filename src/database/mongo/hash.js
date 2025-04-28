@@ -349,10 +349,10 @@ module.exports = function (module) {
 		cache.del(data.map((item) => item[0]));
 	};
 
-	module.find = async function (key, query, skip = 0, limit = 10, collectionName = "objects") {
+	module.find = async function (query, skip = 0, limit = 10, collectionName = "objects") {
 		return await module.client
 			.collection(collectionName)
-			.find({ ...query, key })
+			.find({ ...query })
 			.skip(skip)
 			.limit(limit)
 			.toArray();

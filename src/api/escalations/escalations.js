@@ -3,76 +3,96 @@
 const db = require("../../database");
 const utils = require("../utils");
 const COLLECTIONS = require("../../database/mongo/collections");
-const groups = require.main.require('./src/groups');
-const privileges = require.main.require('./src/privileges');
-
+const { ObjectId } = require("mongodb");
+const groups = require("../../groups");
+const privileges = require.main.require("./src/privileges");
 
 const escalationsAPI = module.exports;
 
+const FIELDS = ["status", "remarks", "ad_type", "cadence", "description"];
 
 escalationsAPI.getEscalations = async (req, res) => {
-  try {
-    const uid = req.body.uid;
+	try {
+		const uid = req.uid;
 
-    const page = parseInt(req.query.page) || 1; // default page = 1
-    const limit = parseInt(req.query.limit) || 10; // default limit = 10
-    const skip = (page - 1) * limit;
+		const page = parseInt(req.query.page) || 1; // default page = 1
+		const limit = parseInt(req.query.limit) || 10; // default limit = 10
+		const skip = (page - 1) * limit;
+		console.log(limit);
 
-    const key = `escalation:${uid}`;
-    const escalations = await db.find(
-      key,
-      { status: { $ne: "resolved" } },
-      skip,
-      limit,
-      COLLECTIONS.ESCALATION
-    );
+		const key = `user:${uid}:`;
+		const escalations = await db.find(
+			{
+				_key: {
+					$regex: new RegExp(key),
+				},
+				status: { $ne: "resolved" },
+			},
+			skip,
+			limit,
+			COLLECTIONS.ESCALATIONS
+		);
 
-    return escalations;
-  } catch (err) {
-    console.error("GET /escalations error:", err);
-    return { error: "Internal Server Error" };
-  }
+		return escalations;
+	} catch (err) {
+		console.error("GET /escalations error:", err);
+		throw new Error(err);
+	}
 };
-
 
 escalationsAPI.updateEscalation = async (req, res) => {
-  try {
-    const uid = req.uid;
-    const body = req.body;
+	try {
+		const uid = req.uid;
+		const body = req.body;
 
-    // Fetch existing escalation
-    const escalation = await db.getObject(body.escalationId, COLLECTIONS.ESCALATION);
-    if (!escalation) {
-      return "Escalation not found";
-    }
+		if (ObjectId.isValid(body.escalationId)) {
+			throw new Error("Escalation id not valid ");
+		}
+		const escalation = await db.getObject(
+			body.escalationId,
+			COLLECTIONS.ESCALATIONS
+		);
+		if (!escalation) {
+			throw new Error("Invalid ");
+		}
 
-    // Check if user is in group
-    const isMember = await groups.isMember(uid, escalation.account_name);
+		// Check if user is in group
+		const isMember = await groups.isMember(uid, escalation.group);
 
-    // Check if user has low privilege (cannot moderate)
-    const canModerate = await privileges.global.can('topics:moderate', uid);
+		if (!isMember) {
+			throw new Error("Not a member of group");
+		}
 
-    if (isMember && !canModerate) {
-      if (body.status && body.status !== escalation.status) {
-        return "You are not authorized to update status";
-      }
-    }
+		// Check if user has low privilege (cannot moderate)
+		const canModerate = await privileges.global.can("topics:moderate", uid);
 
-    // Merge and save
-    const updatedEscalation = {
-      ...escalation,
-      ...body,
-    };
+		if (!canModerate && body.status != escalation.status) {
+			return "You are not authorized to update status";
+		}
 
-    await db.setObject(body.escalationId, updatedEscalation, COLLECTIONS.ESCALATION);
+		Object.keys(body).forEach((key) => {
+			if (!FIELDS.includes(key)) {
+				delete body[key];
+			}
+		});
+		// Merge and save
+		const updatedEscalation = {
+			...escalation,
+			...body,
+		};
 
-    return "Escalation updated successfully";
-  } catch (err) {
-    console.error("PATCH /escalations/:id error:", err);
-    return "Internal Server Error";
-  }
+		await db.setObject(
+			escalation._key,
+			updatedEscalation,
+			COLLECTIONS.ESCALATIONS
+		);
+
+		return "Escalation updated successfully";
+	} catch (err) {
+		console.error("PATCH /escalations/:id error:", err);
+		throw err;
+	}
 };
-
 
 // setObject(payload)
 
@@ -83,14 +103,14 @@ escalationsAPI.updateEscalation = async (req, res) => {
 // // escation:groupId:userid, now, escationId
 // // escation:userid, now, escationId
 
-// (async () => {
-// 	console.log("Test");
-// 	const payload = {
-// 		_key: "test:data:1",
-// 		params: { 1: 1 },
-// 	};
-// 	await db.setObject(payload._key, payload, "escalations");
+(async () => {
+	console.log("Test");
+	const payload = {
+		_key: "test:data:1",
+		params: { 1: 1 },
+	};
+	await db.setObject(payload._key, payload, "escalations");
 
-// 	let data = await db.getObject(payload._key, null, "escalations");
-// 	console.log(data);
-// })();
+	let data = await db.getObject(payload._key, null, "escalations");
+	console.log(data);
+})();

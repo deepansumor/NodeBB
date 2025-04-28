@@ -28,6 +28,13 @@ module.exports = function () {
 		[],
 		controllers.write.escalations.getAccounts
 	);
+	setupApiRoute(
+		router,
+		"post",
+		"/update-thresholds",
+		[],
+		controllers.write.escalations.updateThreshold
+	);
 
 	return router;
 };

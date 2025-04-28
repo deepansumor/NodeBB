@@ -2,7 +2,7 @@
 
 const db = require("../../database"); // your DB adapter
 const thresholdsAPI = module.exports;
-const groups = require.main.require("./src/groups");
+const groups = require("../../groups")
 const COLLECTIONS = require("../../database/mongo/collections");
 
 thresholdsAPI.getAccounts = async (req, res) => {
@@ -32,7 +32,7 @@ thresholdsAPI.updateThreshold = async (req, res) => {
 
 		// Save/update thresholds (assumes a hash in Redis or MongoDB doc update)
 		await db.setObject(
-			`Thresholds:${profileId}`,
+			`thresholds:${profileId}`,
 			thresholds,
 			COLLECTIONS.THRESHOLDS
 		);
