@@ -37,73 +37,64 @@ escalationsAPI.getEscalations = async (req, res) => {
 };
 
 escalationsAPI.updateEscalation = async (req, res) => {
-  try {
-    const uid = req.uid;
-    const body = req.body;
-    
-    // Validate the _id before trying to convert to ObjectId
-    if (!ObjectId.isValid(body._id)) {
-      throw new Error("Escalation id is not valid");
-    }
+	try {
+		const uid = req.uid;
+		const body = req.body;
 
-    // Convert the _id to an ObjectId after validating
-    const escalationId = new ObjectId(body._id);
+		// Validate the _id before trying to convert to ObjectId
+		if (!ObjectId.isValid(body._id)) {
+			throw new Error("Escalation id is not valid");
+		}
 
-    // Find the escalation using the valid ObjectId
-    const escalation = await db.find(
-      { _id: escalationId },
-      0,
-      1,
-      COLLECTIONS.ESCALATIONS
-    );
+		// Find the escalation using the valid ObjectId
+		const escalation = await db.find(
+			{ _id: body._id },
+			0,
+			1,
+			COLLECTIONS.ESCALATIONS
+		);
 
-    if (!escalation || escalation.length === 0) {
-      throw new Error("Escalation not found");
-    }
+		if (!escalation || escalation.length === 0) {
+			throw new Error("Escalation not found");
+		}
 
-    const group = await groups.getGroupByName(escalation.group);
-    if (!group) {
-      throw new Error("Group not found");
-    }
+		// Check if the user is a member of the group using the group ID
+		const isMember = await groups.isMember(uid, escalation.group);
 
-    // Check if the user is a member of the group using the group ID
-    const isMember = await groups.isMember(uid, group._id);
+		if (!isMember) {
+			throw new Error("Not a member of group");
+		}
 
-    if (!isMember) {
-      throw new Error("Not a member of group");
-    }
+		// Check for valid privileges if needed (not currently active)
+		// const canModerate = await privileges.global.can("topics:moderate", uid);
+		// if (!canModerate && body.status !== escalation.status) {
+		//   throw new Error("You are not authorized to update status");
+		// }
 
-    // Check for valid privileges if needed (not currently active)
-    // const canModerate = await privileges.global.can("topics:moderate", uid);
-    // if (!canModerate && body.status !== escalation.status) {
-    //   throw new Error("You are not authorized to update status");
-    // }
+		// Clean and update the escalation
+		Object.keys(body).forEach((key) => {
+			if (!FIELDS.includes(key)) {
+				delete body[key];
+			}
+		});
 
-    // Clean and update the escalation
-    Object.keys(body).forEach((key) => {
-      if (!FIELDS.includes(key)) {
-        delete body[key];
-      }
-    });
+		const updatedEscalation = {
+			...escalation[0], // Ensure to update with the first element
+			...body,
+		};
 
-    const updatedEscalation = {
-      ...escalation[0], // Ensure to update with the first element
-      ...body,
-    };
+		await db.setObject(
+			escalation[0]._key, // Access the first element
+			updatedEscalation,
+			COLLECTIONS.ESCALATIONS
+		);
 
-    await db.setObject(
-      escalation[0]._key, // Access the first element
-      updatedEscalation,
-      COLLECTIONS.ESCALATIONS
-    );
-
-    return "Escalation updated successfully";
-  } catch (err) {
-    console.error("PATCH /escalations/:id error:", err);
-    return { error: err.message };
-  }
+		return "Escalation updated successfully";
+	} catch (err) {
+		console.error("PATCH /escalations/:id error:", err);
+		return { error: err.message };
+	}
 };
-
 
 // setObject(payload)
 
