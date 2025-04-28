@@ -45,7 +45,7 @@ escalationsAPI.updateEscalation = async (req, res) => {
 			throw new Error("Escalation id is not valid ");
 		}
 		const escalation = await db.find(
-			{_id: body._id},
+			{ _id: body._id },
 			0,
 			1,
 			COLLECTIONS.ESCALATIONS
@@ -54,8 +54,13 @@ escalationsAPI.updateEscalation = async (req, res) => {
 			throw new Error("Escalation not found");
 		}
 
-		// Check if user is in group
-		const isMember = await groups.isMember(uid, escalation.group);
+		const group = await groups.getGroupByName(escalation.group);
+		if (!group) {
+			throw new Error("Group not found");
+		}
+
+		// Check if the user is a member of the group using the group ID
+		const isMember = await groups.isMember(uid, group._id);
 
 		if (!isMember) {
 			throw new Error("Not a member of group");

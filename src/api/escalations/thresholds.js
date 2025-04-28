@@ -8,9 +8,6 @@ const COLLECTIONS = require("../../database/mongo/collections");
 thresholdsAPI.getAccounts = async (req, res) => {
 	try {
 		const uid = req.uid;
-		if (!uid) {
-			return { error: "Unauthorized: UID missing" };
-		}
 
 		// Get all groups for the user
 		const userGroupsNested = await groups.getUserGroups([uid]);
