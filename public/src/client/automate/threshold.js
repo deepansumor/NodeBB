@@ -1,0 +1,107 @@
+define("forum/automate/thresholds", ["jquery"], function ($) {
+	const accountForm = {};
+
+	accountForm.init = function () {
+		const accountSelect = $("#account_name");
+
+		// Dummy accounts fallback
+		const dummyAccounts = [
+			{ account_id: "123", account_name: "Account One" },
+			{ account_id: "456", account_name: "Account Two" },
+		];
+
+		// API endpoints
+		const API = {
+			GET_ACCOUNTS: "/get_accounts",
+			SUBMIT_THRESHOLDS: "/api/v3/thresholds",
+		};
+
+		// Set loading state
+		function setLoadingState(selectElement, message) {
+			selectElement.html(`<option value="">${message}</option>`);
+		}
+
+		// Populate account dropdown
+		function populateAccounts(accounts) {
+			accountSelect.empty().append('<option value="">Select Account</option>');
+			accounts.forEach((account) => {
+				accountSelect.append(
+					`<option value="${account.account_id}">${account.account_name}</option>`
+				);
+			});
+		}
+
+		// Load accounts from API
+		function loadAccounts() {
+			setLoadingState(accountSelect, "Loading accounts...");
+			$.getJSON(API.GET_ACCOUNTS)
+				.done(function (accounts) {
+					populateAccounts(accounts);
+				})
+				.fail(function () {
+					console.error("Error fetching accounts.");
+					populateAccounts(dummyAccounts);
+				});
+		}
+
+		// Bind account select change
+		function bindAccountSelect() {
+			accountSelect.on("change", function () {
+				$("#account_id").val(this.value);
+			});
+		}
+
+		// Bind checkbox toggles
+		function bindCheckboxListeners() {
+			$('input[type="checkbox"]').on("change", function () {
+				const input = $("#" + this.id.replace("_check", ""));
+				input.prop("disabled", !this.checked);
+				if (!this.checked) input.val("");
+			});
+		}
+
+		// Bind form submit
+		function bindFormSubmit() {
+			$("#AccountForm").on("submit", function (event) {
+				event.preventDefault();
+
+				const formData = {};
+				$(this)
+					.serializeArray()
+					.forEach(function ({ name, value }) {
+						if (!name.endsWith("_check")) {
+							const num = parseFloat(value);
+							formData[name] = !isNaN(num) ? num : value || null;
+						}
+					});
+
+				$.ajax({
+					url: API.SUBMIT_THRESHOLDS,
+					method: "POST",
+					contentType: "application/json",
+					data: JSON.stringify(formData),
+					success: function (data) {
+						console.log("Server Response:", data.message);
+						alert(data.message);
+					},
+					error: function () {
+						console.error("Error submitting form.");
+						alert("Failed to submit data. Please try again.");
+					},
+				});
+			});
+		}
+
+		// Initialize everything
+		loadAccounts();
+		bindAccountSelect();
+		bindCheckboxListeners();
+		bindFormSubmit();
+	};
+
+	$(document).ready(function () {
+		accountForm.init();
+	});
+
+	return accountForm;
+});
