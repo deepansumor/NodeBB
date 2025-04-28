@@ -103,14 +103,14 @@ escalationsAPI.updateEscalation = async (req, res) => {
 // // escation:groupId:userid, now, escationId
 // // escation:userid, now, escationId
 
-(async () => {
-	console.log("Test");
-	const payload = {
-		_key: "test:data:1",
-		params: { 1: 1 },
-	};
-	await db.setObject(payload._key, payload, "escalations");
+// (async () => {
+// 	console.log("Test");
+// 	const payload = {
+// 		_key: "test:data:1",
+// 		params: { 1: 1 },
+// 	};
+// 	await db.setObject(payload._key, payload, "escalations");
 
-	let data = await db.getObject(payload._key, null, "escalations");
-	console.log(data);
-})();
+// 	let data = await db.getObject(payload._key, null, "escalations");
+// 	console.log(data);
+// })();
