@@ -13,8 +13,13 @@ thresholdsAPI.getAccounts = async (req, res) => {
 		}
 
 		// Get all groups for the user
-		const userGroupsNested = await groups.getUserGroups([uid]); // <-- Nested array
-		const userGroups = userGroupsNested.flat(); // <-- Flatten it
+		const userGroupsNested = await groups.getUserGroups([uid]);
+		const userGroups = userGroupsNested.flat(); // Flatten it
+
+		// Check if userGroups is empty
+		if (!userGroups.length) {
+			return { message: "No thresholds found for this user." };
+		}
 
 		const results = userGroups.map((group) => ({
 			groupName: group.name,

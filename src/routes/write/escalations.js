@@ -18,7 +18,7 @@ module.exports = function () {
 		router,
 		"post",
 		"/update-escalations",
-		[],
+		[...middlewares],
 		controllers.write.escalations.updateEscalations
 	);
 	setupApiRoute(
