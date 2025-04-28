@@ -45,15 +45,15 @@ escalationsAPI.updateEscalation = async (req, res) => {
 		const uid = req.uid;
 		const body = req.body;
 
-		if (ObjectId.isValid(body.escalationId)) {
-			throw new Error("Escalation id not valid ");
+		if (ObjectId.isValid(body._id)) {
+			throw new Error("Escalation id is not valid ");
 		}
 		const escalation = await db.getObject(
-			body.escalationId,
+			body._id,
 			COLLECTIONS.ESCALATIONS
 		);
 		if (!escalation) {
-			throw new Error("Invalid ");
+			throw new Error("Escalation not found");
 		}
 
 		// Check if user is in group

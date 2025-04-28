@@ -2,25 +2,31 @@
 
 const db = require("../../database"); // your DB adapter
 const thresholdsAPI = module.exports;
-const groups = require("../../groups")
+const groups = require("../../groups");
 const COLLECTIONS = require("../../database/mongo/collections");
 
 thresholdsAPI.getAccounts = async (req, res) => {
 	try {
-		const uid = req.uid;
+		const uid = req.body.uid;
+		if (!uid) {
+			return { error: "Unauthorized: UID missing" };
+		}
+
 		// Get all groups for the user
-		const userGroups = await groups.getUserGroups([uid]);
+		const userGroupsNested = await groups.getUserGroups([uid]); // <-- Nested array
+		const userGroups = userGroupsNested.flat(); // <-- Flatten it
+
 		const results = userGroups.map((group) => ({
-			groupId: group.name, // NodeBB uses group name as ID
-			groupName: group.displayName || group.name, // Prefer readable name
+			groupName: group.name,
+			groupSlug: group.slug,
 		}));
+
 		return results;
 	} catch (err) {
 		console.error("GET /thresholds error:", err);
 		return { error: "Internal Server Error" };
 	}
 };
-
 
 thresholdsAPI.updateThreshold = async (req, res) => {
 	try {

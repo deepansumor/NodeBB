@@ -11,14 +11,14 @@ module.exports = function () {
 		router,
 		"get",
 		"/get-escalations",
-		[],
+		[...middlewares],
 		controllers.write.escalations.getEscalations
 	);
 	setupApiRoute(
 		router,
 		"post",
 		"/update-escalations",
-		[],
+		[...middlewares],
 		controllers.write.escalations.updateEscalations
 	);
 	setupApiRoute(
@@ -32,7 +32,7 @@ module.exports = function () {
 		router,
 		"post",
 		"/update-thresholds",
-		[],
+		[...middlewares],
 		controllers.write.escalations.updateThreshold
 	);
 
