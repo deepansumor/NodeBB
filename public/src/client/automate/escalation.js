@@ -6,14 +6,31 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 	escalations.init = function () {
 		const accountFilter = document.getElementById("accountFilter");
 		const escalationTable = document.getElementById("escalationTable");
-		let escalationsData;
 
 		// API Endpoints
 		const API = {
 			ESCALATIONS: "/automate/get-escalations",
-			GET_ACCOUNTS: "/api/v3/automate/get-accounts",
+			GET_ACCOUNTS: "/automate/get-accounts",
 			UPDATE_ESCALATIONS: "/automate/update-escalations",
 		};
+
+		function loadAccounts() {
+			setLoadingState(accountFilter, "Loading accounts...");
+			api
+				.get(API.GET_ACCOUNTS)
+				.then((data) => {
+					console.log(data);
+					if (Array.isArray(data)) {
+						populateAccounts(data);
+					} else {
+						console.error("Invalid accounts data.");
+					}
+				})
+				.catch((err) => {
+					console.error("Error loading accounts:", err);
+					setLoadingState(accountFilter, "Failed to load accounts");
+				});
+		}
 
 		// Helper: Set loading state for dropdown
 		function setLoadingState(selectElement, message) {
@@ -24,7 +41,7 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 		function populateAccounts(accounts) {
 			accountFilter.innerHTML = `<option value="all">All Accounts</option>`;
 			accounts.forEach((account) => {
-				const option = new Option(account.account_name, account.account_id);
+				const option = new Option(account.groupName, account.profileId); //, account.account_id
 				accountFilter.appendChild(option);
 			});
 		}
@@ -36,7 +53,6 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 			api
 				.get(API.ESCALATIONS)
 				.then((data) => {
-					escalationsData = data;
 					renderEscalations(data);
 				})
 				.catch((err) => {
@@ -106,12 +122,26 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 				}" class="text-primary hover:underline" target="_blank">View File</a>
       </td>
       <td class="text-center">
-        <textarea class="remarks-input form-control w-full p-2 mb-2" rows="2"></textarea>
-        <button class="update-remarks-btn btn btn-primary btn-sm mt-1" data-escalation="${
-					escalation._id
-				}">
-          Send
-        </button>
+        <div class="remark-display p-2 mb-2">
+    ${escalation.remark || "No remark yet."}
+  </div>
+
+  <textarea class="remarks-input form-control w-full p-2 mb-2 hidden" rows="2">
+    ${escalation.remark || ""}
+  </textarea>
+
+  <div class="flex gap-2">
+    <button class="edit-remarks-btn btn btn-secondary btn-sm" data-escalation="${
+			escalation._id
+		}">
+      Edit
+    </button>
+    <button class="update-remarks-btn btn btn-primary btn-sm hidden" data-escalation="${
+			escalation._id
+		}">
+      Send
+    </button>
+  </div>
       </td>
     `;
 
@@ -122,19 +152,36 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 			bindRemarksListeners();
 		}
 
-		// Render status options based on an array of status values
-		// function renderStatusOptions(statusArray, selectedStatus) {
-		// 	if (!Array.isArray(statusArray) || !statusArray.length) {
-		// 		return "<option>No status available</option>";
-		// 	}
+		// When Edit is clicked
+		document.addEventListener("click", function (e) {
+			if (e.target.classList.contains("edit-remarks-btn")) {
+				const td = e.target.closest("td");
+				td.querySelector(".remark-display").classList.add("hidden");
+				td.querySelector(".remarks-input").classList.remove("hidden");
+				td.querySelector(".update-remarks-btn").classList.remove("hidden");
+				e.target.classList.add("hidden"); // hide Edit button
+			}
+		});
 
-		// 	return statusArray
-		// 		.map((status) => {
-		// 			const isSelected = status === selectedStatus ? "selected" : "";
-		// 			return `<option value="${status}" ${isSelected}>${status}</option>`;
-		// 		})
-		// 		.join("");
-		// }
+		// When Send is clicked
+		document.addEventListener("click", function (e) {
+			if (e.target.classList.contains("update-remarks-btn")) {
+				const td = e.target.closest("td");
+				const textarea = td.querySelector(".remarks-input");
+				const newRemark = textarea.value;
+				const escalationId = e.target.dataset.escalation;
+
+				// TODO: Send `newRemark` to your server with escalationId (e.g., via fetch or axios)
+
+				// After successful update:
+				td.querySelector(".remark-display").textContent =
+					newRemark || "No remark yet.";
+				td.querySelector(".remark-display").classList.remove("hidden");
+				textarea.classList.add("hidden");
+				td.querySelector(".edit-remarks-btn").classList.remove("hidden");
+				e.target.classList.add("hidden"); // hide Send button
+			}
+		});
 
 		// Bind change event to status dropdown
 		function bindStatusListeners() {
@@ -174,13 +221,14 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 		function bindRemarksListeners() {
 			document.querySelectorAll(".update-remarks-btn").forEach((button) => {
 				button.addEventListener("click", function () {
+					const btn = this;
 					const escalationId = this.dataset.escalation;
 					const remarksInput =
 						this.closest("td").querySelector(".remarks-input");
 					const remarks = remarksInput.value.trim();
 
 					if (!remarks) {
-						showFeedback(this, "Remarks cannot be empty", "text-red-500");
+						showFeedback(btn, "Remarks cannot be empty", "text-red-500");
 						return;
 					}
 
@@ -193,11 +241,13 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 						})
 						.then(() => {
 							console.log("Remarks updated for escalation:", escalationId);
-							showFeedback(this, "Remarks updated", "text-green-500");
+							showFeedback(btn, "Remarks updated", "text-green-500");
+							setTimeout(() => location.reload(), 500);
 						})
 						.catch((err) => {
 							console.error("Failed to update remarks:", err);
-							showFeedback(this, "Failed to update remarks", "text-red-500");
+							showFeedback(btn, "Failed to update remarks", "text-red-500");
+							setTimeout(() => location.reload(), 500);
 						});
 				});
 			});
@@ -223,6 +273,7 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 
 		// Initialize
 		loadEscalations();
+		loadAccounts();
 	};
 
 	// Make sure it runs after page is ready
