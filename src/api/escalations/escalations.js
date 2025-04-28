@@ -40,12 +40,12 @@ escalationsAPI.updateEscalation = async (req, res) => {
 	try {
 		const uid = req.uid;
 		const body = req.body;
-
-		if (!ObjectId.isValid(body._id)) {
+		const escalationId = new ObjectId(body._id);
+		if (!ObjectId.isValid(escalationId)) {
 			throw new Error("Escalation id is not valid ");
 		}
 		const escalation = await db.find(
-			{ _id: body._id },
+			{ _id: escalationId },
 			0,
 			1,
 			COLLECTIONS.ESCALATIONS
