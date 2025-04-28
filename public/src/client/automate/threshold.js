@@ -1,5 +1,4 @@
-"use strict";
-define("forum/automate/thresholds", ["jquery"], function ($) {
+define("forum/automate/thresholds", ["jquery", "api"], function (api) {
 	const accountForm = {};
 
 	accountForm.init = function () {
@@ -27,7 +26,7 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 			accountSelect.empty().append('<option value="">Select Account</option>');
 			accounts.forEach((account) => {
 				accountSelect.append(
-					`<option value="${account.account_id}">${account.account_name}</option>`
+					`<option value="${account.groupSlug}">${account.groupName}</option>`
 				);
 			});
 		}
@@ -37,7 +36,6 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 			setLoadingState(accountSelect, "Loading accounts...");
 			$.getJSON(API.GET_ACCOUNTS)
 				.done(function (accounts) {
-					console.log(accounts);
 					populateAccounts(accounts);
 				})
 				.fail(function () {
@@ -45,7 +43,6 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 					populateAccounts(dummyAccounts);
 				});
 		}
-
 		// Bind account select change
 		function bindAccountSelect() {
 			accountSelect.on("change", function () {
@@ -95,6 +92,7 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 		}
 
 		// Initialize everything
+		console.log("this is working");
 		loadAccounts();
 		bindAccountSelect();
 		bindCheckboxListeners();
@@ -102,6 +100,7 @@ define("forum/automate/thresholds", ["jquery"], function ($) {
 	};
 
 	$(document).ready(function () {
+		console.log("this is working");
 		accountForm.init();
 	});
 
