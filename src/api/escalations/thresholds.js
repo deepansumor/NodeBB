@@ -3,6 +3,7 @@
 const db = require("../../database"); // your DB adapter
 const thresholdsAPI = module.exports;
 const groups = require.main.require("./src/groups");
+const COLLECTIONS = require("../../database/mongo/collections");
 
 thresholdsAPI.getAccounts = async (req, res) => {
 	try {
@@ -20,12 +21,7 @@ thresholdsAPI.getAccounts = async (req, res) => {
 	}
 };
 
-/**
- * POST /api/v3/automate/update-threshold
- * Logic:
- * - Receive payload with new thresholds
- * - Use profileId as key to update Thresholds DB
- */
+
 thresholdsAPI.updateThreshold = async (req, res) => {
 	try {
 		const { profileId, thresholds } = req.body;
@@ -35,7 +31,11 @@ thresholdsAPI.updateThreshold = async (req, res) => {
 		}
 
 		// Save/update thresholds (assumes a hash in Redis or MongoDB doc update)
-		await db.setObject(`Thresholds:${profileId}`, thresholds, "thresholds_db");
+		await db.setObject(
+			`Thresholds:${profileId}`,
+			thresholds,
+			COLLECTIONS.THRESHOLDS
+		);
 
 		return { success: "Threshold updated successfully" };
 	} catch (err) {
