@@ -14,6 +14,7 @@ const cache = require('../cache');
 module.exports = function (Categories) {
 	Categories.create = async function (data) {
 		const parentCid = data.parentCid ? data.parentCid : 0;
+		const meta = typeof data.meta == "object" && !Array.isArray(data.meta) ? data.meta : {};
 		const [cid, firstChild] = await Promise.all([
 			db.incrObjectField('global', 'nextCid'),
 			db.getSortedSetRangeWithScores(`cid:${parentCid}:children`, 0, 0),
@@ -47,6 +48,7 @@ module.exports = function (Categories) {
 			imageClass: 'cover',
 			isSection: 0,
 			subCategoriesPerPage: 10,
+			meta
 		};
 
 		if (data.backgroundImage) {
@@ -82,7 +84,7 @@ module.exports = function (Categories) {
 			guestPrivileges: guestPrivileges,
 		});
 		category = result.category;
-
+		category.meta = meta;
 		await db.setObject(`category:${category.cid}`, category);
 		if (!category.descriptionParsed) {
 			await Categories.parseDescription(category.cid, category.description);

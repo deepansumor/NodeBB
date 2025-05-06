@@ -10,7 +10,7 @@ const groups = require('../groups');
 const privileges = require('../privileges');
 const activitypub = require('../activitypub');
 const utils = require('../utils');
-
+const EXTRA_FIELDS = ['adType', 'cadence', 'summary', 'status', 'stage', 'escalationDate'];
 module.exports = function (Posts) {
 	Posts.create = async function (data) {
 		// This is an internal method, consider using Topics.reply instead
@@ -18,6 +18,12 @@ module.exports = function (Posts) {
 		const content = data.content.toString();
 		const timestamp = data.timestamp || Date.now();
 		const isMain = data.isMain || false;
+
+		const extra = {};
+		EXTRA_FIELDS.forEach(field => {
+			if(!data[field]) return;
+			extra[field] = data[field];
+		});
 
 		if (!uid && parseInt(uid, 10) !== 0) {
 			throw new Error('[[error:invalid-uid]]');
@@ -66,6 +72,7 @@ module.exports = function (Posts) {
 		}
 
 		({ post: postData } = await plugins.hooks.fire('filter:post.create', { post: postData, data: data }));
+		postData = {...postData,...extra};
 		await db.setObject(`post:${postData.pid}`, postData);
 
 		const topicData = await topics.getTopicFields(tid, ['cid', 'pinned']);
@@ -84,6 +91,7 @@ module.exports = function (Posts) {
 
 		const result = await plugins.hooks.fire('filter:post.get', { post: postData, uid: data.uid });
 		result.post.isMain = isMain;
+		result.post = {...result.post,...extra};
 		plugins.hooks.fire('action:post.save', { post: { ...result.post, _activitypub } });
 		return result.post;
 	};
