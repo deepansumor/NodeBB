@@ -10,7 +10,7 @@ const groups = require('../groups');
 const privileges = require('../privileges');
 const activitypub = require('../activitypub');
 const utils = require('../utils');
-const EXTRA_FIELDS = ['adType', 'cadence', 'summary', 'status', 'stage', 'escalationDate'];
+const EXTRA_FIELDS = [];
 module.exports = function (Posts) {
 	Posts.create = async function (data) {
 		// This is an internal method, consider using Topics.reply instead

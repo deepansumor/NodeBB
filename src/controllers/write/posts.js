@@ -40,7 +40,9 @@ Posts.get = async (req, res) => {
 	if (!post) {
 		return helpers.formatApiResponse(404, res, new Error('[[error:no-post]]'));
 	}
-
+	if(req.query.replies){
+		post.replies = await api.posts.getReplies(req,post);
+	}
 	helpers.formatApiResponse(200, res, post);
 };
 

@@ -17,6 +17,9 @@ const privileges = require('../privileges');
 const categories = require('../categories');
 const translator = require('../translator');
 
+const EXTRA_FIELDS = ['adType', 'cadence', 'summary', 'status', 'stage', 'escalationDate'];
+
+
 module.exports = function (Topics) {
 	Topics.create = async function (data) {
 		// This is an internal method, consider using Topics.post instead
@@ -41,8 +44,14 @@ module.exports = function (Topics) {
 			topicData.tags = data.tags.join(',');
 		}
 
+		const extra = {};
+		EXTRA_FIELDS.forEach(field => {
+			if (!data[field]) return;
+			extra[field] = data[field];
+		});
+
 		const result = await plugins.hooks.fire('filter:topic.create', { topic: topicData, data: data });
-		topicData = result.topic;
+		topicData = { ...result.topic, ...extra };
 		await db.setObject(`topic:${topicData.tid}`, topicData);
 
 		const timestampedSortedSetKeys = [
@@ -81,6 +90,11 @@ module.exports = function (Topics) {
 	};
 
 	Topics.post = async function (data) {
+		const extra = {};
+		EXTRA_FIELDS.forEach(field => {
+			if (!data[field]) return;
+			extra[field] = data[field];
+		});
 		data = await plugins.hooks.fire('filter:topic.post', data);
 		const { uid } = data;
 
@@ -120,7 +134,7 @@ module.exports = function (Topics) {
 			await user.isReadyToPost(uid, data.cid);
 		}
 
-		const tid = await Topics.create(data);
+		const tid = await Topics.create({ ...data, ...extra });
 
 		let postData = data;
 		postData.tid = tid;

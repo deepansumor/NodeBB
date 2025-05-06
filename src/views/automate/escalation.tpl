@@ -7,11 +7,17 @@
         <div class="d-flex gap-2">
           <label class="d-flex align-items-center">
             <span class="me-2 text-secondary">Filter by Account:</span>
-            <select
-              id="accountFilter"
-              class="form-select"
-            >
-              <option value="all">All Accounts</option>
+            <select id="accountFilter" class="form-select">
+              {{{each categories}}}
+              <optgroup label="{categories.name}">
+
+                {{{each categories.children}}}
+                <option value="{categories.children.slug}">{categories.children.name}</option>
+                {{{end}}}
+
+              </optgroup>
+
+              {{{end}}}
             </select>
           </label>
         </div>
@@ -22,30 +28,32 @@
           <thead class="table-light">
             <tr>
               <th class="text-center text-uppercase small fw-semibold">
-                Escalation ID
+                Sr. no
               </th>
               <th class="text-center text-uppercase small fw-semibold">
                 Name
               </th>
               <th class="text-center text-uppercase small fw-semibold">
-                Account
+                AD Type
               </th>
               <th class="text-center text-uppercase small fw-semibold">
-                Status
+                Cadence
               </th>
               <th class="text-center text-uppercase small fw-semibold">
-                Actions
+              Status
+            </th>
+              <th class="text-center text-uppercase small fw-semibold">
+                Description
               </th>
               <th class="text-center text-uppercase small fw-semibold">
-                Remarks
+                Remark
               </th>
             </tr>
           </thead>
           <tbody id="escalationTable" class="table-group-divider">
-            
+
           </tbody>
         </table>
       </div>
     </div>
-  </div>
-
+</div>

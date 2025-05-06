@@ -91,6 +91,7 @@ categoryController.get = async function (req, res, next) {
 		query: req.query,
 		tag: req.query.tag,
 		targetUid: targetUid,
+		// includeChildren: req.query.includeChildren ?? 0
 	});
 	if (!categoryData) {
 		return next();

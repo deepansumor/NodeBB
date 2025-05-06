@@ -67,6 +67,20 @@ Categories.getCategoryById = async function (data) {
 	category.isIgnored = watchState[0] === Categories.watchStates.ignoring;
 	category.parent = parent;
 
+	// this code is commented as its under discussion
+
+	// if (data.includeChildren) {
+	// 	let childrenPromise = category.children.map(child => {
+	// 		let payload = { ...data };
+	// 		payload.cid = child.cid;
+	// 		return Categories.getCategoryTopics(payload);
+	// 	});
+	// 	let childrenTopics = await Promise.all(childrenPromise);
+	// 	childrenTopics.forEach(childTopics => {
+	// 		category.topics.push(...childTopics.topics)
+	// 	});
+	// }
+
 	calculateTopicPostCount(category);
 	const result = await plugins.hooks.fire('filter:category.get', {
 		category: category,
