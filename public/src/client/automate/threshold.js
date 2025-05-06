@@ -18,7 +18,7 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 
 		// Set loading state
 		function setLoadingState(selectElement, message) {
-			selectElement.html(<option value="">${message}</option>);
+			selectElement.html(`<option value="">${message}</option>`);
 		}
 
 		// Populate account dropdown
