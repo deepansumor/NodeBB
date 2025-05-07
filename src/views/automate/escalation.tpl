@@ -28,22 +28,23 @@
           <thead class="table-light">
             <tr>
               <th class="text-center text-uppercase small fw-semibold">
-                Sr. no
+                SR. NO
+              </th>
+             
+              <th class="text-center text-uppercase small fw-semibold">
+                AD TYPE
               </th>
               <th class="text-center text-uppercase small fw-semibold">
-                Name
+                CADENCE
               </th>
               <th class="text-center text-uppercase small fw-semibold">
-                AD Type
+                ESCALATION DATE
               </th>
               <th class="text-center text-uppercase small fw-semibold">
-                Cadence
+                ALERT DETAILS
               </th>
               <th class="text-center text-uppercase small fw-semibold">
-              Status
-            </th>
-              <th class="text-center text-uppercase small fw-semibold">
-                Description
+                STATUS
               </th>
               <th class="text-center text-uppercase small fw-semibold">
                 Remark

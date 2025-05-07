@@ -12,6 +12,18 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 		category: {}
 	};
 
+	const extractProfileId = (title = '') => {
+		const match = title.match(/Profile (\d+)/);
+		return match ? match[1] : '--';
+	};
+
+	const parseSummary = (summary = '', fallback= 'No alert details available.') => {
+		const lines = summary.split('\n').map(line => line.trim());
+		const details = lines.filter(line => line.startsWith('-'));
+		return details.length ? details.join('<br>') : fallback;
+	};
+
+
 	Escalation.init = function () {
 		this.events();
 	}
@@ -52,7 +64,7 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 				let response = await api[isLocked ? 'put' : 'del'](`/topics/${tid}/lock`);
 				console.log(response);
 				let index = Escalation.category.topics.findIndex(topic => topic.tid == tid);
-				if(index > -1) Escalation.category.topics[index].locked = isLocked;
+				if (index > -1) Escalation.category.topics[index].locked = isLocked;
 				else console.log("Unable to update in Cache")
 
 			} catch (error) {
@@ -69,7 +81,7 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 			let tid = $currentRow.data('tid');
 
 			let topic = Escalation.category.topics.find(topic => topic.tid == tid);
-			if(!topic) return console.log("No Topic found with tid", tid);
+			if (!topic) return console.log("No Topic found with tid", tid);
 
 			console.log(topic);
 
@@ -79,7 +91,7 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 
 			try {
 				let response = await api.get(`/posts/${pid}`, { replies: 1 });
-				let replies =  [response, ...(response.replies || [])];
+				let replies = [response, ...(response.replies || [])];
 
 				// if (!replies.length) return;
 
@@ -92,12 +104,12 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 									${replies.map((reply, i) => `
 										<tr>
 											<td>&#8595;</td>
-											<td>${reply.content}</td>
-											<td>${reply.user ? reply.user.displayname : "SYSTEM" }</td>
+											<td>${parseSummary(reply.content,reply.content)}</td>
+											<td>${reply.user ? reply.user.displayname : "SYSTEM"}</td>
 											<td>${new Date(reply.timestamp).toLocaleString()}</td>
 										</tr>
 									`).join('')}
-									<tr class="${isLocked ? 'd-none': ''}">
+									<tr class="${isLocked ? 'd-none' : ''}">
 										<td colspan="4">
 											<div style="margin-top: 10px;">
 												<textarea class="form-control reply-text" rows="3" placeholder="Write your reply..."></textarea>
@@ -133,7 +145,7 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 
 			console.log(topic);
 
-			if(!topic || topic.locked){
+			if (!topic || topic.locked) {
 				return alert("Cant modify the topic now, it's locked");
 			}
 
@@ -141,7 +153,7 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 				$(this).prop('disabled', true);
 				$textarea.prop('disabled', true);
 
-				let response = await api.post(`/topics/${tid}`, { content: text, toPid:pid});
+				let response = await api.post(`/topics/${tid}`, { content: text, toPid: pid });
 				console.log(response);
 			} catch (error) {
 				console.log(error)
@@ -155,19 +167,34 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 	Escalation.render = function (response) {
 		let { topics = [] } = response;
 		Escalation.category = response;
-		let html = topics.map((topic, index) => {
-			return `<tr class="single-escalation" data-tid=${topic.tid}>
-				<td>${index + 1}</td>
-				<td>${topic.title || '--'}</td>
-				<td>${topic.adType || '--'}</td>
-				<td>${topic.cadence || '--'}</td>
-				<td>${Escalation.renderStatuses(topic.locked)}</td>
-				<td>${topic.summary || '--'}</td>
-				<td><span class="view-posts" data-pid="${topic.mainPid}">view (${topic.postcount || '--'})</span></td>
-			</tr>`
+
+		const html = topics.map((topic, index) => {
+		
+			const profileId = extractProfileId(topic.title);
+			const alertDetails = parseSummary(topic.summary);
+			const postTime = topic.timestampISO
+				? new Date(topic.timestampISO).toLocaleString()
+				: '--';
+
+			return `
+				<tr class="single-escalation" data-tid="${topic.tid}">
+					<td>${index + 1}</td>
+					<td>${topic.adType || '--'}</td>
+					<td>${topic.cadence || '--'}</td>
+					<td>${topic.escalationDate || '--'}</td>
+					<td>${Escalation.renderStatuses(topic.locked)}</td>
+					<td>${alertDetails}</td>
+					<td>
+						<span class="view-posts" data-pid="${topic.mainPid}">
+							view (${topic.postcount || '--'})
+						</span>
+					</td>
+				</tr>
+			`;
 		}).join('');
 
-		$('#escalationTable').html(html)
-	}
+		$('#escalationTable').html(html);
+	};
+
 	return Escalation;
 });
