@@ -11,13 +11,7 @@ const helpers = require('./helpers');
 const escalationController = module.exports;
 
 escalationController.get = async function (req, res, next) {
-	res.locals.metaTags = [{
-		name: 'title',
-		content: String(meta.config.title || 'NodeBB'),
-	}, {
-		property: 'og:type',
-		content: 'website',
-	}];
+
 
 	const allRootCids = await categories.getAllCidsFromSet('cid:0:children');
 	const rootCids = await privileges.categories.filterCids('find', allRootCids, req.uid);
@@ -31,10 +25,7 @@ escalationController.get = async function (req, res, next) {
 	const childCids = await privileges.categories.filterCids('find', allChildCids, req.uid);
 	const categoryData = await categories.getCategories(pageCids.concat(childCids));
 	const tree = categories.getTree(categoryData, 0);
-	await Promise.all([
-		categories.getRecentTopicReplies(categoryData, req.uid, req.query),
-		categories.setUnread(tree, pageCids.concat(childCids), req.uid),
-	]);
+
 
 	const data = {
 		title: meta.config.homePageTitle || '[[pages:home]]',
@@ -43,20 +34,5 @@ escalationController.get = async function (req, res, next) {
 		pagination: pagination.create(page, pageCount, req.query),
 	};
 
-	data.categories.forEach((category) => {
-		if (category) {
-			helpers.trimChildren(category);
-			helpers.setCategoryTeaser(category);
-		}
-	});
-
-	if (req.originalUrl.startsWith(`${nconf.get('relative_path')}/api/categories`) || req.originalUrl.startsWith(`${nconf.get('relative_path')}/categories`)) {
-		data.title = '[[pages:categories]]';
-		data.breadcrumbs = helpers.buildBreadcrumbs([{ text: data.title }]);
-		res.locals.metaTags.push({
-			property: 'og:title',
-			content: '[[pages:categories]]',
-		});
-	}
 	res.render("automate/escalation", data);
 };

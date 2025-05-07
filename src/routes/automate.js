@@ -9,13 +9,13 @@ module.exports = function (app, name, middleware, controllers) {
 	const accountMiddlewares = [...middlewares, middleware.ensureLoggedIn];
 	setupPageRoute(
 		app,
-		"/escalation",
+		"/escalations",
 		accountMiddlewares,
 		controllers.escalation.get
 	);
 	setupPageRoute(
 		app,
-		"/threshold",
+		"/thresholds",
 		accountMiddlewares,
 		controllers.threshold.get
 	);
