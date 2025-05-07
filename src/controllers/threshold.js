@@ -5,6 +5,13 @@ thresholdsController.get = async function (req, res, next) {
 	try {
 		var escalationTable = {
 			title: "Account Thresholds Configuration",
+
+			wait_time_sop: [
+				{ key: "Stage1", label: "Stage 1" },
+				{ key: "Stage2", label: "Stage 2" },
+				{ key: "Stage3", label: "Stage 3" },
+				
+			],
 			mandatory_metrics: [
 				{ key: "ACOS", label: "ACOS" },
 				{ key: "ROAS", label: "ROAS" },

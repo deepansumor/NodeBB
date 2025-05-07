@@ -41,10 +41,10 @@
                 ESCALATION DATE
               </th>
               <th class="text-center text-uppercase small fw-semibold">
-                ALERT DETAILS
+                STATUS
               </th>
               <th class="text-center text-uppercase small fw-semibold">
-                STATUS
+                ALERT DETAILS
               </th>
               <th class="text-center text-uppercase small fw-semibold">
                 Remark

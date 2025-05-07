@@ -35,6 +35,31 @@
                     </div>
                 </section>
 
+                <!-- wait time sop Section -->
+                <section class="bg-light p-4 rounded border mb-4">
+                    <h3 class="h5 font-weight-semibold text-primary mb-3">
+                         Thresholds SOP
+                    </h3>
+
+                    <div class="row g-4">
+
+                        <!-- MANDATORY METRICS -->
+                        {{{each wait_time_sop}}}
+                        <div class="col-md-4">
+
+                            <label for="{{ wait_time_sop.key }}" class="form-label">
+                                {{ wait_time_sop.label }} <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" id="{{ wait_time_sop.key }}" name="{{ wait_time_sop.key }}"
+                               required class="form-control form-control-lg" />
+                        </div>
+                        {{{end}}}
+
+                       
+
+                    </div>
+                </section>
+
                 <!-- Thresholds Section -->
                 <section class="bg-light p-4 rounded border mb-4">
                     <h3 class="h5 font-weight-semibold text-primary mb-3">

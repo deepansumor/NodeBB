@@ -1,9 +1,10 @@
+
 define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 	const accountForm = {};
 
 	accountForm.init = function () {
 		const accountSelect = $("#account_name");
-
+        let allCategories =[];
 		// Dummy accounts fallback
 		// const dummyAccounts = [
 		// 	{ account_id: "123", account_name: "Account One" },
@@ -12,8 +13,8 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 
 		// API endpoints
 		const API = {
-			GET_ACCOUNTS: "/automate/get-accounts",
-			SUBMIT_THRESHOLDS: "/automate/update-thresholds",
+			GET_ACCOUNTS: "/api/categories",
+			// SUBMIT_THRESHOLDS: "/automate/update-thresholds",
 		};
 
 		// Set loading state
@@ -26,7 +27,7 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 			accountSelect.empty().append('<option value="">Select Account</option>');
 			accounts.forEach((account) => {
 				accountSelect.append(
-					`<option value="${account.profileId}">${account.groupName}</option>`
+					`<option value="${account.cid}">${account.name}</option>`
 				);
 			});
 		}
@@ -42,10 +43,11 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 				.then((data) => {
 					console.log("Loading threshold...");
 					console.log("data from the threshold -->", data);
-					if (!data || !Array.isArray(data))
-						return console.error("No Matching Accounts Found");
-					data = data.filter((account) => account.profileId);
-					populateAccounts(data);
+					// if (!data || !Array.isArray(data))
+					// 	return console.error("No Matching Accounts Found");
+					// data = data.filter((account) => account.profileId);
+					allCategories = data.categories
+					populateAccounts(data.categories);
 				})
 				.catch((err) => {
 					console.error("Error loading threshold:", err);
@@ -74,27 +76,39 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 				event.preventDefault();
 
 				const formData = {};
+				const sopData ={};
 				$(this)
 					.serializeArray()
 					.forEach(function ({ name, value }) {
 						if (!name.endsWith("_check")) {
 							const num = parseFloat(value);
+							if(name.includes("Stage")){
+								sopData[name] = value;
+							}else{
 							formData[name] = !isNaN(num) ? num : value || null;
+						    }
 						}
 					});
 
-				let profileId = formData.account_id;
+				let cid = formData.account_id;
+				const category = allCategories.find( category => category.cid === cid)
+				console.log("filter category",category);
 				delete formData.account_id;
 				delete formData.account_name;
-
+				const data ={
+					meta:{
+						profileId:category?.meta?.profileId,
+						thresholds:formData,
+						waitTimeSop:sopData
+					}
+					}
+				
+                // console.log("form and sop data -->",data);
 				api
-					.post(API.SUBMIT_THRESHOLDS, {
-						profileId,
-						thresholds: formData,
-					})
+					.put(`/categories/${cid}`, data)
 					.then((res) => {
-						console.log("Server Response:", res.message);
-						alert(res.message);
+						console.log("Server Response:", res);
+						alert("Data add successfully");
 					})
 					.catch((err) => {
 						console.error("Error submitting form.");
