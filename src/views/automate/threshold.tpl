@@ -38,7 +38,7 @@
                 <!-- wait time sop Section -->
                 <section class="bg-light p-4 rounded border mb-4">
                     <h3 class="h5 font-weight-semibold text-primary mb-3">
-                         Thresholds SOP
+                        Escalations Wait Time SOP
                     </h3>
 
                     <div class="row g-4">

@@ -13,7 +13,7 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 
 		// API endpoints
 		const API = {
-			GET_ACCOUNTS: "/api/categories",
+			GET_ACCOUNTS: "/categories",
 			// SUBMIT_THRESHOLDS: "/automate/update-thresholds",
 		};
 
@@ -27,7 +27,7 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 			accountSelect.empty().append('<option value="">Select Account</option>');
 			accounts.forEach((account) => {
 				accountSelect.append(
-					`<option value="${account.cid}">${account.name}</option>`
+					`<option value="${account?.meta?.profileId}">${account.name}</option>`
 				);
 			});
 		}
@@ -42,12 +42,14 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 				.get(API.GET_ACCOUNTS)
 				.then((data) => {
 					console.log("Loading threshold...");
-					console.log("data from the threshold -->", data);
+					console.log("data from the threshold -->", data.categories);
 					// if (!data || !Array.isArray(data))
 					// 	return console.error("No Matching Accounts Found");
 					// data = data.filter((account) => account.profileId);
-					allCategories = data.categories
-					populateAccounts(data.categories);
+					allCategories = data.categories.filter(category => !category?.parentCid && (category?.meta || {}).profileId)
+					
+					// console.log("filter category-->", allCategories);
+					populateAccounts(allCategories);
 				})
 				.catch((err) => {
 					console.error("Error loading threshold:", err);
@@ -57,7 +59,26 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 		// Bind account select change
 		function bindAccountSelect() {
 			accountSelect.on("change", function () {
+
+				// making sure the fields are empty
+				$('input[type="number"]').val('');
+				$('input[type="text"]').val('');
+                $('input[type="checkbox"]').prop('checked', false);
+
 				$("#account_id").val(this.value);
+
+				
+				const category = allCategories?.find( category => category?.meta?.profileId == (this.value))
+				console.log("hey this is category --->",category);
+
+				$.each(category?.meta?.thresholds, function(key, value) {
+					$(`[name="${key}"]`).val(value);
+				  });
+
+				  $.each(category?.meta?.waitTimeSop, function(key, value) {
+					$(`[name="${key}"]`).val(value);
+				  });
+
 			});
 		}
 
@@ -90,14 +111,16 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 						}
 					});
 
-				let cid = formData.account_id;
-				const category = allCategories.find( category => category.cid === cid)
+				let profileId = formData.account_id;
+				// console.log("profileid -->",profileId,allCategories)
+				const category = allCategories?.find( category => category?.meta?.profileId == profileId)
+				const cid = category?.cid
 				console.log("filter category",category);
 				delete formData.account_id;
 				delete formData.account_name;
 				const data ={
 					meta:{
-						profileId:category?.meta?.profileId,
+						profileId,
 						thresholds:formData,
 						waitTimeSop:sopData
 					}
@@ -108,7 +131,7 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 					.put(`/categories/${cid}`, data)
 					.then((res) => {
 						console.log("Server Response:", res);
-						alert("Data add successfully");
+						alert("Threshold Saved Successfully");
 					})
 					.catch((err) => {
 						console.error("Error submitting form.");
