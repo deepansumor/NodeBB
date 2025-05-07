@@ -30,7 +30,7 @@
               <th class="text-center text-uppercase small fw-semibold">
                 SR. NO
               </th>
-             
+
               <th class="text-center text-uppercase small fw-semibold">
                 AD TYPE
               </th>
@@ -40,6 +40,7 @@
               <th class="text-center text-uppercase small fw-semibold">
                 ESCALATION DATE
               </th>
+
               <th class="text-center text-uppercase small fw-semibold">
                 STATUS
               </th>
