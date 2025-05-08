@@ -15,8 +15,9 @@ thresholdsController.get = async function (req, res, next) {
 			mandatory_metrics: [
 				{ key: "ACOS", label: "ACOS" },
 				{ key: "ROAS", label: "ROAS" },
-				{ key: "sales", label: "Sales" },
-				{ key: "spend", label: "Spend" },
+				{ key: "spends", label: "Spend (Monthly)" },
+				{ key: "CPC", label: "CPC" },
+				{ key: "CVR", label: "CVR (%)" },
 			],
 			optional_metrics: [
 				
@@ -25,13 +26,10 @@ thresholdsController.get = async function (req, res, next) {
 					label: "CTR (%)",
 				},
 				{
-					key: "CVR",
-					label: "CVR (%)",
+					key: "sales",
+					label: "Sales",
 				},
-				{
-					key: "CPC",
-					label: "CPC",
-				},
+				
 				{
 					key: "orders",
 					label: "Orders",

@@ -19,4 +19,10 @@ module.exports = function (app, name, middleware, controllers) {
 		accountMiddlewares,
 		controllers.threshold.get
 	);
+	setupPageRoute(
+		app,
+		"/home",
+		accountMiddlewares,
+		controllers.escape.get
+	);
 };

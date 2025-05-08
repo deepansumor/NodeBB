@@ -43,6 +43,8 @@ Controllers.composer = require("./composer");
 Controllers.escalation = require("./escalation");
 Controllers.threshold = require("./threshold");
 
+Controllers.escape = require("./escape");
+
 Controllers.write = require("./write");
 
 Controllers.reset = async function (req, res) {
