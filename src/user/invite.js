@@ -152,7 +152,7 @@ module.exports = function (User) {
 		}
 
 		const token = utils.generateUUID();
-		const registerLink = `${nconf.get('url')}/register?token=${token}`;
+		const registerLink = `${(nconf.get('server_url') || nconf.get('url'))}/register?token=${token}`;
 
 		const expireDays = meta.config.inviteExpiration;
 		const expireIn = expireDays * 86400000;
