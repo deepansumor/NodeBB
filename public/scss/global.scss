@@ -48,3 +48,24 @@ html[data-dir="rtl"] {
 .cursor-pointer{
 	cursor: pointer;
 }
+
+// background dot-image
+
+.bg-image{
+    position:"relative";
+    z-index:100;
+  }
+  .bg-image::after{
+			content: "";
+			bottom: 12px;
+			display: block;
+			position: absolute;
+			margin-bottom: 0;
+			height: 100%;
+			width: 30%;
+            background-image: url('/assets/images/bg-repeat.png') !important;
+            background-position: 0 0px !important;
+            background-repeat: repeat !important;
+            right: -100px;
+            z-index: -1;
+}

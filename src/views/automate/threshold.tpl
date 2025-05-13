@@ -1,6 +1,6 @@
 <body class="bg-light">
 
-    <div class="container py-5">
+    <div class="container bg-image py-5">
         <div class="card mx-auto p-4" style="max-width: 900px;">
             <h2 class="h3 font-weight-bold text-primary mb-5 text-center">
                 Account Thresholds Configuration

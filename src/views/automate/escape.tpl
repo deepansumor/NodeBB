@@ -1,9 +1,5 @@
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Escape Velocity - Amazon Ads Campaign Management</title>
+   
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         /* Escape Velocity Theme Colors */
@@ -58,13 +54,7 @@
         .card-ev {
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .card-ev:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
+           
         }
 
         /* Icon styling */
@@ -105,10 +95,33 @@
             color:
                 var(--ev-accent);
         }
-    </style>
-</head>
 
-<body>
+        .bg-dot{
+            position: relative;
+            z-index: 10;
+        }
+        .bg-dot::after{
+            content: "";
+            bottom: 150px;
+            display: block;
+            position: absolute;
+            margin-bottom: 0;
+            height: 70%;
+            width: 60%;
+            background-image: url('/assets/images/bg-repeat.png') !important;
+            background-position: 0 0px !important;
+            background-repeat: repeat !important;
+            right: 0;
+            z-index: -1;
+        }
+
+        .text-para{
+
+           font-family: 'Roboto',sans-serif;
+        }
+
+                
+    </style>
 
     <!-- HERO SECTION -->
     <section class="py-5 text-center">
@@ -119,14 +132,14 @@
                         <span class="accent-text">Amazon Ads</span>
                         Operations
                     </h1>
-                    <p class="mt-3 text-muted">
+                    <p class="mt-3 text-muted text-para">
                         An internal platform tailored for Escape Velocity teams to track escalations,
                          respond to alerts, and maintain campaign performance with clarity and control.
                     </p>
 
                 </div>
                 <div class="col-lg-6 text-center mt-4 mt-lg-0">
-                    <div class="card-ev p-4">
+                    <div class="card-ev p-4 bg-dot">
                         <img src="/assets/images/escape.png" alt="Dashboard Screenshot" class="img-fluid" />
                     </div>
                 </div>
@@ -142,8 +155,9 @@
                 <div class="col-md-4">
                     <a href="/escalations" class="text-decoration-none text-dark h-100 d-block">
                         <div class="card-ev p-4 d-flex flex-column h-100">
-                            <div class="w-100">
-                                <div class="mb-3 icon-box">📊 </div>
+                             <div class="w-100 rounded-md">
+                                <img src="/assets/images/escalation.png"
+                                  widht='300px' height='100px' />
                             </div>
                             <h5 class="fw-bold">Escalation Management</h5>
                             <p class="text-muted mb-4">Monitor and manage campaign
@@ -158,8 +172,10 @@
                 <div class="col-md-4">
                     <a href="/thresholds" class="text-decoration-none text-dark h-100 d-block">
                         <div class="card-ev p-4 d-flex flex-column h-100">
-                            <div class="w-100">
-                                <div class="mb-3 icon-box">⚠️</div>
+                           <div class="w-100">
+                                <img src="/assets/images/thresholds.jpeg"
+                                  widht='300px' height='100px' />
+                                
                             </div>
                             <h5 class="fw-bold">Threshold Monitoring</h5>
                             <p class="text-muted mb-4">Set custom performance thresholds and
@@ -175,7 +191,9 @@
                     <a href="/admin" class="text-decoration-none text-dark h-100 d-block">
                         <div class="card-ev p-4 d-flex flex-column h-100">
                             <div class="w-100">
-                                <div class="mb-3 icon-box">⚙️</div>
+                                <img src="/assets/images/admin.png"
+                                  widht='300px' height='100px' />
+                                
                             </div>
                             <h5 class="fw-bold">Admin Controls</h5>
                             <p class="text-muted mb-4">Comprehensive admin panel for
@@ -199,7 +217,10 @@
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card-ev p-4 h-100">
-                        <div class="mb-3 icon-box">📂</div>
+                         <div class="w-100 ">
+                                <img src="/assets/images/accountManagement.png"
+                                  widht='300px' height='100px' />
+                         </div>      
                         <h5 class="fw-bold">1. Account Management</h5>
                         <p class="text-muted">Organize and categorize accounts for
                             efficient management and tracking.</p>
@@ -207,15 +228,22 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card-ev p-4 h-100">
-                        <div class="mb-3 icon-box">📌</div>
-                        <h5 class="fw-bold">2. Issue Escalation</h5>
-                        <p class="text-muted">Track escalations through a structured
+                            <div class="w-100 ">
+                                <img src="/assets/images/issueEscalation.png"
+                                  widht='300px' height='100px' />
+                            </div>                        
+                            <h5 class="fw-bold">2. Issue Escalation</h5>
+                            <p class="text-muted">Track escalations through a structured
                             topic-based system.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card-ev p-4 h-100">
-                        <div class="mb-3 icon-box">🔔</div>
+                         <div class="w-100">
+                                <img src="/assets/images/alert.png"
+                                  widht='300px' height='100px' />
+                                
+                            </div>
                         <h5 class="fw-bold">3. Monitoring & Alerts</h5>
                         <p class="text-muted">Set performance thresholds and receive
                             timely notifications.</p>
@@ -225,6 +253,3 @@
         </div>
     </section>
 
-</body>
-
-</html>

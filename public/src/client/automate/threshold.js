@@ -41,8 +41,8 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 			api
 				.get(API.GET_ACCOUNTS)
 				.then((data) => {
-					console.log("Loading threshold...");
-					console.log("data from the threshold -->", data.categories);
+					// console.log("Loading threshold...");
+					// console.log("data from the threshold -->", data.categories);
 					// if (!data || !Array.isArray(data))
 					// 	return console.error("No Matching Accounts Found");
 					// data = data.filter((account) => account.profileId);
@@ -69,10 +69,17 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 
 				
 				const category = allCategories?.find( category => category?.meta?.profileId == (this.value))
-				console.log("hey this is category --->",category);
+				// console.log("hey this is category --->",category);
 
 				$.each(category?.meta?.thresholds, function(key, value) {
-					$(`[name="${key}"]`).val(value);
+					$(`#${key}`).val(value);
+
+					// if the checkbox id present make the checkbox true
+					$(`#${key}_check`).prop('checked', true);
+
+					// Enable the input field for editing
+					$(`#${key}`).prop('disabled', false).val(value);
+					
 				  });
 
 				  $.each(category?.meta?.waitTimeSop, function(key, value) {
@@ -115,7 +122,7 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 				// console.log("profileid -->",profileId,allCategories)
 				const category = allCategories?.find( category => category?.meta?.profileId == profileId)
 				const cid = category?.cid
-				console.log("filter category",category);
+				// console.log("filter category",category);
 				delete formData.account_id;
 				delete formData.account_name;
 				const data ={
@@ -130,7 +137,7 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 				api
 					.put(`/categories/${cid}`, data)
 					.then((res) => {
-						console.log("Server Response:", res);
+						// console.log("Server Response:", res);
 						alert("Threshold Saved Successfully");
 					})
 					.catch((err) => {
