@@ -53,7 +53,7 @@ define("forum/automate/thresholds", ["jquery", "api"], function (jquery, api) {
 				})
 				.catch((err) => {
 					console.error("Error loading threshold:", err);
-					throw new Error("error -->", err);
+					throw new Error("error -->"+ err);
 				});
 		}
 		// Bind account select change

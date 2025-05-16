@@ -136,18 +136,27 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 		});
 
 		let fetchingPosts = false;
+		
 		// View topic replies
 		$("#escalationTable").on("click", ".view-posts", async function () {
 			const $this = $(this);
 			const pid = $this.data("pid");
 			const $row = $this.closest("tr");
 			const tid = $row.data("tid");
+            
+			const $nextRow = $row.next('.reply-row');
+
+			if ($nextRow.length) {
+				$nextRow.remove(); // Hide if already visible
+				return;
+			}
 			if (fetchingPosts) return alert("Please wait while we fetch remarks");
 
 			const topic = Escalation.category.topics.find((t) => t.tid === tid);
 			if (!topic) return console.warn("No topic found with TID", tid);
 
 			const isLocked = topic.locked;
+
 			$("#escalationTable .reply-row").remove(); // Remove any open reply rows
 
 			try {
@@ -177,14 +186,41 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 									</tr>`
 										)
 										.join("")}
-									<tr class="reply-textarea-row ${isLocked ? "d-none" : ""}">
-										<td colspan="4">
-											<div style="margin-top: 10px;">
-												<textarea class="form-control reply-text" rows="3" placeholder="Write your remark..."></textarea>
-												<button class="btn btn-primary float-end btn-sm mt-2 post-reply" data-pid="${pid}" data-tid="${tid}">Post Reply</button>
-											</div>
-										</td>
+										<tr class="reply-textarea-row ${isLocked ? "d-none" : ""}">
+											<td colspan="4" style="background:whitesmoke; padding:18px 40px; margin:24px auto;">
+												<div > 
+													<textarea class="form-control reply-text" rows="3" placeholder="Write your remark..."></textarea>
+													<button class="btn btn-primary float-end btn-sm mt-2 post-reply" data-pid="${pid}" data-tid="${tid}">Post Reply</button>
+												</div>
+											</td>
+									    </tr>
+										<tr class="reply-textarea-row ${isLocked ? 'd-none' : ''}">
+											<td colspan="4" class="drop-column" style="padding:40px 18px;">
+												<div class="drop-reasions">
+														<div  style="display:flex; justify-content: space-between;align-items: center;">
+																<div>
+																		<label for="standard-reason">
+																		Reason For Escalation:
+																		</label>
+																		<select id="standard-reason" >
+																			<option value="">Select escalation reason…</option>
+																			<option value="out of stock">Out of stock</option>
+																			<option value="out of budget">Out of budget</option>
+																			<option value="⁠client made a change that they weren’t supposed to">⁠Client made a change that they weren’t supposed to</option>
+																			<option value="other">Other</option>
+																		</select>
+																
+																</div>
+																<button style="margin-right:0px" class="btn btn-primary float-end btn-sm  post-reason" data-pid="${pid}" data-tid="${tid}">
+																	Add Reason
+																</button>
+														</div>
+													<textarea type="text" id="custom-reason" class="form-control mt-2"
+														placeholder="Enter escalation reason..." style="display:none;  margin-left: 175px;width: 50%;"></textarea>
+												</div>
+											</td>
 									</tr>
+									
 								</tbody>
 							</table>
 						</td>
@@ -195,6 +231,63 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 				console.error("Error loading replies:", error);
 			} finally {
 				fetchingPosts = !true;
+			}
+		});
+
+		// adding other reason 
+
+		$('#escalationTable').on('change', '#standard-reason', function () {
+			const selected = $(this).val();
+			if (selected === 'other') {
+				$('#custom-reason').show();
+			} else {
+				$('#custom-reason').hide();
+			}
+		});
+
+		// adding reasion for escalation 
+
+		$('#escalationTable').on('click', '.post-reason', async function () {
+			const $btn = $(this);
+			let reasonVal = $('#standard-reason').val(); // use `let` so we can change it
+			const $textarea = $('#custom-reason');
+
+			if (!reasonVal) {
+				return alert(`Please select a valid reason`);
+			}
+
+			if (reasonVal === 'other') {
+				const custom = $textarea.val().trim();
+				if (!custom) {
+					return alert('Please enter a reason');
+				}
+				reasonVal = custom; 
+			}
+
+			const text = `**Reason:** `+ reasonVal;
+
+			const tid = $btn.data('tid');
+			const pid = $btn.data('pid');
+			const topic = Escalation.category.topics.find(t => t.tid === tid);
+
+			if (!topic || topic.locked) {
+				return alert("Cannot reply: topic is locked.");
+			}
+
+			try {
+				$btn.prop('disabled', true);
+				$textarea.prop('disabled', true);
+
+				await api.post(`/topics/${tid}`, { content: text, toPid: pid });
+
+				// Refresh reply view after posting
+				$(`.view-posts[data-pid="${pid}"]`).click();
+			} catch (error) {
+				console.error("Reply post failed:", error);
+				alert(error.message || "Something went wrong! Please try again.");
+			} finally {
+				$btn.prop('disabled', false);
+				$textarea.prop('disabled', false);
 			}
 		});
 
