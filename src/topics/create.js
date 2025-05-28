@@ -17,7 +17,7 @@ const privileges = require('../privileges');
 const categories = require('../categories');
 const translator = require('../translator');
 
-const EXTRA_FIELDS = ['adType', 'cadence', 'summary', 'status', 'stage', 'escalationDate', 'portfolioName'];
+const EXTRA_FIELDS = ['adType', 'cadence', 'summary', 'status', 'stage', 'escalationDate', 'portfolio'];
 
 
 module.exports = function (Topics) {
