@@ -16,8 +16,15 @@ module.exports = function (app, name, middleware, controllers) {
 	setupPageRoute(
 		app,
 		"/thresholds",
-		accountMiddlewares,
+		[...accountMiddlewares],
 		controllers.threshold.get
+	);
+
+	setupPageRoute(
+		app,
+		"/p-thresholds",
+		[...accountMiddlewares],
+		controllers.pthreshold.get
 	);
 	setupPageRoute(
 		app,
