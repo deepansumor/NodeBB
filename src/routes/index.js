@@ -25,6 +25,8 @@ const _mounts = {
 	"well-known": require("./well-known"),
 	activitypub: require("./activitypub"),
 	automate: require("./automate"),
+	audits:require("./audits")
+
 };
 
 _mounts.main = (app, middleware, controllers) => {
@@ -260,6 +262,7 @@ function addCoreRoutes(app, router, middleware, mounts) {
 	_mounts.api(router, middleware, controllers);
 	_mounts.feed(router, middleware, controllers);
 	_mounts.automate(router, "automate", middleware, controllers);
+	_mounts.audits(router, "audits", middleware, controllers);
 	_mounts.activitypub(router, middleware, controllers);
 	_mounts.main(router, middleware, controllers);
 	_mounts.mod(router, middleware, controllers);
