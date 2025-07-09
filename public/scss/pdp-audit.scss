@@ -1,0 +1,516 @@
+:root {
+    --primary-color: rgb(255 119 87);
+    --primary-hover: #e66a4d;
+    --bg-light: #f9f9f9;
+    --bs-heading-color:#000 !important;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-light);
+}
+
+/* Custom Bootstrap overrides */
+.btn-primary {
+    background-color: var(--primary-color)!important;
+    border-color: var(--primary-color);
+    background-image: var(--primary-color)!important;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover)!important;
+    border-color: var(--primary-hover);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-success {
+    color: #28a745 !important; /* Standard Bootstrap green for consistency */
+}
+
+/* Navbar Styles (replacing old sidebar styles) */
+.navbar {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.navbar-brand .brand-logo {
+    width: 2.5rem; /* Slightly larger for a prominent brand logo in navbar */
+    height: 2.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), #ff5757);
+}
+
+.navbar-brand .brand-text {
+    font-weight: bold;
+    font-size: 1.5rem; /* Slightly larger for a prominent brand text */
+    color: #333; /* Darker color for better contrast */
+}
+
+.navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Smaller gap for horizontal navbar */
+    padding: 0.5rem 1rem; /* Adjust padding for navbar links */
+    color: #6b7280;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-color);
+    background-color: #f3f4f6; /* Light hover background */
+    border-radius: 0.375rem; /* Slightly rounded corners on hover */
+}
+
+.navbar-nav .nav-link.active {
+    color: var(--primary-color);
+    background-color: #fef2f2;
+    font-weight: 500;
+    border-radius: 0.375rem; /* Active state styling */
+}
+
+/* Main content */
+.main-content {
+    /* No margin-left needed as sidebar is gone */
+    min-height: calc(100vh - 70px); /* Adjust based on navbar height for full viewport height */
+    padding-top: 1rem; /* Give some top padding below the navbar */
+}
+
+
+/* Cards */
+.stat-card {
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Audit Item Adjustments for better alignment with flexbox */
+.audit-item {
+    display: flex;
+    justify-content: space-between; /* Ensures space between left and right sections */
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    background-color: white; /* Ensure white background for each item */
+}
+
+.audit-item:last-child {
+    margin-bottom: 0;
+}
+
+.audit-item .badge {
+    min-width: 60px; /* Give badges a consistent width */
+    text-align: center;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 991.98px) { /* Bootstrap's 'lg' breakpoint for navbar collapse */
+    .navbar-nav .nav-link {
+        padding: 0.5rem 1rem; /* Restore padding for stacked nav links */
+        justify-content: flex-start; /* Align text to start in collapsed view */
+    }
+
+    .navbar-brand .brand-logo {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .navbar-brand .brand-text {
+        font-size: 1.25rem;
+    }
+}
+
+
+/* General utility classes (keeping existing ones that are still relevant) */
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+}
+
+.fs-5 {
+    font-size: 1.25rem !important; /* Bootstrap's default fs-5 */
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.fw-bold {
+    font-weight: 700 !important;
+}
+
+.display-4 {
+    font-size: calc(1.475rem + 2.7vw) !important;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+.justify-content-center {
+    justify-content: center !important;
+}
+
+.justify-content-between {
+    justify-content: space-between !important;
+}
+
+.gap-3 {
+    gap: 1rem !important;
+}
+
+.ms-2 {
+    margin-left: 0.5rem !important;
+}
+
+.flex-column {
+    flex-direction: column !important;
+}
+
+.flex-sm-row {
+    flex-direction: row !important;
+}
+
+.mt-4 {
+    margin-top: 1.5rem !important;
+}
+
+.mb-5 {
+    margin-bottom: 3rem !important;
+}
+
+.mb-1 {
+    margin-bottom: 0.25rem !important;
+}
+
+.py-4 {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+}
+
+.px-3 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+.pb-0 {
+    padding-bottom: 0 !important;
+}
+
+.pt-3 {
+    padding-top: 1rem !important;
+}
+
+.row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: calc(-1 * var(--bs-gutter-y));
+    margin-right: calc(-.5 * var(--bs-gutter-x));
+    margin-left: calc(-.5 * var(--bs-gutter-x));
+}
+
+.col-md-3 {
+    flex: 0 0 auto;
+    width: 25%;
+}
+
+.col-sm-6 {
+    flex: 0 0 auto;
+    width: 50%;
+}
+
+.text-end {
+    text-align: right !important;
+}
+
+.small {
+    font-size: .875em !important;
+}
+
+.h-100 {
+    height: 100% !important;
+}
+
+.flex-grow-1 {
+    flex-grow: 1 !important;
+}
+
+.card-header {
+    padding: 1rem 1rem;
+    margin-bottom: 0;
+    background-color: rgba(0,0,0,.03);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 1rem 1rem;
+}
+
+.card-title {
+    margin-bottom: 0.5rem;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+}
+
+.container, .container-fluid {
+    width: 100%;
+    padding-right: var(--bs-gutter-x, .75rem);
+    padding-left: var(--bs-gutter-x, .75rem);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+/* Remove old sidebar-specific responsive styles */
+@media (max-width: 768px) {
+    /* .sidebar, .sidebar.show, .main-content rules related to sidebar are now removed */
+}
+
+/* Loading spinner, image preview, subcategory cards, score circle, criteria items, analysis box, priority issues - keeping these as they might be used on other pages or future expansions not shown in this specific 'dashboard' view */
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+.image-preview {
+    background-color: #f1f5f9;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 8rem;
+    width: 100%;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 0.375rem;
+}
+
+.subcategory-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.subcategory-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* changed from 'between' to 'space-between' */
+    padding: 1rem;
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.category-btn {
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: white;
+    text-align: left;
+    transition: all 0.2s;
+    cursor: pointer;
+    width: 100%;
+}
+
+.category-btn:hover {
+    border-color: var(--primary-color);
+}
+
+.category-btn.active {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 119, 87, 0.05);
+}
+
+.category-title {
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.category-weight {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.progress {
+    height: 6px;
+}
+
+.progress-bar{
+    background-color: var(--primary-color)!important;
+}
+
+.progress-sm {
+    height: 4px;
+}
+
+.score-circle {
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    border: 8px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.score-text {
+    text-align: center;
+}
+
+.score-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.score-total {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.criteria-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: #f9fafb;
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+}
+
+.criteria-item:last-child {
+    margin-bottom: 0;
+}
+
+.criteria-icon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+}
+
+.criteria-text {
+    font-size: 0.875rem;
+}
+
+.analysis-box {
+    padding: 1rem;
+    background-color: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    border-radius: 0 0.375rem 0.375rem 0;
+    font-size: 0.875rem;
+}
+
+.priority-issue {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+}
+
+.priority-issue:last-child {
+    margin-bottom: 0;
+}
+
+.issue-icon {
+    margin-top: 0.125rem;
+    flex-shrink: 0;
+}
+
+.issue-content {
+    flex: 1;
+}
+
+.issue-title {
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.issue-score {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
