@@ -61,25 +61,126 @@ define("forum/automate/portfolio/render/portfolios", [
   "../config"
 ], function ($, state, config) {
 
-  function renderPortfolioMetrics(portfolio) {
-    return Object.entries(portfolio.thresholds).map(([metric, value]) => {
-      const unit = config.metricUnits[metric] || '';
-      const isDisabled = !portfolio.alertsEnabled;
-      return `
-        <div class="col-lg-2-4 col-md-4 col-sm-6">
-          <div class="p-3 border rounded">
-            <label class="form-label mb-1 small">${metric}</label>
+  // function renderPortfolioMetrics(portfolio) {
+  //   return Object.entries(portfolio.thresholds).map(([metric, value]) => {
+
+  //      const isRequired = config.requiredMetrics.includes(metric);
+  //     const isEnabled = value !== null && value !== undefined;
+  //     const unit = config.metricUnits[metric] || '';
+  //     const isDisabled = !portfolio.alertsEnabled;
+  //     return `
+  //       <div class="col-lg-2-4 col-md-4 col-sm-6">
+  //         <div class="p-3 border rounded">
+  //           <label class="form-label mb-1 small">${metric}</label>
+  //           <input type="number" class="form-control form-control-sm metric-value-input"
+  //             data-portfolio-id="${portfolio.portfolioId}"
+  //             data-metric="${metric}"
+  //             value="${value ?? ''}" step="0.01"
+  //             ${isDisabled ? 'disabled' : ''}>
+  //           ${unit}
+  //         </div>
+  //       </div>
+  //     `;
+  //   }).join('');
+  // }
+
+
+function renderPortfolioMetrics(portfolio) {
+  return Object.entries(config.defaultThresholds).map(([metric]) => {
+    const isRequired = config.requiredMetrics.includes(metric);
+
+    // 🔒 Ensure thresholds object exists
+    portfolio.thresholds = portfolio.thresholds || {};
+
+    // ✅ Handle missing metrics gracefully
+    const value = portfolio.thresholds.hasOwnProperty(metric)
+      ? portfolio.thresholds[metric]
+      : null;
+
+    const isEnabled = value !== null && value !== undefined;
+    const unit = config.metricUnits[metric] || '';
+    const disabledByAlerts = !portfolio.alertsEnabled;
+    const inputDisabled = disabledByAlerts || (!isRequired && !isEnabled);
+
+    const toggleHTML = !isRequired
+      ? `<div class="form-check form-switch me-2">
+          <input class="form-check-input toggle-metric-checkbox" type="checkbox"
+            data-portfolio-id="${portfolio.portfolioId}" data-metric="${metric}" 
+            ${isEnabled ? 'checked' : ''} ${disabledByAlerts ? 'disabled' : ''}>
+        </div>`
+      : '';
+
+    const unitHTML = unit ? `<span class="unit-label">${unit}</span>` : '';
+
+    return `
+      <div class="col-lg-2-4 col-md-4 col-sm-6">
+        <div class="p-3 border rounded">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="d-flex align-items-center">
+              ${toggleHTML}
+              <label class="form-label mb-0 small">
+                ${metric} ${isRequired ? '<span class="required-indicator">*</span>' : ''}
+              </label>
+            </div>
+          </div>
+          <div class="position-relative">
             <input type="number" class="form-control form-control-sm metric-value-input"
               data-portfolio-id="${portfolio.portfolioId}"
-              data-metric="${metric}"
-              value="${value ?? ''}" step="0.01"
-              ${isDisabled ? 'disabled' : ''}>
-            ${unit}
+              data-metric="${metric}" value="${value ?? ''}" step="0.01"
+              ${inputDisabled ? 'disabled' : ''}>
+            ${unitHTML}
           </div>
         </div>
-      `;
-    }).join('');
-  }
+      </div>
+    `;
+  }).join('');
+}
+
+
+//   function renderPortfolioMetrics(portfolio) {
+//   return Object.entries(config.defaultThresholds).map(([metric]) => {
+//     const isRequired = config.requiredMetrics.includes(metric);
+//     // const value = portfolio.thresholds[metric] || '';
+//     const thresholds = portfolio.thresholds || {};
+// const value = thresholds.hasOwnProperty(metric) ? thresholds[metric] : '';
+//     const isEnabled = value !== null && value !== undefined;
+//     const unit = config.metricUnits[metric] || '';
+//     const disabledByAlerts = !portfolio.alertsEnabled;
+//     const inputDisabled = disabledByAlerts || (!isRequired && !isEnabled);
+
+//     const toggleHTML = !isRequired
+//       ? `<div class="form-check form-switch me-2">
+//           <input class="form-check-input toggle-metric-checkbox" type="checkbox"
+//             data-portfolio-id="${portfolio.portfolioId}" data-metric="${metric}" 
+//             ${isEnabled ? 'checked' : ''} ${disabledByAlerts ? 'disabled' : ''}>
+//         </div>`
+//       : '';
+
+//     const unitHTML = unit ? `<span class="unit-label">${unit}</span>` : '';
+
+//     return `
+//       <div class="col-lg-2-4 col-md-4 col-sm-6">
+//         <div class="p-3 border rounded">
+//           <div class="d-flex align-items-center justify-content-between mb-2">
+//             <div class="d-flex align-items-center">
+//               ${toggleHTML}
+//               <label class="form-label mb-0 small">
+//                 ${metric} ${isRequired ? '<span class="required-indicator">*</span>' : ''}
+//               </label>
+//             </div>
+//           </div>
+//           <div class="position-relative">
+//             <input type="number" class="form-control form-control-sm metric-value-input"
+//               data-portfolio-id="${portfolio.portfolioId}"
+//               data-metric="${metric}" value="${value ?? ''}" step="0.01"
+//               ${inputDisabled ? 'disabled' : ''}>
+//             ${unitHTML}
+//           </div>
+//         </div>
+//       </div>
+//     `;
+//   }).join('');
+// }
 
   // function renderPortfolios() {
   //   const container = $('#portfolioList');
@@ -179,6 +280,47 @@ define("forum/automate/portfolio/render/portfolios", [
 
 
 // render portfolio
+
+// function renderPortfolioMetrics(portfolio) {
+//   return Object.entries(portfolio.thresholds).map(([metric, value]) => {
+//     const unit = config.metricUnits[metric] || '';
+//     const isRequired = config.requiredMetrics.includes(metric);
+//     const isEnabled = isRequired || value !== null && value !== undefined;
+//     const inputDisabled = !isEnabled || !portfolio.alertsEnabled;
+
+//     const toggleHTML = !isRequired
+//       ? `<div class="form-check form-switch mb-2">
+//           <input class="form-check-input toggle-metric-checkbox"
+//                  type="checkbox"
+//                  data-portfolio-id="${portfolio.portfolioId}"
+//                  data-metric="${metric}"
+//                  ${isEnabled ? 'checked' : ''}>
+//         </div>`
+//       : '';
+
+//     return `
+//       <div class="col-lg-2-4 col-md-4 col-sm-6">
+//         <div class="p-3 border rounded">
+//           <div class="d-flex align-items-center justify-content-between mb-2">
+//             ${toggleHTML}
+//             <label class="form-label mb-0 small">
+//               ${metric} ${isRequired ? '<span class="required-indicator">*</span>' : ''}
+//             </label>
+//           </div>
+//           <input type="number" class="form-control form-control-sm metric-value-input"
+//             data-portfolio-id="${portfolio.portfolioId}"
+//             data-metric="${metric}"
+//             value="${value ?? ''}" step="0.01"
+//             ${inputDisabled ? 'disabled' : ''}>
+//           ${unit}
+//         </div>
+//       </div>
+//     `;
+//   }).join('');
+// }
+
+
+
 
   function renderPortfolios() {
   const container = $('#portfolioList');

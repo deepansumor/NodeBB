@@ -126,7 +126,7 @@ define("forum/automate/portfolio/handlers", [
 
 
       require(["./api-service"], function (apiService) {
-        apiService.saveThresholds(account).then(() => {
+        apiService.updateAlertsStatus(account).then(() => {
           require(["./render/portfolios"], function (portfolioRenderer) {
             portfolioRenderer.renderPortfolios();
           });
@@ -135,9 +135,50 @@ define("forum/automate/portfolio/handlers", [
     });
 
 
-    $('body').on('change', '.toggle-metric-checkbox', function () {
-      helpers.togglePortfolioMetric($(this).data('portfolio-id'), $(this).data('metric'), $(this).is(':checked'));
-    });
+//     $('body').on('change', '.toggle-metric-checkbox', function () {
+//       // helpers.togglePortfolioMetric($(this).data('portfolio-id'), $(this).data('metric'), $(this).is(':checked'));
+//       const portfolioId = $(this).data('portfolio-id');
+//   const metric = $(this).data('metric');
+//   const isEnabled = $(this).is(':checked');
+
+//   // Update value: set to null if disabled
+//   const accounts = state.getAccounts();
+//   accounts.forEach(acc => {
+//     const portfolio = acc.meta.portfolios.find(p => p.portfolioId == portfolioId);
+//     if (portfolio) {
+//       portfolio.thresholds[metric] = isEnabled ? (portfolio.thresholds[metric] || 0) : null;
+//     }
+//   });
+
+//   helpers.markUnsaved();
+//   require(["./render/portfolios"], function (portfolioRenderer) {
+//     portfolioRenderer.renderPortfolios();
+//   });
+// });
+   
+  // $('body').on('change', '.toggle-metric-checkbox', function () {
+  //     // helpers.togglePortfolioMetric($(this).data('portfolio-id'), $(this).data('metric'), $(this).is(':checked'));
+  //   });
+
+  $('body').on('change', '.toggle-metric-checkbox', function () {
+  const portfolioId = $(this).data('portfolio-id');
+  const metric = $(this).data('metric');
+  const isEnabled = $(this).is(':checked');
+
+  const accounts = state.getAccounts();
+  accounts.forEach(acc => {
+    const portfolio = acc.meta.portfolios.find(p => p.portfolioId == portfolioId);
+    if (portfolio) {
+      portfolio.thresholds[metric] = isEnabled ? (portfolio.thresholds[metric] || 0) : null;
+    }
+  });
+
+  const inputSelector = `.metric-value-input[data-portfolio-id="${portfolioId}"][data-metric="${metric}"]`;
+  $(inputSelector).prop('disabled', !isEnabled);
+
+  helpers.markUnsaved();
+});
+
 
     $('body').on('input', '.metric-value-input', function () {
       helpers.updatePortfolioMetric($(this).data('portfolio-id'), $(this).data('metric'), parseFloat($(this).val()));
@@ -173,10 +214,10 @@ define("forum/automate/portfolio/handlers", [
 
       apiService.saveThresholds(account)
         .then(() => {
-          console.log("Thresholds saved successfully!");
+          alert("Thresholds saved successfully!") ;
         })
         .catch((err) => {
-          console.error("Failed to save thresholds:", err);
+          alert("Failed to save thresholds:", err);
         });
     });
 
