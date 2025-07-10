@@ -97,14 +97,31 @@ for (let index = 0; index < [...jQuery('.use-defaults-btn')].length; index++) {
   }
 
   // wait time sop
-  function renderWaitTimeSop(account) {
+//   function renderWaitTimeSop(account) {
+//   const waitTime = account?.meta?.waitTimeSop || {};
+
+//   $('#stage1').val(waitTime.stage1 ?? '');
+//   $('#stage2').val(waitTime.stage2 ?? '');
+// }
+
+function renderWaitTimeSop(account) {
   const waitTime = account?.meta?.waitTimeSop || {};
 
   $('#stage1').val(waitTime.stage1 ?? '');
   $('#stage2').val(waitTime.stage2 ?? '');
+
+  // 🔒 Disable inputs if the user is not an admin
+  if (!app.user.isAdmin) {
+    $('#stage1').prop('disabled', true);
+    $('#stage2').prop('disabled', true);
+  } else {
+    $('#stage1').prop('disabled', false);
+    $('#stage2').prop('disabled', false);
+  }
 }
 
 
+// update portfolio metrics
   function updatePortfolioMetric(portfolioId, metric, value) {
   const accounts = state.getAccounts();
   accounts.forEach((acc) => {

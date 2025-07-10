@@ -154,7 +154,7 @@
             <div class="row g-4">
                 <div class="col-md-4">
                     <a href="/escalations" class="text-decoration-none text-dark h-100 d-block">
-                        <div class="card-ev p-4 d-flex flex-column h-100">
+                        <div class="card-ev p-4  h-100">
                              <div class="w-100 rounded-md">
                                 <img src="/assets/images/escalation.png"
                                   widht='300px' height='100px' />
@@ -171,7 +171,7 @@
 
                 <div class="col-md-4">
                     <a href="/thresholds" class="text-decoration-none text-dark h-100 d-block">
-                        <div class="card-ev p-4 d-flex flex-column h-100">
+                        <div class="card-ev p-4  h-100">
                            <div class="w-100">
                                 <img src="/assets/images/thresholds.jpeg"
                                   widht='300px' height='100px' />
@@ -189,7 +189,7 @@
 
                 <div class="col-md-4">
                     <a href="/admin" class="text-decoration-none text-dark h-100 d-block">
-                        <div class="card-ev p-4 d-flex flex-column h-100">
+                        <div class="card-ev p-4  h-100">
                             <div class="w-100">
                                 <img src="/assets/images/admin.png"
                                   widht='300px' height='100px' />

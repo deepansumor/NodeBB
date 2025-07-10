@@ -47,7 +47,7 @@ pthresholdsController.get = async function (req, res, next) {
             ],
         };
 
-        escalationTable.title = "escalation table";
+        escalationTable.title = "Thresholds";
         await privileges.isModerator()
         res.render("automate/p-threshold", escalationTable);
     } catch (err) {
