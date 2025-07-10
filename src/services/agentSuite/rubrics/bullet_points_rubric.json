@@ -1,0 +1,53 @@
+{
+  "section": "Bullet Points",
+  "sub_dimensions": [
+    {
+      "name": "Formatting & Scanability",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "Single block of text or inconsistent formatting",
+        "5": "Basic formatting present but lacks emphasis or clarity",
+        "10": "Capitalized headers, line breaks, and concise bullet structure"
+      },
+      "sop_checklist": [
+        "Each point starts with a capitalized feature header",
+        "Minimum 5 bullet points",
+        "Bullets use short sentences or phrases, not paragraphs"
+      ],
+      "edge_cases": [
+        "If bullets are too lengthy or read like paragraphs, score ≤5",
+        "Score 0 if fewer than 3 bullet points"
+      ]
+    },
+    {
+      "name": "Value Prop Clarity",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "Only technical features, no benefit or value explained",
+        "5": "Some benefits mentioned but not consistent",
+        "10": "Each bullet connects a feature with a clear customer benefit"
+      },
+      "sop_checklist": [
+        "Highlights USP (unique selling points)",
+        "Uses value-driven language (e.g., 'so you can...')",
+        "Includes high-search keywords naturally"
+      ],
+      "edge_cases": [
+        "If bullet includes fluff without substance, cap at 6",
+        "If features are repeated across bullets, score ≤5"
+      ]
+    }
+  ],
+  "suggestions": {
+    "formatting_and_scanability": [
+      "- Begin each bullet with a capitalized header followed by a colon",
+      "- Use 5 bullet points minimum to cover varied benefits",
+      "- Avoid long paragraphs or combining multiple features in one bullet"
+    ],
+    "value_prop_clarity": [
+      "- Add customer-centric benefits after technical features (e.g., 'so you can...')",
+      "- Highlight unique selling points clearly and avoid repetition",
+      "- Naturally include relevant keywords customers search for"
+    ]
+  }
+}

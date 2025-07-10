@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "keyword_usage": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "includes_primary_keywords": { "type": "boolean" },
+            "includes_secondary_keywords": { "type": "boolean" },
+            "missing_key_terms": { "type": "boolean" }
+          },
+          "required": [
+            "includes_primary_keywords",
+            "includes_secondary_keywords",
+            "missing_key_terms"
+          ]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "readability": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "clear_and_concise": { "type": "boolean" },
+            "well_structured": { "type": "boolean" },
+            "clunky_phrasing": { "type": "boolean" }
+          },
+          "required": [
+            "clear_and_concise",
+            "well_structured",
+            "clunky_phrasing"
+          ]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "length": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "within_120_150_chars": { "type": "boolean" },
+            "not_too_short": { "type": "boolean" },
+            "not_too_long": { "type": "boolean" }
+          },
+          "required": ["within_120_150_chars", "not_too_short", "not_too_long"]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "overall_score": { "type": "number" }
+  },
+  "required": ["keyword_usage", "readability", "length", "overall_score"]
+}

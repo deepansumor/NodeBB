@@ -1,0 +1,54 @@
+{
+  "main_image": {
+    "score": "number",
+    "checklist": {
+      "white_background": "boolean",
+      "product_fills_frame": "boolean",
+      "crisp_and_well_lit": "boolean",
+      "minor_compliance_issues": "boolean"
+    },
+    "comment": "string"
+  },
+  "infographics": {
+    "score": "number",
+    "checklist": {
+      "has_5_plus_infographics": "boolean",
+      "custom_branded": "boolean",
+      "usp_focused": "boolean"
+    },
+    "comment": "boolean"
+  },
+  "lifestyle_use_case_images": {
+    "score": "number",
+    "checklist": {
+      "three_plus_images": "boolean",
+      "ugc_style_content": "boolean",
+      "shows_product_in_use": "boolean"
+    },
+    "comment": "string"
+  },
+  "image_resolution": {
+    "score": "boolean",
+    "checklist": {
+      "above_1000px": "boolean",
+      "above_2000px": "boolean",
+      "zoomable_quality": "boolean"
+    },
+    "comment": "string"
+  },
+  "overall_score": "number",
+  "suggestions": {
+    "main_image": [
+      "string (suggestion bullet point)"
+    ],
+    "infographics": [
+      "string (suggestion bullet point)"
+    ],
+    "lifestyle_use_case_images": [
+      "string (suggestion bullet point)"
+    ],
+    "image_resolution": [
+      "string (suggestion bullet point)"
+    ]
+  }
+}

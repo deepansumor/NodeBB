@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "formatting": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "rich_html_format": { "type": "boolean" },
+            "basic_structure": { "type": "boolean" },
+            "not_raw_text": { "type": "boolean" }
+          },
+          "required": ["rich_html_format", "basic_structure", "not_raw_text"]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "brand_narrative": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "on_brand_copy": { "type": "boolean" },
+            "persuasive_content": { "type": "boolean" },
+            "not_generic": { "type": "boolean" }
+          },
+          "required": ["on_brand_copy", "persuasive_content", "not_generic"]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "overall_score": { "type": "number" }
+  },
+  "required": ["formatting", "brand_narrative", "overall_score"]
+}

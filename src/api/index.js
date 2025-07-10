@@ -15,4 +15,6 @@ module.exports = {
 	files: require('./files'),
 	utils: require('./utils'),
 	escalations: require('./escalations'),
+
+	agents: require("./agents")
 };

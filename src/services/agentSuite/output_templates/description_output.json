@@ -1,0 +1,34 @@
+{
+  "formatting": {
+    "score": "number",
+    "checklist": {
+      "rich_html_format": "boolean",
+      "basic_structure": "boolean",
+      "not_raw_text": "boolean"
+    },
+    "comment": "string"
+  },
+  "brand_narrative": {
+    "score": "number",
+    "checklist": {
+      "on_brand_copy": "boolean",
+      "persuasive_content": "boolean",
+      "not_generic": "boolean"
+    },
+    "comment": "string"
+  },
+  "overall_score": "number",
+  "suggestions": {
+    "formatting": [
+      "string (suggestion bullet point)"
+    ],
+    "brand_narrative": [
+      "string (suggestion bullet point)"
+    ]
+  },
+  "recommended_keywords": [
+    "string (keyword 1)",
+    "string (keyword 2)",
+    "string (category-specific or high-visibility term)"
+  ]
+}

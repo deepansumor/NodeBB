@@ -1,0 +1,63 @@
+{
+  "section": "Product Description",
+  "sub_dimensions": [
+    {
+      "name": "Formatting",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "Raw block of unformatted text or keyword stuffing",
+        "5": "Basic structure present with minimal formatting or clarity",
+        "10": "Well-structured HTML with clear paragraphs, spacing, and scannability"
+      },
+      "sop_checklist": [
+        "Description is written in HTML or properly formatted paragraphs (not raw/plain text)",
+        "Basic structure includes logical flow or sections (e.g., intro, benefits, usage)",
+        "No keyword stuffing, emojis, or non-compliant symbols used"
+      ],
+      "edge_cases": [
+        "Cap at 5 if content is fully plain-text even if readable",
+        "Cap at 6 if formatting exists but contains broken HTML or visual clutter"
+      ]
+    },
+    {
+      "name": "Brand Narrative",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "Generic or vague text with no persuasive benefit or brand tone",
+        "5": "Some brand value and benefits communicated, but inconsistent or generic language",
+        "10": "Persuasive, brand-aligned storytelling that highlights product USPs and customer value clearly"
+      },
+      "sop_checklist": [
+        "Highlights unique selling propositions (materials, purpose, differentiators)",
+        "Persuasive content connects features to clear customer benefits (e.g., 'keeps food warm for hours')",
+        "Tone is consistent with brand and avoids vague, generic claims"
+      ],
+      "edge_cases": [
+        "Cap at 6 if it includes brand tone but no clear feature-benefit link",
+        "Cap at 5 if repeated bullet points or copied content is detected"
+      ]
+    }
+  ],
+  "suggestions": {
+    "Essential Fixes": [
+      "Structure the description using HTML tags (e.g., <br>, <p>) or clear paragraph breaks for readability",
+      "Avoid use of raw blocks of text; separate product features, benefits, and usage into sections",
+      "Remove keyword stuffing, emojis, or prohibited phrases (e.g., 'best in class', '100% guarantee')"
+    ],
+    "Conversion Boosters": [
+      "Highlight key USPs (e.g., 'made of stainless steel', 'double-walled insulation') early in the text",
+      "Include practical use-case scenarios to help customers visualize value",
+      "Add 1–2 customer-centric lines about ease-of-use, care instructions, or compatibility (e.g., dishwasher safe, food-grade materials)"
+    ],
+    "Premium Upgrades": [
+      "Use persuasive storytelling to explain why this product fits the customer’s lifestyle",
+      "Reinforce differentiators like sustainability, compact design, or travel-friendliness (if applicable)",
+      "Use natural keywords like 'steel lunch box', 'airtight containers', 'bento-style design' to boost SEO without stuffing"
+    ],
+    "Category-Specific": [
+      "Kitchen: Mention materials (e.g., BPA-free plastic, stainless steel) and storage capacity",
+      "Home Decor: Describe design style (e.g., minimalist, rustic) and where it fits best (bedroom, kitchen, etc.)",
+      "Beauty: Mention skin type compatibility, application method, and benefits (e.g., hydration, anti-aging)"
+    ]
+  }
+}

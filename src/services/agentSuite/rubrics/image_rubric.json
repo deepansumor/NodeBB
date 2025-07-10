@@ -1,0 +1,104 @@
+{
+  "section": "Image Stack Quality",
+  "sub_dimensions": [
+    {
+      "name": "Main Image",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "Blurry, background not white, or non-compliant",
+        "5": "Acceptable clarity but small, off-center, or with shadows",
+        "10": "White background (pure RGB 255,255,255), well-lit, and product fills ≥85% of frame"
+      },
+      "sop_checklist": [
+        "Background is pure white (RGB 255,255,255), no shadows or props",
+        "Product fills at least 85% of frame",
+        "Image is ≥1000px and zoomable"
+      ],
+      "edge_cases": [
+        "Deduct 2 points if product is cropped",
+        "Cap at 7 if shadows or decorative props are visible"
+      ]
+    },
+    {
+      "name": "Infographics",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "No infographics present",
+        "5": "1–2 images with basic text overlays or generic callouts",
+        "10": "5+ custom-branded infographics each showing a unique product benefit"
+      },
+      "sop_checklist": [
+        "At least 5 infographic images with overlays (text, arrows, icons)",
+        "Each infographic explains a distinct USP or feature",
+        "3+ images follow a consistent layout with brand colors/fonts"
+      ],
+      "edge_cases": [
+        "If fewer than 5 infographics are present, cap score at 5",
+        "If infographics use generic templates or poor layout, cap at 6"
+      ]
+    },
+    {
+      "name": "Lifestyle/Use Case Images",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "No lifestyle images present",
+        "5": "1–2 stock-like or semi-contextual images",
+        "10": "3+ real-world images with people using the product naturally"
+      },
+      "sop_checklist": [
+        "At least 3 images show human models using the product in real-world contexts (home, kitchen, office, etc.)",
+        "No text, icons, or overlays present on lifestyle images",
+        "Scenes and backgrounds must look authentic (not purely studio or staged)"
+      ],
+      "edge_cases": [
+        "If fewer than 3 real lifestyle images are present, cap at 5",
+        "If model holds product but is not clearly using it, image does not count as lifestyle",
+        "Do not count infographic or zoomed product shots as lifestyle"
+      ]
+    },
+    {
+      "name": "Image Resolution",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "Low resolution (<1000px) or visibly pixelated",
+        "5": "Images are 1000–1999px and zoomable",
+        "10": "All images are ≥2000px and crisp when zoomed fullscreen"
+      },
+      "sop_checklist": [
+        "All images are at least 1000px on the longest side",
+        "All images appear crisp and zoomable on desktop",
+        "No image is blurry or pixelated in fullscreen view"
+      ],
+      "edge_cases": [
+        "If only 1–2 images are ≥2000px, cap score at 7",
+        "If some images are blurry, cap score at 5"
+      ]
+    }
+  ],
+  "suggestions": {
+    "Essential Fixes": [
+      "Replace main image with high-res version on pure white background (RGB 255,255,255)",
+      "Remove all non-compliant elements: text, logos, watermarks",
+      "Ensure product fills exactly 85% of frame in main image"
+    ],
+    "Conversion Boosters": [
+      "Add lifestyle shots showing 3+ real usage scenarios (e.g., kitchen for appliances)",
+      "Include size reference image with dimensions/scale (ruler, hand for scale)",
+      "Create 2-3 branded infographics highlighting unique features/benefits",
+      "Add product video (30-60 sec) demonstrating use and key features"
+    ],
+    "Premium Upgrades": [
+      "Professional reshoot with multiple angles (front/back/side/top)",
+      "Add 'in context' comparison shots (e.g., product beside common objects)",
+      "Include detailed close-ups of materials/textures/unique features",
+      "Upgrade infographics to show competitive advantages",
+      "Add 360° spin or zoomable high-res images"
+    ],
+    "Category-Specific": [
+      "Apparel: Add flat lay + modeled shots showing front/back/details",
+      "Electronics: Show all ports/interfaces with clear labels",
+      "Home Goods: Include room-setting lifestyle images",
+      "Beauty: Add before/after or application sequence shots"
+    ]
+  }
+}
