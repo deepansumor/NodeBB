@@ -136,14 +136,14 @@
 // 		});
 
 // 		let fetchingPosts = false;
-		
+
 // 		// View topic replies
 // 		$("#escalationTable").on("click", ".view-posts", async function () {
 // 			const $this = $(this);
 // 			const pid = $this.data("pid");
 // 			const $row = $this.closest("tr");
 // 			const tid = $row.data("tid");
-            
+
 // 			const $nextRow = $row.next('.reply-row');
 
 // 			if ($nextRow.length) {
@@ -209,7 +209,7 @@
 // 																			<option value="⁠client made a change that they weren’t supposed to">⁠Client made a change that they weren’t supposed to</option>
 // 																			<option value="other">Other</option>
 // 																		</select>
-																
+
 // 																</div>
 // 																<button style="margin-right:0px" class="btn btn-primary float-end btn-sm  post-reason" data-pid="${pid}" data-tid="${tid}">
 // 																	Add Reason
@@ -220,7 +220,7 @@
 // 												</div>
 // 											</td>
 // 									</tr>
-									
+
 // 								</tbody>
 // 							</table>
 // 						</td>
@@ -460,34 +460,68 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 	// 	return details.length ? details.join("<br>") : fallback;
 	// };
 	// Parse alert summary and format it into HTML
+	// const parseSummary = (summary = "", fallback = "No alert details available.") => {
+	// 	try {
+
+	// 		if (typeof summary === "string") {
+				
+	// 			const jsonMatch = summary.match(/<!--\s*ESCALATION_DATA:\s*(\{[\s\S]?\})\s-->/);
+	// 			if (jsonMatch) {
+	// 				const data = JSON.parse(jsonMatch[1]);
+	// 				const alerts = data.alerts || {};
+	// 				const alertLines = Object.entries(alerts).map(
+	// 					([metric, msg]) => `- ${metric}: ${msg}`
+	// 				);
+	// 				return alertLines.join("<br>");
+	// 			}
+
+	// 			// Fallback for old summary format
+	// 			const lines = summary.split("\n").map((line) => line.trim());
+	// 			const details = lines.filter((line) => line.startsWith("-"));
+	// 			return details.length ? details.join("<br>") : fallback;
+	// 		} else {
+	// 			console.warn("Summary is not a string:", summary);
+	// 			return fallback;
+	// 		}
+	// 	} catch (err) {
+	// 		console.warn("Summary parsing failed", err);
+	// 		return fallback;
+	// 	}
+	// };
+
+
+	
 	const parseSummary = (summary = "", fallback = "No alert details available.") => {
-		try {
-			// Try extracting the ESCALATION_DATA block from HTML comment
-			if (typeof summary === "string") {
-				const jsonMatch = summary.match(/<!--\s*ESCALATION_DATA:\s*(\{[\s\S]?\})\s-->/);
-				if (jsonMatch) {
-					const data = JSON.parse(jsonMatch[1]);
-					const alerts = data.alerts || {};
-					const alertLines = Object.entries(alerts).map(
-						([metric, msg]) => `- ${metric}: ${msg}`
-					);
-					return alertLines.join("<br>");
-				}
+	try {
+		if (typeof summary !== "string") return fallback;
 
-				// Fallback for old summary format
-				const lines = summary.split("\n").map((line) => line.trim());
-				const details = lines.filter((line) => line.startsWith("-"));
-				return details.length ? details.join("<br>") : fallback;
-			} else {
-				console.warn("Summary is not a string:", summary);
-				return fallback;
-			}
-		} catch (err) {
-			console.warn("Summary parsing failed", err);
-			return fallback;
-		}
-	};
+		// Decode \u003C → < and \u20b9 → ₹
+		const decodeUnicode = (str) =>
+			str.replace(/\\u([\dA-F]{4})/gi, (_, g1) =>
+				String.fromCharCode(parseInt(g1, 16))
+			);
 
+		const decoded = decodeUnicode(summary);
+
+		// Match JSON inside <!-- ESCALATION_DATA: {...} -->
+		const jsonMatch = decoded.match(/<!--\s*ESCALATION_DATA:\s*(\{[\s\S]*?\})\s*-->/);
+
+		if (!jsonMatch) return fallback;
+
+		const data = JSON.parse(jsonMatch[1]);
+		const alerts = data.alerts || {};
+
+		const alertLines = Object.entries(alerts).map(
+			([metric, msg]) => `- ${metric}: ${msg}`
+		);
+
+		return alertLines.length ? alertLines.join("<br>") : fallback;
+
+	} catch (err) {
+		console.warn("Summary parsing failed:", err);
+		return fallback;
+	}
+};
 
 
 	// Initialize escalation module
@@ -552,7 +586,7 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 			// let currentPage = 1;
 
 			// set default all metrics
-            $('#metricFilter').val('ALL');
+			$('#metricFilter').val('ALL');
 
 			try {
 				await Escalation.fetchAndRender(value);
@@ -601,14 +635,14 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 		});
 
 		let fetchingPosts = false;
-		
+
 		// View topic replies
 		$("#escalationTable").on("click", ".view-posts", async function () {
 			const $this = $(this);
 			const pid = $this.data("pid");
 			const $row = $this.closest("tr");
 			const tid = $row.data("tid");
-            
+
 			const $nextRow = $row.next('.reply-row');
 
 			if ($nextRow.length) {
@@ -641,16 +675,16 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 								</thead>
 								<tbody>
 									${replies
-										.map(
-											(reply) => `
+						.map(
+							(reply) => `
 									<tr>
 										<td>&#8595;</td>
 										<td>${parseSummary(reply.content, reply.content)}</td>
 										<td>${reply.user?.displayname || "SYSTEM"}</td>
 										<td>${new Date(reply.timestamp).toLocaleString()}</td>
 									</tr>`
-										)
-										.join("")}
+						)
+						.join("")}
 										<tr class="reply-textarea-row ${isLocked ? "d-none" : ""}">
 											<td colspan="4" style="background:whitesmoke; padding:18px 40px; margin:24px auto;">
 												<div > 
@@ -726,7 +760,7 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 				if (!custom) {
 					return alert('Please enter a reason');
 				}
-				reasonVal = custom; 
+				reasonVal = custom;
 			}
 
 			const text = `*Reason:* `+ reasonVal;
@@ -817,27 +851,27 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 		const { topics = [] } = response;
 
 		// Filter metrics code 
-			const selectedMetric = $('#metricFilter').val(); 
-			// const filteredTopics = topics.filter(topic => {
-			// 	const alertDetails = topic.summary || '';
-			// 	if (selectedMetric === "ALL") return true;
-			// 	return alertDetails.toLowerCase().includes(selectedMetric.toLowerCase());
-			// });
-			const filteredTopics = topics.filter(topic => {
-				const alertText = typeof topic.summary === "string" ? topic.summary : JSON.stringify(topic.summary || "");
-				if (selectedMetric === "ALL") return true;
-				return alertText.toLowerCase().includes(selectedMetric.toLowerCase());
-			});
+		const selectedMetric = $('#metricFilter').val();
+		// const filteredTopics = topics.filter(topic => {
+		// 	const alertDetails = topic.summary || '';
+		// 	if (selectedMetric === "ALL") return true;
+		// 	return alertDetails.toLowerCase().includes(selectedMetric.toLowerCase());
+		// });
+		const filteredTopics = topics.filter(topic => {
+			const alertText = typeof topic.summary === "string" ? topic.summary : JSON.stringify(topic.summary || "");
+			if (selectedMetric === "ALL") return true;
+			return alertText.toLowerCase().includes(selectedMetric.toLowerCase());
+		});
 
 
-			const rows = filteredTopics.map((topic, index) => {
-				const profileId = extractProfileId(topic.title);
-				const alertDetails = parseSummary(topic.summary);
-				const postTime = topic.timestampISO
-					? new Date(topic.timestampISO).toLocaleString()
-					: '--';
+		const rows = filteredTopics.map((topic, index) => {
+			const profileId = extractProfileId(topic.title);
+			const alertDetails = parseSummary(topic.summary);
+			const postTime = topic.timestampISO
+				? new Date(topic.timestampISO).toLocaleString()
+				: '--';
 
-				return `
+			return `
 				<tr class="single-escalation" data-tid="${topic.tid}">
 					<td>${index + 1}</td>
 					<td>${topic.portfolioName || topic.adType || "--"}</td>
@@ -851,7 +885,7 @@ define("forum/automate/escalation", ["jquery", "api"], function ($, api) {
 						</span>
 					</td>
 				</tr>`;
-			})
+		})
 			.join("");
 
 		$("#escalationTable").html(rows);
