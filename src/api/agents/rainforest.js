@@ -67,7 +67,7 @@ rainforestApi.dbReportsData = async (req) => {
 
     // const asin = req.params.asin;
 
-    const data = await db.find({}, 0, 10, COLLECTIONS.REPORT)
+    const data = await db.find({}, 0, 30, COLLECTIONS.REPORT)
     return data
   } catch (error) {
     console.log("Error while fetching DB reports -->", error)
