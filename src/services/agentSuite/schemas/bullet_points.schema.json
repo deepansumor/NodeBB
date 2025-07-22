@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "formatting_scanability": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "capitalized_headers": { "type": "boolean" },
+            "easy_to_scan": { "type": "boolean" },
+            "not_wall_of_text": { "type": "boolean" }
+          },
+          "required": [
+            "capitalized_headers",
+            "easy_to_scan",
+            "not_wall_of_text"
+          ]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "value_prop_clarity": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "feature_benefit_combo": { "type": "boolean" },
+            "clear_value_proposition": { "type": "boolean" },
+            "could_be_more_compelling": { "type": "boolean" }
+          },
+          "required": [
+            "feature_benefit_combo",
+            "clear_value_proposition",
+            "could_be_more_compelling"
+          ]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "overall_score": { "type": "number" }
+  },
+  "required": ["formatting_scanability", "value_prop_clarity", "overall_score"]
+}

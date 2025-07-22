@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDP Audit Report</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Original Header Section */
+    .header {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .header-content h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .header-subtitle {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .view-amazon-btn {
+      background: #ff6b47;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Original Product Info Section */
+    .product-info {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product-details h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .product-meta {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .product-meta span {
+      margin-right: 16px;
+    }
+
+    /* Original Score Circle */
+    .score-circle {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+
+    .score-circle svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .score-circle .bg-circle {
+      fill: none;
+      stroke: #e5e7eb;
+      stroke-width: 8;
+    }
+
+    .score-circle .progress-circle {
+      fill: none;
+      stroke: #ff6b47;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 76;
+    }
+
+    .score-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .score-number {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .score-total {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .score-label {
+      font-size: 14px;
+      color: #6b7280;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* Enhanced Data Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .data-table th {
+      background: #f7fafc;
+      padding: 16px;
+      text-align: left;
+      font-weight: 600;
+      color: #2d3748;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .data-table td {
+      padding: 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover {
+      background: #f7fafc;
+    }
+
+    /* Score Indicators */
+    .score-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      min-width: 50px;
+    }
+
+    .score-badge.excellent {
+      background: #f0fff4;
+      color: #38a169;
+    }
+
+    .score-badge.good {
+      background: #f0fff4;
+      color: #38a169;
+    }
+
+    .score-badge.average {
+      background: #fef5e7;
+      color: #ed8936;
+    }
+
+    .score-badge.poor {
+      background: #fed7d7;
+      color: #e53e3e;
+    }
+
+    .progress-container {
+      width: 100px;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-bar.excellent {
+      background: #38a169;
+    }
+
+    .progress-bar.good {
+      background: #38a169;
+    }
+
+    .progress-bar.average {
+      background: #ed8936;
+    }
+
+    .progress-bar.poor {
+      background: #e53e3e;
+    }
+
+    /* Enhanced Analysis Sections */
+    .analysis-section {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-header {
+      background: linear-gradient(90deg, #ff6b47 0%, #ff8a65 100%);
+      color: white;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .section-score {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .section-content {
+      padding: 24px;
+    }
+
+    /* Criteria Grid */
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .criteria-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #f7fafc;
+    }
+
+    .criteria-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .criteria-icon.pass {
+      background: #f0fff4;
+      color: #38a169;
+    }
+
+    .criteria-icon.fail {
+      background: #fed7d7;
+      color: #e53e3e;
+    }
+
+    .criteria-icon.warning {
+      background: #fef5e7;
+      color: #ed8936;
+    }
+
+    .criteria-text {
+      flex: 1;
+      font-size: 14px;
+      color: #4a5568;
+    }
+
+    /* Recommendations Box */
+    .recommendations {
+      background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+      border: 1px solid #bee3f8;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .recommendations-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .recommendations-icon {
+      width: 32px;
+      height: 32px;
+      background: #3182ce;
+      color: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .recommendations-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c5282;
+    }
+
+    .recommendations-content {
+      color: #2c5282;
+      line-height: 1.6;
+    }
+
+    /* Subcategory Analysis Sections */
+    .subcategory-analysis-section {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: #fafafa;
+    }
+
+    .subcategory-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .subcategory-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .subcategory-section-score {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    /* Content Specific Styles */
+    .bullet-points-preview {
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .bullet-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #e2e8f0;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .bullet-list li:last-child {
+      border-bottom: none;
+    }
+
+    .bullet-list li::before {
+      content: "•";
+      color: #ff6b47;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .description-preview {
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 16px 0;
+      font-style: italic;
+      color: #4a5568;
+    }
+
+    .analysis-section,
+    .subcategory-analysis-section,
+    .header,
+    .product-info,
+    .data-table {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .analysis-section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+
+    .container {
+      max-width: none;
+      padding: 0;
+    }
+
+    .header,
+    .product-info,
+    .data-table,
+    .analysis-section {
+      box-shadow: none;
+      border: 1px solid #e5e7eb;
+      break-inside: avoid;
+    }
+
+    .analysis-section {
+      page-break-inside: avoid;
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-content">
+        <h1>PDP Audit Results</h1>
+        <p class="header-subtitle">Comprehensive analysis based on Amazon optimization best practices</p>
+      </div>
+      <a href="https://www.amazon.in/dp/{{asin}}" class="view-amazon-btn">
+        <span>🔗</span> View on Amazon
+      </a>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-details">
+        <h2>{{name}}</h2>
+        <div class="product-meta">
+          <span><strong>Brand:</strong> {{brand}}</span>
+          <span><strong>ASIN:</strong> {{asin}}</span>
+          <span><strong>Last Updated:</strong> {{lastUpdated}}</span>
+        </div>
+      </div>
+      <div>
+        <div class="score-circle">
+          <svg viewBox="0 0 100 100">
+            <circle class="bg-circle" cx="50" cy="50" r="45"></circle>
+            <circle class="progress-circle" cx="50" cy="50" r="45"></circle>
+          </svg>
+          <div class="score-text">
+            <div class="score-number">{{overallScore}}</div>
+            <div class="score-total">/100</div>
+          </div>
+        </div>
+        <div class="score-label">Overall Score</div>
+      </div>
+    </div>
+
+    <!-- CATEGORY SCORES TABLE -->
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Weight</th>
+          <th>Score</th>
+          <th>Performance</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each categories}}
+        <tr>
+          <td><strong>{{name}}</strong></td>
+          <td>{{weight}}</td>
+          <td>{{score}}/10</td>
+          <td>
+            <div class="progress-container">
+              <div class="progress-bar {{getScoreStatus score}}" style="width: {{multiply score 10}}%"></div>
+            </div>
+          </td>
+          <td><span class="score-badge {{getScoreStatus score}}">{{capitalize (getScoreStatus score)}}</span></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <!-- CATEGORY ANALYSIS -->
+    {{#each categories}}
+    <div class="analysis-section">
+      <div class="section-header">
+        <div>
+          <div class="section-title">{{name}}</div>
+          <div style="font-size: 14px; opacity: 0.9;">{{weight}} Weight</div>
+        </div>
+        <div class="section-score">{{score}}/10</div>
+      </div>
+
+      <div class="section-content">
+        {{#each subcategories}}
+        <div class="subcategory-analysis-section">
+          <div class="subcategory-section-header">
+            <h4 class="subcategory-section-title">{{name}}</h4>
+            <div class="subcategory-section-score">{{score}}/10</div>
+          </div>
+
+          {{#if criteria}}
+          <div class="criteria-grid">
+            {{#each criteria}}
+            <div class="criteria-item">
+              <div class="criteria-icon {{getCriteriaStatus passed}}">{{criteriaSymbol passed}}</div>
+              <div class="criteria-text">{{name}}</div>
+            </div>
+            {{/each}}
+          </div>
+          {{/if}}
+
+          <div class="recommendations">
+            <div class="recommendations-header">
+              <div class="recommendations-icon">💡</div>
+              <div class="recommendations-title">Analysis & Recommendations</div>
+            </div>
+            <div class="recommendations-content">
+              {{#if notes}}
+              <p>{{notes}}</p>
+              {{/if}}
+
+              {{#if suggestions}}
+              <ul class="bullet-list">
+                {{#each suggestions}}
+                <li>{{this}}</li>
+                {{/each}}
+              </ul>
+              {{/if}}
+            </div>
+
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</body>
+
+</html>

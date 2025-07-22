@@ -1,0 +1,77 @@
+{
+  "section": "Title Optimization",
+    "sub_dimensions": [
+    {
+      "name": "Keyword Usage",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "Missing primary or secondary keywords",
+        "5": "Includes either primary or secondary keyword, but not both",
+        "10": "Includes both primary and secondary keywords naturally"
+      },
+      "sop_checklist": [
+        "Includes brand name, item type, and size or model",
+        "Includes high search volume terms",
+        "No duplication or keyword stuffing"
+      ],
+      "edge_cases": [
+        "If product type is too generic (e.g., 'bag'), deduct 1–2 points",
+        "Title copy-pasted across multiple ASINs"
+      ]
+    },
+    {
+      "name": "Readability",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "Keyword stuffing, poor grammar or unnatural phrasing",
+        "5": "Acceptable structure but lacks flow or polish",
+        "10": "Clear, well-structured and grammatically correct"
+      },
+      "sop_checklist": [
+        "No all-caps or symbols",
+        "Follows sentence casing or proper title case",
+        "Fluent and scannable"
+      ],
+      "edge_cases": [
+        "If title has typos or confusing fragments, score ≤5",
+        "If overly long but readable, score capped at 8"
+      ]
+    },
+    {
+      "name": "Length",
+      "score_range": "0–10",
+      "scoring_criteria": {
+        "0": "<60 or >200 characters",
+        "5": "Between 150–200 characters (risk of truncation)",
+        "10": "120–150 characters"
+      },
+      "sop_checklist": [
+        "Title is above 120 characters",
+        "Avoids truncation on mobile (≤150 ideal)",
+        "Includes only meaningful words"
+      ],
+      "edge_cases": [
+        "Score 5 if length is good but readability suffers",
+        "Score 0 if title is under 60 chars even with keywords"
+      ]
+    }
+  ],
+  "suggestions": {
+    "Keyword Usage": [
+      "Include both primary and secondary high-volume keywords relevant to the product type.",
+      "Avoid duplication of similar terms like 'portable' and 'compact' together if redundant.",
+      "If brand or model is missing, add them to meet SOP checklist."
+    ],
+    "Readability": [
+      "Avoid keyword stuffing — use natural phrasing even when including important terms.",
+      "Break long clauses into clean, comma-separated phrases.",
+      "Ensure proper capitalization and avoid ALL CAPS or symbols."
+    ],
+    "Length": [
+      "Target 120–150 characters for maximum desktop and mobile visibility.",
+      "Remove low-impact modifiers (e.g., 'very effective', 'nice design') if over 150 chars.",
+      "Add usage context or benefits if the title is too short (under 60 characters)."
+    ]
+  }
+}
+

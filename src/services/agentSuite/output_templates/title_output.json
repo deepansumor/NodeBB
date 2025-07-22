@@ -1,0 +1,42 @@
+{
+  "keyword_usage": {
+    "score": "number",
+    "checklist": {
+      "includes_primary_keywords": "boolean",
+      "includes_secondary_keywords": "boolean",
+      "missing_key_terms": "boolean"
+    },
+    "comment": "string"
+  },
+  "readability": {
+    "score": "number",
+    "checklist": {
+      "clear_and_concise": "boolean",
+      "well_structured": "boolean",
+      "clunky_phrasing": "boolean"
+    },
+    "comment": "string"
+  },
+  "length": {
+    "score": "number",
+    "checklist": {
+      "within_120_150_chars": "boolean",
+      "not_too_short": "boolean",
+      "not_too_long": "boolean"
+    },
+    "comment": "string"
+  },
+  "overall_score": "number",
+  "suggestions": {
+    "keyword_usage": [
+      "string (suggestion bullet point)"
+    ],
+    "readability": [
+      "string (suggestion bullet point)"
+    ],
+    "length": [
+      "string (suggestion bullet point)"
+    ]
+  }
+
+}

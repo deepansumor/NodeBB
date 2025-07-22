@@ -15,3 +15,5 @@ Write.admin = require("./admin");
 Write.files = require("./files");
 Write.utilities = require("./utilities");
 Write.escalations = require("./escalations");
+
+Write.agents = require("./agents")

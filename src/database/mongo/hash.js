@@ -9,7 +9,7 @@ module.exports = function (module) {
 
 	module.objectCache = cache;
 
-	module.setObject = async function (key, data, collection = "objects") {
+	module.setObject = async function (key, data, collection = "objects") { // = "objects"
 		const isArray = Array.isArray(key);
 		if (!key || !data || (isArray && !key.length)) {
 			return;
@@ -353,15 +353,29 @@ module.exports = function (module) {
 
 	module.find = async function (
 		query,
-		skip = 0,
-		limit = 10,
+		skip =0,
+		limit =10,
+		collectionName = "objects",
+		sort = { createdAt: -1 }
+	) {
+		return await module.client
+			.collection(collectionName)
+			.find({ ...query })
+			.sort(sort)
+			.skip(skip)
+			.limit(limit)
+			.toArray();
+	};
+
+	module.findOne = async function (
+		query,
 		collectionName = "objects"
 	) {
 		return await module.client
 			.collection(collectionName)
 			.find({ ...query })
-			.skip(skip)
-			.limit(limit)
 			.toArray();
 	};
+
+
 };

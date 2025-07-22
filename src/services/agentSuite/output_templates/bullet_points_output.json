@@ -1,0 +1,29 @@
+{
+  "formatting_scanability": {
+    "score": "number",
+    "checklist": {
+      "capitalized_headers": "boolean",
+      "easy_to_scan": "boolean",
+      "not_wall_of_text": "boolean"
+    },
+    "comment": "string"
+  },
+  "value_prop_clarity": {
+    "score": "number",
+     "checklist": {
+      "feature_benefit_combo": "boolean",
+      "clear_value_proposition": "boolean",
+      "could_be_more_compelling": "boolean"
+    },
+    "comment": "string"
+  },
+  "overall_score": "number",
+  "suggestions": {
+    "formatting_and_scanability": [
+      "string (suggestion bullet point)"
+    ],
+    "value_prop_clarity": [
+      "string (suggestion bullet point)"
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "main_image": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "white_background": { "type": "boolean" },
+            "product_fills_frame": { "type": "boolean" },
+            "crisp_and_well_lit": { "type": "boolean" },
+            "minor_compliance_issues": { "type": "boolean" }
+          },
+          "required": [
+            "white_background",
+            "product_fills_frame",
+            "crisp_and_well_lit",
+            "minor_compliance_issues"
+          ]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "infographics": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "has_5_plus_infographics": { "type": "boolean" },
+            "custom_branded": { "type": "boolean" },
+            "usp_focused": { "type": "boolean" }
+          },
+          "required": [
+            "has_5_plus_infographics",
+            "custom_branded",
+            "usp_focused"
+          ]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "lifestyle_use_case_images": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "three_plus_images": { "type": "boolean" },
+            "ugc_style_content": { "type": "boolean" },
+            "shows_product_in_use": { "type": "boolean" }
+          },
+          "required": [
+            "three_plus_images",
+            "ugc_style_content",
+            "shows_product_in_use"
+          ]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "image_resolution": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "number" },
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "above_1000px": { "type": "boolean" },
+            "above_2000px": { "type": "boolean" },
+            "zoomable_quality": { "type": "boolean" }
+          },
+          "required": ["above_1000px", "above_2000px", "zoomable_quality"]
+        },
+        "comment": { "type": "string" }
+      },
+      "required": ["score", "checklist", "comment"]
+    },
+    "overall_score": { "type": "number" }
+  },
+  "required": [
+    "main_image",
+    "infographics",
+    "lifestyle_use_case_images",
+    "image_resolution",
+    "overall_score"
+  ]
+}
