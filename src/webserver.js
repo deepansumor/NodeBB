@@ -34,6 +34,7 @@ const topicEvents = require('./topics/events');
 const privileges = require('./privileges');
 const routes = require('./routes');
 const auth = require('./routes/authentication');
+const AWS = require('./api/agents/services/aws');
 
 const helpers = require('./helpers');
 
@@ -115,6 +116,7 @@ async function initializeNodeBB() {
 	await flags.init();
 	await analytics.init();
 	await topicEvents.init();
+	await AWS.init();
 	if (nconf.get('runJobs')) {
 		await require('./widgets').moveMissingAreasToDrafts();
 	}

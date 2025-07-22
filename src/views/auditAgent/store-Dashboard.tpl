@@ -1,5 +1,5 @@
 <title>Amazon Audit Dashboard</title>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
+    <nav class="navbar navbar-expand-lg navbar-light bg-red border-bottom py-3">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="brand-logo"></div>
@@ -10,17 +10,21 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link active" href="/agents">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link " href="/agents/audit">PDP Audit</a></li>
-                <li class="nav-item"><a class="nav-link " href="/agents/brand-audit">Store Audit</a></li>
-            </ul>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/agents">
+                             Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/agents/audit">
+                           PDP Audit
+                        </a>
+                    </li>
+                   
+                </ul>
             </div>
-           
-
         </div>
     </nav>
-
-
 
     <div class="main-content">
         <div class="container py-4">
@@ -36,23 +40,9 @@
                         Start PDP Audit
                         <i class="fas fa-arrow-right ms-2"></i>
                     </a>
-                    <a href="/agents/brand-audit" class="btn btn-primary btn-lg">
-                        Start Store Audit
-                        <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
                    
                 </div>
             </div>
-
- <div class="d-flex justify-content-center my-4">
-  <div class="btn-group" role="group" aria-label="Audit Type Toggle">
-    <input type="radio" class="btn-check" name="auditToggle" id="pdpToggle" autocomplete="off" checked>
-    <label class="btn btn-outline-primary" for="pdpToggle">PDP</label>
-
-    <input type="radio" class="btn-check" name="auditToggle" id="storeToggle" autocomplete="off">
-    <label class="btn btn-outline-primary" for="storeToggle">Store</label>
-  </div>
-</div>
 
             <div class="row g-4 mb-5">
                 <div class="col-md-3 col-sm-6">

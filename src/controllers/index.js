@@ -54,6 +54,10 @@ Controllers.escape = require("./escape");
 Controllers.dashboard = require("./auditAgent/dashboard");
 Controllers.pdpAudit = require("./auditAgent/pdp-audit");
 Controllers.auditAgent = require("./auditAgent")
+Controllers.storeAudit = require("./auditAgent/store-audit")
+Controllers.storeSummary = require("./auditAgent/store-summary")
+Controllers.pdpReport = require("./auditAgent/pdp-report")
+
 
 Controllers.write = require("./write");
 

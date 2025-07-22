@@ -5,3 +5,7 @@ collections.ACCOUNTS = "accounts";
 collections.ASINS = "asins"
 collections.REPORT = "pdp_reports"
 collections.SELLERS = "sellers"
+
+
+collections.BRANDASIN = "brand_asins";
+collections.AUDIT_RUNS = "audit_runs";

@@ -1,5 +1,7 @@
 "use strict";
 
+const  privileges = require("../privileges/users")
+
 const thresholdsController = module.exports;
 thresholdsController.get = async function (req, res, next) {
 	try {
@@ -46,6 +48,7 @@ thresholdsController.get = async function (req, res, next) {
 		};
 
 		escalationTable.title = "escalation table";
+		await privileges.isModerator()
 		res.render("automate/threshold", escalationTable);
 	} catch (err) {
 		console.error("Error rendering template:", err);

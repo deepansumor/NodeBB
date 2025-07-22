@@ -12,49 +12,56 @@ module.exports = function () {
         router,
         "post",
         "/generate-report/:asin",
-        [...middlewares],
+        [],
         controllers.write.agents.generateReport
     );
 
     setupApiRoute(
         router,
-        "get",
-        "/data/:asin/new",
-        [...middlewares],
-        controllers.write.agents.createNewASINData
-    );
-
-    setupApiRoute(
-        router,
-        "get",
-        "/data/:asin",
-        [...middlewares],
-        controllers.write.agents.getAsinData
-    );
-
-    setupApiRoute(
-        router,
-        "get",
-        "/report/:asin",
-        [...middlewares],
-        controllers.write.agents.getReport
-    );
-
-    setupApiRoute(
-        router,
         "post",
-        "/report/save/:asin",  //take out "put" || save
-        [...middlewares],
-        controllers.write.agents.saveReport
+        "/generate-report/store/:brandName",
+        [],
+        controllers.write.agents.brandStoreReport
     );
 
     setupApiRoute(
+        router,
+        "get",
+        "/brand-audit",
+        [],
+        controllers.write.agents.getBrandAudit
+    );
+
+    //  setupApiRoute(
+    //     router,
+    //     "get",
+    //     "/data/fetch",
+    //     [],
+    //     controllers.write.agents.forceFetchASINData
+    // );
+
+    //  setupApiRoute(
+    //     router,
+    //     "get",
+    //     "/data",
+    //     [],
+    //     controllers.write.agents.getAsinData
+    // );
+
+    //  setupApiRoute(
+    //     router,
+    //     "get",
+    //     "/report",
+    //     [],
+    //     controllers.write.agents.getReport
+    // );
+     setupApiRoute(
         router,
         "get",
         "/report/download/:brand/:asin/:date",
         [...middlewares],
         controllers.write.agents.download
-    );
+    );
 
     setupApiRoute(
         router,
@@ -62,39 +69,23 @@ module.exports = function () {
         "/report",
         [...middlewares],
         controllers.write.agents.dbReport
-    );
-
-    setupApiRoute(
+    );
+     
+     setupApiRoute(
         router,
         "get",
         "/report/single/:key",
         [...middlewares],
         controllers.write.agents.singleAsinReport
-    );
-
-    setupApiRoute(
+    );
+     
+     setupApiRoute(
         router,
         "get",
-        "/fetch/data/:asin",
+        "/report/brand/:auditId",
         [...middlewares],
-        controllers.write.agents.asinData
-    );
-
-
-    // route sp-api connects to the app-store
-    setupApiRoute(
-        router,
-        "get",
-        "/auth/login",
-        controllers.write.agents.authStart
-    );
-
-    setupApiRoute(
-        router,
-        "get",
-        "/auth/finish",
-        controllers.write.agents.authFinish
-    );
+        controllers.write.agents.getBrandAsins
+    );
 
     return router;
 }

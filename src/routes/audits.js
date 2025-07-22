@@ -18,4 +18,24 @@ module.exports = function (app, name, middleware, controllers) {
         accountMiddlewares,
         controllers.pdpAudit.get)
         ;
+     
+       setupPageRoute(
+        app,
+        "/agents/brand-audit",
+        accountMiddlewares,
+        controllers.storeAudit.get)
+        ;    
+
+        setupPageRoute(
+        app,
+        "/agents/brand-summary",
+        accountMiddlewares,
+        controllers.storeSummary.get)
+        ;    
+        setupPageRoute(
+        app,
+        "/agents/pdp-report",
+        accountMiddlewares,
+        controllers.pdpReport.get)
+        ;    
 }

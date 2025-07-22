@@ -47,7 +47,6 @@ Write.reload = async (params) => {
 	router.use('/api/v3/utilities', require('./utilities')());
 	router.use('/api/v3/automate', require('./escalations')());
 
-	// agent route
 	router.use('/api/v3/agent', require('./agents')());
 
 	setupApiRoute(router, 'get', '/api/v3/ping', writeControllers.utilities.ping.get);
