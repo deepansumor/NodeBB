@@ -36,5 +36,29 @@ module.exports = function () {
 		controllers.write.escalations.updateThreshold
 	);
 
+	setupApiRoute(
+		router,
+		"get",
+		"/filterData",
+		[...middlewares],
+		controllers.write.escalations.filterData
+	);
+
+	setupApiRoute(
+		router,
+		"get",
+		"/total-count",
+		[...middlewares],
+		controllers.write.escalations.getTotalCount
+	);
+
+	setupApiRoute(
+		router,
+		"get",
+		"/portfolios",
+		[...middlewares],
+		controllers.write.escalations.getAllPortfolios
+	);
+
 	return router;
 };

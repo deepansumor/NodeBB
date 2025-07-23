@@ -1,7 +1,7 @@
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const fs = require("fs");
 const path = require("path");
-
+const AWS = require("../api/agents/services/aws")
 const nconf = require("nconf")
 const S3 = nconf.get("s3")
 const configPath = path.resolve(__dirname, "config.json");
@@ -16,14 +16,15 @@ if (!BUCKET || !ACCESS_KEY || !SECRET_KEY) {
   throw new Error("Missing required AWS credentials or bucket name.");
 }
 
-const s3 = new S3Client({
-  region: REGION,
-  credentials: {
-    accessKeyId: ACCESS_KEY,
-    secretAccessKey: SECRET_KEY,
-  },
-});
+// const s3 = new S3Client({
+//   region: REGION,
+//   credentials: {
+//     accessKeyId: ACCESS_KEY,
+//     secretAccessKey: SECRET_KEY,
+//   },
+// });
 
+// const s3 = AWS.s3
 const s3Api = module.exports;
 
 /**
@@ -31,19 +32,20 @@ const s3Api = module.exports;
  * @param {string} key - The S3 object key (e.g., products/B0CL9P14JH.json)
  * @param {Object} data - The JSON data to save
  */
-s3Api.saveJson = async (key, data) => {
-  const command = new PutObjectCommand({
+s3Api.saveJson = async (key, pdfBuffer) => {
+  const command = {
     Bucket: BUCKET,
     Key: key,
-    Body: JSON.stringify(data, null, 2),
-    ContentType: "application/json",
-  });
+    Body: pdfBuffer,
+    ContentType: "application/pdf",
+  };
 
   try {
-    const response = await s3.send(command);
-    console.log(`✅ Uploaded ${key} to S3`, response);
+    const response = await AWS.s3.upload(command).promise();
+    console.log(`✅ Uploaded PDF ${key} to S3`);
+    return response;
   } catch (err) {
-    console.error(`❌ Failed to upload ${key}`, err);
+    console.error(`❌ Failed to upload PDF ${key}`, err);
     throw err;
   }
 };
@@ -55,28 +57,19 @@ s3Api.saveJson = async (key, data) => {
  */
 // key == path of the file
 s3Api.getJson = async (key) => {
-  const command = new GetObjectCommand({
+
+  // console.log("the s3 instance -->",AWS)
+  const params ={
     Bucket: BUCKET,
     Key: key,
-  });
+  }
 
   try {
-    const response = await s3.send(command);
-    // const chunks = [];
-    // for await (const chunk of response.Body) {
-    //   chunks.push(chunk);
-    // }
-    // const body = Buffer.concat(chunks).toString("utf-8");
-    // console.log("response of the s3 bucket -->",body)
-    // return JSON.parse(body);
-    return response.Body
+    const s3Object = AWS.s3.getObject(params); // Do not pass a callback
+    return s3Object.createReadStream(); // return the ReadableStream
   } catch (err) {
-    if (err.name === "NoSuchKey") {
-      console.error(`❌ File not found at key: ${key}`);
-      return null
-    } else {
-      console.error(`❌ Failed to fetch data for key: ${key}`, err);
-    }
+    console.error('❌ Error creating stream from S3 object:', err);
     throw err;
   }
+ 
 };

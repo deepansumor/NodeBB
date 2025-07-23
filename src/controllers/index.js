@@ -47,6 +47,7 @@ Controllers.escalation = require("./escalation");
 Controllers.threshold = require("./threshold");
 Controllers.pthreshold = require("./p-threshold");
 
+Controllers.escalationV2 = require("./escalationsv2")
 
 Controllers.escape = require("./escape");
 

@@ -353,8 +353,8 @@ module.exports = function (module) {
 
 	module.find = async function (
 		query,
-		skip =0,
-		limit =10,
+		skip = 0,
+		limit = 10,
 		collectionName = "objects",
 		sort = { createdAt: -1 }
 	) {
@@ -377,5 +377,14 @@ module.exports = function (module) {
 			.toArray();
 	};
 
+	module.aggregation = async function (
+		pipeline,
+		collectionName = "objects"
+	) {
+		return await module.client
+			.collection(collectionName)
+			.aggregate(pipeline)
+			.toArray()
+	};
 
 };

@@ -40,4 +40,33 @@ escalationsControllers.updateThreshold = async (req, res) => {
 		res,
 		await api.escalations.thresholds.updateThreshold(req)
 	);
+
+};
+
+
+escalationsControllers.getTotalCount = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.filters.getTotalCount(req)
+	);
+
+};
+
+escalationsControllers.filterData = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.filters.get(req)
+	);
+
+};
+
+escalationsControllers.getAllPortfolios = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.filters.getAllPortfolios(req)
+	);
+
 };

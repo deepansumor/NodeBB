@@ -1,5 +1,7 @@
 const awsSdk = require('aws-sdk');
 const nconf = require('nconf');
+// const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+
 const { QueueUrl, aws_region, aws_access_key_id, aws_secret_access_key } = nconf.get("s3");
 
 
@@ -16,6 +18,7 @@ AWS.init = async function (server) {
     });
 
     AWS.sqs =  new awsSdk.SQS();
+    AWS.s3 = new awsSdk.S3();
   
     console.log("AWS SDK initialized with SQS and S3 services");
 }

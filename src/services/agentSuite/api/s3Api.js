@@ -1,7 +1,7 @@
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const fs = require("fs");
 const path = require("path");
-
+const AWS = require("../../../api/agents/services/aws")
 const nconf = require("nconf");
 const S3 = nconf.get("s3");
 const configPath = path.resolve(__dirname, "config.json");
@@ -16,15 +16,16 @@ if (!BUCKET || !ACCESS_KEY || !SECRET_KEY) {
   throw new Error("Missing required AWS credentials or bucket name. Please set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and S3_BUCKET environment variables.");
 }
 
-const s3Client = new S3Client({
-  region: REGION,
-  credentials: {
-    accessKeyId: ACCESS_KEY,
-    secretAccessKey: SECRET_KEY,
-  },
-});
+// const s3Client = new S3Client({
+//   region: REGION,
+//   credentials: {
+//     accessKeyId: ACCESS_KEY,
+//     secretAccessKey: SECRET_KEY,
+//   },
+// });
 
-console.log('✅ S3 credentials loaded successfully');
+// const s3Client = AWS.s3;
+// console.log('✅ S3 credentials loaded successfully');
 
 const s3Api = module.exports;
 
@@ -57,15 +58,15 @@ s3Api.saveJson = async (key, data) => {
  * @param {Buffer} pdfBuffer - The PDF buffer to save
  */
 s3Api.savePdf = async (key, pdfBuffer) => {
-  const command = new PutObjectCommand({
+  const command = {
     Bucket: BUCKET,
     Key: key,
     Body: pdfBuffer,
     ContentType: "application/pdf",
-  });
+  };
 
   try {
-    const response = await s3Client.send(command);
+    const response = await AWS.s3.upload(command).promise();
     console.log(`✅ Uploaded PDF ${key} to S3`);
     return response;
   } catch (err) {
