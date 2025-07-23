@@ -56,12 +56,18 @@ categoriesAPI.create = async function (caller, data) {
 };
 
 categoriesAPI.update = async function (caller, data) {
-	await hasAdminPrivilege(caller.uid);
+	// await hasAdminPrivilege(caller.uid);
 	if (!data) {
 		throw new Error('[[error:invalid-data]]');
 	}
 	const { cid, values } = data;
 
+	const categoryPrivileges = await privileges.categories.get(cid, caller.uid);
+    console.log('categoryPrivileges:', categoryPrivileges);
+    if (!categoryPrivileges['topics:create']) {
+        throw new Error('[[error:no-privileges]]');
+    }
+	
 	const payload = {};
 	payload[cid] = values;
 	await categories.update(payload);

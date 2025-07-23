@@ -217,7 +217,7 @@ define("forum/automate/portfolio/handlers", [
           alert("Thresholds saved successfully!") ;
         })
         .catch((err) => {
-          alert("Failed to save thresholds:", err);
+          alert(err.message);
         });
     });
 
