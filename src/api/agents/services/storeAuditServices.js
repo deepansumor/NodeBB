@@ -5,7 +5,9 @@ const { ObjectId } = require("mongodb");
 const COLLECTIONS = require("../../../database/mongo/collections");
 const AWS = require("./aws")
 
+const nconf = require('nconf');
 
+const { QueueUrl } = nconf.get("s3");
 
 
 function getBrandName(req) {

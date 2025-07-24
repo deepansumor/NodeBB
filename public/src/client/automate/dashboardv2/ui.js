@@ -120,7 +120,7 @@ define( ["./core"], (escalationsCore) =>{
 
     // Update panel content
     document.getElementById("detail-panel-id").textContent = `ID: ESC-${escalation.tid}`
-    document.getElementById("detail-summary").textContent = escalationsCore.parseSummary(escalation.summary)
+    document.getElementById("detail-summary").innerHTML = escalationsCore.parseSummary(escalation.summary)
     document.getElementById("detail-brand").textContent = escalation.subcategory.name.replace(/Stage\d+/, "").trim()
     document.getElementById("detail-stage").innerHTML =
       `<span class="stage-badge ${escalationsUI.getStageBadgeClass(stage)}">${stage}</span>`
