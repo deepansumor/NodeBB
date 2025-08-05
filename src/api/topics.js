@@ -312,7 +312,7 @@ topicsAPI.bump = async (caller, { tid }) => {
     topics.pushUnreadCount(caller.uid);
 };
 
-topicsAPI.move = async (caller, { tid, cid }) => {
+topicsAPI.move = async (caller, { tid, cid , body = {}}) => {
     const canMove = await privileges.categories.isAdminOrMod(cid, caller.uid);
     if (!canMove) {
         throw new Error('[[error:no-privileges]]');
@@ -335,6 +335,7 @@ topicsAPI.move = async (caller, { tid, cid }) => {
             await topics.tools.move(tid, {
                 cid,
                 uid: caller.uid,
+                body
             });
 
             const notifyUids = await privileges.categories.filterUids('topics:read', topicData.cid, uids);

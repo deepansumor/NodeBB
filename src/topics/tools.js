@@ -279,6 +279,7 @@ module.exports = function (Topics) {
 
         await Promise.all([
             Topics.setTopicFields(tid, {
+                ...(typeof data.body == "object" ? data.body : {}),
                 cid: cid,
                 oldCid: oldCid,
             }),
