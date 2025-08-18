@@ -258,7 +258,7 @@ agentApi.getBrandAsins = async (req) => {
 
     // 🆕 Extract category_scores.scores from auditMeta.summary
    let metaCategoryScores = null;
-let summaryIssues = null;
+let humanSummary = null;
 
 if (Array.isArray(auditMeta.summary)) {
   for (const item of auditMeta.summary) {
@@ -266,12 +266,12 @@ if (Array.isArray(auditMeta.summary)) {
       metaCategoryScores = item.scores;
     }
 
-    if (item?.type === "issues" && Array.isArray(item.list)) {
-      summaryIssues = item.list;
+    if (item?.type === "human_summary") {
+      humanSummary = item.text;
     }
 
     // Break early if both are found
-    if (metaCategoryScores && summaryIssues) break;
+    if (metaCategoryScores && humanSummary) break;
   }
 }
     // Summary Calculation
@@ -331,7 +331,7 @@ if (Array.isArray(auditMeta.summary)) {
       },
       asins,
        metaCategoryScores ,
-      summaryIssues 
+      humanSummary
     };
 
     return {
