@@ -8,16 +8,7 @@ define("forum/automate/portfolio/handlers", [
 ], function ($, state, portfoliosRenderer, helpers, apiService, config) {
 
   function setupHandlers() {
-    // $('#accountSelect').on('change', function () {
-    //   const selectedId = parseInt($(this).val(), 10);
-    //   // const selected = state.accounts.find(a => a.meta.profileId == selectedId);
-    //   const selected = state.getAccounts().find(a => a.meta.profileId == selectedId);
-
-    //   if (!selected) return;
-
-    //   state.currentAccount = selected.meta.profileId;
-    //   portfoliosRenderer.renderPortfolios();
-    // });
+   
 
     $('#accountSelect').on('change', function () {
       const selectedId = $(this).val(); // don't parseInt; profileId is a string
@@ -43,14 +34,7 @@ define("forum/automate/portfolio/handlers", [
 
 
 
-    // $('#portfolioSearch').on('input', function () {
-    //   state.searchTerm = this.value.toLowerCase();
-    //   portfoliosRenderer.renderPortfolios();
-    // });
-
-    // $('body').on('click', '.use-defaults-btn', function () {
-    //   helpers.useDefaults($(this).data('id'));
-    // });
+  
     $('#portfolioSearch').on('input', function () {
       state.setSearchTerm($(this).val().toLowerCase()); // ✅ fix
       require(["./render/portfolios"], function (portfolioRenderer) {
@@ -58,34 +42,34 @@ define("forum/automate/portfolio/handlers", [
       });
     });
 
+    // use default 
     $('body').on('click', '.use-defaults-btn', function () {
-      const portfolioId = $(this).data('id');
-      const accounts = state.getAccounts();
-      console.log("accounts in usedefault:", accounts);
+  const portfolioId = $(this).data('id');
 
+  const accounts = state.getAccounts();
+  const currentAccountId = state.getCurrentAccount(); //  get currently selected account
+  const account = accounts.find(a => a.meta.profileId == currentAccountId); //  find that account
 
-      let portfolio = null;
-      // accounts.some(acc => {
-      for (const acc of accounts) {
-        if (acc.meta?.portfolios) {
-          portfolio = acc.meta.portfolios.find(p => p.portfolioId == portfolioId);
-          if (portfolio) break; // found portfolio, exit loop
-        }
-      }
+  if (!account || !account.meta?.portfolios) {
+    console.warn("Current account or its portfolios not found.");
+    return;
+  }
 
-      console.log("portfolio data:", portfolio);
+  const portfolio = account.meta.portfolios.find(p => p.portfolioId == portfolioId); // ✅ only look here
 
-      if (!portfolio) {
-        console.warn(`Portfolio with ID ${portfolioId} not found.`);
-        return;
-      }
+  console.log("portfolio data:", portfolio);
 
-      // Pass portfolio object and default thresholds to helper
-      helpers.useDefaults(portfolio, config.defaultThresholds);
+  if (!portfolio) {
+    console.warn(`Portfolio with ID ${portfolioId} not found in current account.`);
+    return;
+  }
 
-      // Re-render portfolios after update
-      portfoliosRenderer.renderPortfolios();
-    });
+  // Apply default thresholds
+  helpers.useDefaults(portfolio, config.defaultThresholds);
+
+  // Re-render only the current account’s portfolios
+  portfoliosRenderer.renderPortfolios();
+});
 
     // $('body').on('click', '.toggle-expand-btn', function () {
     //   helpers.togglePortfolioExpanded($(this).data('id'));
@@ -99,18 +83,7 @@ define("forum/automate/portfolio/handlers", [
       });
     });
 
-    // $('body').on('change', '.toggle-enabled-checkbox', function () {
-    //   helpers.togglePortfolioEnabled($(this).data('id'), $(this).is(':checked'));
-    // });
-
-    //     $('body').on('change', '.toggle-enabled-checkbox', function () {
-    //   const portfolioId = $(this).data('id');
-    //   const isChecked = $(this).is(':checked');
-    //   helpers.togglePortfolioEnabled(portfolioId, isChecked);
-    //   require(["./render/portfolios"], function (portfolioRenderer) {
-    //     portfolioRenderer.renderPortfolios(); // ✅ re-render
-    //   });
-    // });
+   
 
     $('body').on('change', '.toggle-enabled-checkbox', function () {
       const portfolioId = $(this).data('id');
@@ -135,26 +108,7 @@ define("forum/automate/portfolio/handlers", [
     });
 
 
-//     $('body').on('change', '.toggle-metric-checkbox', function () {
-//       // helpers.togglePortfolioMetric($(this).data('portfolio-id'), $(this).data('metric'), $(this).is(':checked'));
-//       const portfolioId = $(this).data('portfolio-id');
-//   const metric = $(this).data('metric');
-//   const isEnabled = $(this).is(':checked');
 
-//   // Update value: set to null if disabled
-//   const accounts = state.getAccounts();
-//   accounts.forEach(acc => {
-//     const portfolio = acc.meta.portfolios.find(p => p.portfolioId == portfolioId);
-//     if (portfolio) {
-//       portfolio.thresholds[metric] = isEnabled ? (portfolio.thresholds[metric] || 0) : null;
-//     }
-//   });
-
-//   helpers.markUnsaved();
-//   require(["./render/portfolios"], function (portfolioRenderer) {
-//     portfolioRenderer.renderPortfolios();
-//   });
-// });
    
   // $('body').on('change', '.toggle-metric-checkbox', function () {
   //     // helpers.togglePortfolioMetric($(this).data('portfolio-id'), $(this).data('metric'), $(this).is(':checked'));
