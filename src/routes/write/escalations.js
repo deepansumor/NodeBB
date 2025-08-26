@@ -60,5 +60,29 @@ module.exports = function () {
 		controllers.write.escalations.getAllPortfolios
 	);
 
+	setupApiRoute(
+		router,
+		"get",
+		"/filterData",
+		[...middlewares],
+		controllers.write.escalations.filterData
+	);
+
+	setupApiRoute(
+		router,
+		"post",
+		"/algolia",
+		[...middlewares],
+		controllers.write.escalations.algolia
+	);
+
+	setupApiRoute(
+		router,
+		"get",
+		"/optimise-filter",
+		[...middlewares],
+		controllers.write.escalations.optimiseFilter
+	);
+
 	return router;
 };

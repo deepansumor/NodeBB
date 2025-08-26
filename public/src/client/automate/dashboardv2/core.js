@@ -8,6 +8,7 @@ define(["api"], (api) => {
       { key: "RESOLVED", label: "RESOLVED" },
     ],
     category: {},
+    categories: [],
     page: 1,
   }
 
@@ -20,7 +21,7 @@ define(["api"], (api) => {
   // API Functions
   escalationsCore.fetchAndRender = async (data = {}) => {
     try {
-      console.log("params for the api -->", data)
+      // console.log("params for the api -->", data)
       const params = new URLSearchParams(data)
       $(".loader-container").show()
 
@@ -31,7 +32,10 @@ define(["api"], (api) => {
       $("#status-filter").prop('disabled', true);
       $("#date-range-filter").prop('disabled', true);
 
-      const response = await api.get(`/automate/filterData?${params.toString()}`)
+      // const response = await api.get(`/automate/filterData?${params.toString()}`)
+      const response= await api.get(`/automate/optimise-filter?${params.toString()}`)
+      // console.log("response from the api in the core.js--->", response)
+      escalationsCore.category = response
       $(".loader-container").hide()
       // making filter enable
        $("#brand-filter").prop('disabled', false);
@@ -52,7 +56,7 @@ define(["api"], (api) => {
   // Initialize filter dropdowns
   escalationsCore.initializeFilters = async () => {
     const totalEscalations = await api.get("/automate/total-count")
-    console.log("Total escalations count:", totalEscalations)
+    // console.log("Total escalations count:", totalEscalations)
     const data = totalEscalations[0]
     document.getElementById("unresolved-count").textContent = data.total - data.locked1 || 0
     document.getElementById("total-escalations").textContent = data.total
@@ -61,14 +65,18 @@ define(["api"], (api) => {
   }
 
   // Populate select dropdown
-  escalationsCore.populateSelect = (selectId, options) => {
+  escalationsCore.populateSelect = (selectId, pcid) => {
     const select = document.getElementById(selectId)
     select.innerHTML = "" // Clear existing options
     const optionElement = document.createElement("option")
     optionElement.value = null
     optionElement.textContent = "All Types"
     select.appendChild(optionElement)
-    options.forEach((option) => {
+
+    const categories = escalationsCore.categories;
+    const category = categories.filter((cat) => cat.cid == pcid);
+    // console.log("category for the portfolio --->", categories,category[0]?.meta?.portfolios,pcid)
+    category[0]?.meta?.portfolios.forEach((option) => {
       const optionElement = document.createElement("option")
       optionElement.value = option.portfolioName
       optionElement.textContent = option.portfolioName
@@ -150,6 +158,7 @@ define(["api"], (api) => {
 
   // API call for posting reply
   escalationsCore.postReply = async (tid, content, toPid) =>
+    
     await api.post(`/topics/${tid}`, { content: content, toPid: toPid })
 
   return escalationsCore

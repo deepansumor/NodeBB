@@ -6,12 +6,37 @@ define( ["./core"], (escalationsCore) =>{
   let selectedEscalation = null
 
   //render status function
+  // escalationsUI.renderStatuses = (locked, tid) => {
+  //   const currentStatus = escalationsCore.getStatusByLock(locked)
+  //   // change the code for previllageous
+  //   const topic = escalationsCore.category.result.find((topic) => topic.tid === tid)
+  //   const canModify =
+  //     topic?.privileges?.length > 0 ? topic?.privileges?.some((obj) => obj?._key.includes("topics:create")) : false
+  //   return `<select name="status" class="status-badge ${currentStatus === "RESOLVED" ? "badge-resolved" : "badge-unresolved"}" data-tid="${tid}" ${canModify ? "" : "disabled"}>
+  //           ${escalationsCore.statuses
+  //             .map(
+  //               (s) => `                <option value="${s.key}" class="" ${s.key === currentStatus ? "selected" : ""}>
+  //                   ${s.label}
+  //               </option>`,
+  //             )
+  //             .join("")}
+  //       </select>`
+  // }
+  
   escalationsUI.renderStatuses = (locked, tid) => {
     const currentStatus = escalationsCore.getStatusByLock(locked)
     // change the code for previllageous
     const topic = escalationsCore.category.result.find((topic) => topic.tid === tid)
-    const canModify =
-      topic.privileges.length > 0 ? topic.privileges.some((obj) => obj._key.includes("topics:create")) : false
+    // console.log("topic inside the ui :", topic);
+    const categoryId = topic?.fromCid || topic?.cid;
+    // console.log("category id :", categoryId);
+    const category = escalationsCore.categoryData.find(c => c.cid === categoryId);
+    // console.log("category inside the ui :", category, category?.privileges);
+
+    // const canModify = topic.privileges?.length > 0 ? topic.privileges?.some((obj) => obj._key.includes("topics:create")) : false
+    // const canModify = category?.privileges?.some(obj => obj._key?.includes("topics:create")) || false;
+     const canModify = category?.privileges['topics:create'] || false ;
+    //  console.log("can modify :", canModify);
     return `<select name="status" class="status-badge ${currentStatus === "RESOLVED" ? "badge-resolved" : "badge-unresolved"}" data-tid="${tid}" ${canModify ? "" : "disabled"}>
             ${escalationsCore.statuses
               .map(
@@ -28,13 +53,13 @@ define( ["./core"], (escalationsCore) =>{
     escalationsCore.category = response
     const { result = [] } = response
     const topics = result
-    console.log("the response of the topics -->", topics)
+    // console.log("the response of the topics -->", topics)
     const rows = topics
       .map((topic, index) => {
         const profileId = escalationsCore.extractProfileId(topic.title)
         const alertDetails = escalationsCore.parseSummary(topic.summary)
-        const stage = topic.stage
-        const name = topic.subcategory.name.replace(/Stage\d+/, "").trim()
+        const stage = topic?.stage || "--"
+        const name = topic?.subcategory?.name.replace(/Stage\d+/, "").trim() || topic?.pcName
         const postTime = topic.timestampISO ? new Date(topic.timestampISO).toLocaleString() : "--"
         return `                <tr class="single-escalation" data-tid="${topic.tid}">
                     <td>${name}</td>
@@ -116,12 +141,12 @@ define( ["./core"], (escalationsCore) =>{
     selectedEscalation = escalation
     const stage = selectedEscalation.stage
 
-    console.log("Showing detail panel for topic:", escalation.tid)
+    // console.log("Showing detail panel for topic:", escalation.tid)
 
     // Update panel content
     document.getElementById("detail-panel-id").textContent = `ID: ESC-${escalation.tid}`
     document.getElementById("detail-summary").innerHTML = escalationsCore.parseSummary(escalation.summary)
-    document.getElementById("detail-brand").textContent = escalation.subcategory.name.replace(/Stage\d+/, "").trim()
+    document.getElementById("detail-brand").textContent = escalation?.pcName
     document.getElementById("detail-stage").innerHTML =
       `<span class="stage-badge ${escalationsUI.getStageBadgeClass(stage)}">${stage}</span>`
     document.getElementById("detail-portfolio").textContent = escalation.portfolioName || escalation.adType
@@ -143,7 +168,7 @@ define( ["./core"], (escalationsCore) =>{
 
   // Close detail panel
   escalationsUI.closeDetailPanel = () => {
-    console.log("Closing detail panel")
+    // console.log("Closing detail panel")
     selectedEscalation = null
     document.getElementById("detail-panel").classList.remove("show")
     document.getElementById("main-content").classList.remove("panel-open")

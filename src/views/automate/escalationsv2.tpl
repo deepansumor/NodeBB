@@ -107,7 +107,7 @@
                         <div class="col-md-3">
                             <label class="form-label small">Portfolio</label>
                             <select class="form-select form-select-sm" id="portfolio-filter">
-                                <option value="">All Types</option>
+                                <option value="null">All Types</option>
                             </select>
                         </div>
                         <div class="col-md-2">
