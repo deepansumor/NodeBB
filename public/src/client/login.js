@@ -26,6 +26,7 @@ define('forum/login', ['hooks', 'translator', 'jquery-form'], function (hooks, t
         const amazon = $('#login-amazon');
        
 		amazon.on("click",async function(e){
+			e.preventDefault();
 			console.log("amazon login btn click")
 			window.location.href = "/api/v3/agent/start-oauth";
 			// await api.get("/agent/start-oauth")

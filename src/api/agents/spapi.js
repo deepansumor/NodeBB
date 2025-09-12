@@ -1,14 +1,18 @@
 const { authorization } = require("../../services");
-const { fetchCatalogData } = require("../../services/spapi");
+const { fetchCatalogData ,getAsinData} = require("../../services/spapi");
 
 
 const spapi = module.exports
 
 spapi.asinData = async(req)=>{
     try{ 
-        const asin = req.params.asin
+        // const asin = req.params.asin
 
-        const data = await fetchCatalogData(asin)
+        console.log("I am inside the asinData api --> 11")
+
+        const data = await getAsinData()
+
+        return data;
 
     }catch(error){
         throw new Error("Error while getting the asin data -->",error);

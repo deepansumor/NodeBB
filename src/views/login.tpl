@@ -59,6 +59,8 @@
 						<span class="text-sm">[[login:dont-have-account]]</span>
 						<a class="btn btn-outline-light text-body" href="{config.relative_path}/register">[[register:register]]</a>
 						{{{ end }}}
+
+						<button class="btn btn-primary" id="login-amazon">Connect with Amazon</button>
 					</form>
 				</div>
 			</div>
@@ -98,9 +100,6 @@
 	</div>
 </div>
 
-<button class="amazon-login btn btn-primary" id="login-amazon">
-        Connect with amazon
-	</button>
 <div data-widget-area="footer">
 	{{{each widgets.footer}}}
 	{{widgets.footer.html}}

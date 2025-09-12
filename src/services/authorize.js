@@ -125,6 +125,7 @@ authorize.startAuth = async (req, res) => {
             `&redirect_uri=${REDIRECT_URI}`;
         console.log('[startAuth] Redirecting seller to Amazon consent URL:', redirectUrl);
 
+        
         res.redirect(redirectUrl);
     } catch (error) {
         console.error("[startAuth] Error starting Amazon auth:", error);
@@ -192,6 +193,8 @@ authorize.finishAuth = async (req, res) => {
         await spapi.getAllAsins(sellerData);
 
         console.log('[finishAuth] Authorization flow completed successfully for seller:', selling_partner_id);
+
+        res.redirect("/agents/registration-success")
         return res.send('<h1>✅ Amazon Authorization Successful</h1>');
     } catch (err) {
         console.error('[finishAuth] Token exchange error:', err.response?.data || err.message);

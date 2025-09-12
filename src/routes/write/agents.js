@@ -40,13 +40,13 @@ module.exports = function () {
     //     controllers.write.agents.forceFetchASINData
     // );
 
-    //  setupApiRoute(
-    //     router,
-    //     "get",
-    //     "/data",
-    //     [],
-    //     controllers.write.agents.getAsinData
-    // );
+     setupApiRoute(
+        router,
+        "get",
+        "/data",
+        [],
+        controllers.write.agents.getAsinData
+    );
 
     //  setupApiRoute(
     //     router,
@@ -55,13 +55,13 @@ module.exports = function () {
     //     [],
     //     controllers.write.agents.getReport
     // );
-     setupApiRoute(
+    setupApiRoute(
         router,
         "get",
         "/report/download/:brand/:asin/:date",
         [...middlewares],
         controllers.write.agents.download
-    );
+    );
 
     setupApiRoute(
         router,
@@ -69,29 +69,28 @@ module.exports = function () {
         "/report",
         [...middlewares],
         controllers.write.agents.dbReport
-    );
-     
-     setupApiRoute(
+    );
+
+    setupApiRoute(
         router,
         "get",
         "/report/single/:key",
         [...middlewares],
         controllers.write.agents.singleAsinReport
-    );
-     
-     setupApiRoute(
+    );
+
+    setupApiRoute(
         router,
         "get",
         "/report/brand/:auditId",
         [...middlewares],
         controllers.write.agents.getBrandAsins
-    );
-       
-       setupApiRoute(
+    );
+    setupApiRoute(
         router,
         "get",
         "/start-oauth",
-       
+
         controllers.write.agents.authStart
     );
 
@@ -99,9 +98,10 @@ module.exports = function () {
         router,
         "get",
         "/callback",
-       
+
         controllers.write.agents.authFinish
     );
+
 
     return router;
 }
