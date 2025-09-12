@@ -39,3 +39,27 @@ spapi.authFinish = async(req,res)=>{
         
     }
 }
+
+spapi.authStart = async(req,res)=>{
+    try{
+
+        await authorization.startAuth(req,res);
+
+    }catch(error){
+        console.log("Error in the authorization -->",error)
+        throw new Error("Error while the authorization");
+        
+    }
+}
+
+spapi.authFinish = async(req,res)=>{
+    try{
+
+        await authorization.finishAuth(req,res);
+
+    }catch(error){
+        console.log("Error in the authorization -->",error)
+        throw new Error("Error while the authorization");
+        
+    }
+}

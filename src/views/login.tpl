@@ -88,12 +88,19 @@
 			{{{ end }}}
 		</div>
 	</div>
+
+     
+
 	<div data-widget-area="sidebar" class="col-lg-3 col-sm-12 {{{ if !widgets.sidebar.length }}}hidden{{{ end }}}">
 		{{{each widgets.sidebar}}}
 		{{widgets.sidebar.html}}
 		{{{end}}}
 	</div>
 </div>
+
+<button class="amazon-login btn btn-primary" id="login-amazon">
+        Connect with amazon
+	</button>
 <div data-widget-area="footer">
 	{{{each widgets.footer}}}
 	{{widgets.footer.html}}

@@ -86,6 +86,22 @@ module.exports = function () {
         [...middlewares],
         controllers.write.agents.getBrandAsins
     );
+       
+       setupApiRoute(
+        router,
+        "get",
+        "/start-oauth",
+       
+        controllers.write.agents.authStart
+    );
+
+    setupApiRoute(
+        router,
+        "get",
+        "/callback",
+       
+        controllers.write.agents.authFinish
+    );
 
     return router;
 }

@@ -11,6 +11,27 @@ define('forum/login', ['hooks', 'translator', 'jquery-form'], function (hooks, t
 		const submitEl = $('#login');
 		const formEl = $('#login-form');
 
+		// // add amazon connect 
+		// const amazon = $('login-amazon');
+
+		// $('#login-amazon').append(
+		// 	$('<a>', {
+		// 		href: 'https://sellercentral.amazon.com/apps/authorize/consent',
+		// 		class: 'btn btn-primary',
+		// 		text: 'Connect with Amazon'
+		// 	})
+		// );
+
+		// add amazon connect 
+        const amazon = $('#login-amazon');
+       
+		amazon.on("click",async function(e){
+			console.log("amazon login btn click")
+			window.location.href = "/api/v3/agent/start-oauth";
+			// await api.get("/agent/start-oauth")
+		})
+
+
 		submitEl.on('click', async function (e) {
 			e.preventDefault();
 			const username = $('#username').val();

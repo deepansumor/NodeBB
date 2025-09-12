@@ -248,7 +248,7 @@ async function listMarketplaces(refreshToken) {
 
     // The raw API response lives in `response.payload`
     // It contains two arrays: participations[] and marketplaceParticipations[]
-    const mkps = response.payload.marketplaceParticipations;
+    const mkps = response.payload.marketplaceParticipations || response ;
 
     // Extract just the Marketplace IDs
     const marketplaceIds = mkps.map(item => item.marketplace.id);

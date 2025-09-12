@@ -87,3 +87,15 @@ agents.dbReport = async (req,res)=>{
         await api.agents.rainforestApi.singleAsinReport(req)
     );
    };
+
+   agents.authStart = async (req, res) => {
+   await api.agents.spapi.authStart(req,res)
+};
+
+agents.authFinish = async (req, res) => {
+    // helpers.formatApiResponse(
+    //     200,
+    //     res,
+        await api.agents.spapi.authFinish(req,res)
+    // );
+};
