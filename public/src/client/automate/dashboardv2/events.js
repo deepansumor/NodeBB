@@ -1,7 +1,7 @@
 
 
 // "forum/automate/escalations-events",
-define( [
+define([
   "./core",
   "./ui",
   "ajaxify",
@@ -33,35 +33,35 @@ define( [
       // Method 1: ajaxify.data.loggedInUser.uid
       if (ajaxify && ajaxify.data && ajaxify.data.loggedInUser && ajaxify.data.loggedInUser.uid) {
         userId = ajaxify.data.loggedInUser.uid
-        console.log("User ID from ajaxify.data.loggedInUser.uid:", userId)
+        // console.log("User ID from ajaxify.data.loggedInUser.uid:", userId)
         return userId
       }
 
       // Method 2: window.app.user.uid
       if (window.app && window.app.user && window.app.user.uid) {
         userId = window.app.user.uid
-        console.log("User ID from window.app.user.uid:", userId)
+        // console.log("User ID from window.app.user.uid:", userId)
         return userId
       }
 
       // Method 3: config.uid
       if (config && config.uid) {
         userId = config.uid
-        console.log("User ID from config.uid:", userId)
+        // console.log("User ID from config.uid:", userId)
         return userId
       }
 
       // Method 4: window.config.uid
       if (window.config && window.config.uid) {
         userId = window.config.uid
-        console.log("User ID from window.config.uid:", userId)
+        // console.log("User ID from window.config.uid:", userId)
         return userId
       }
 
       // Method 5: Check if user data is in ajaxify but in different structure
       if (ajaxify && ajaxify.data && ajaxify.data.uid) {
         userId = ajaxify.data.uid
-        console.log("User ID from ajaxify.data.uid:", userId)
+        // console.log("User ID from ajaxify.data.uid:", userId)
         return userId
       }
 
@@ -69,7 +69,7 @@ define( [
       const userElement = document.querySelector("[data-uid]")
       if (userElement) {
         userId = userElement.getAttribute("data-uid")
-        console.log("User ID from DOM element:", userId)
+        // console.log("User ID from DOM element:", userId)
         return userId
       }
 
@@ -77,7 +77,7 @@ define( [
       const metaUid = document.querySelector('meta[name="uid"]')
       if (metaUid) {
         userId = metaUid.getAttribute("content")
-        console.log("User ID from meta tag:", userId)
+        // console.log("User ID from meta tag:", userId)
         return userId
       }
 
@@ -90,19 +90,11 @@ define( [
   }
 
   escalationsEvents.init = () => {
-    console.log("Escalation Dashboard initialized")
+    // console.log("Escalation Dashboard initialized")
 
-    // Debug: Log available objects
-    console.log("Available objects:")
-    console.log("- ajaxify:", ajaxify)
-    console.log("- ajaxify.data:", ajaxify?.data)
-    console.log("- ajaxify.data.loggedInUser:", ajaxify?.data?.loggedInUser)
-    console.log("- window.app:", window.app)
-    console.log("- window.config:", window.config)
-    console.log("- config:", config)
 
     const userId = getUserId()
-    console.log("Final user ID:", userId)
+    // console.log("Final user ID:", userId)
 
     escalationsEvents.initializeFilters()
   }
@@ -114,7 +106,7 @@ define( [
 
   // Apply filters
   escalationsEvents.applyFilters = (page = 1) => {
-    console.log("Applying filters...")
+    // console.log("Applying filters...")
     const brandFilter = document.getElementById("brand-filter").value
     const stageFilter = document.getElementById("stage-filter").value
     const portfolioFilter = document.getElementById("portfolio-filter").value
@@ -124,7 +116,7 @@ define( [
 
     // Use the getUserId function instead of direct access
     const user = getUserId()
-    console.log("user id -->", user)
+    // console.log("user id -->", user)
 
     if (!user) {
       console.warn("No user ID found, some features may not work properly")
@@ -151,7 +143,7 @@ define( [
     try {
       const response = await escalationsCore.fetchAndRender(data)
       escalationsUI.renderTable(response)
-      console.log("Fetched data:", response)
+      // console.log("Fetched data:", response)
     } catch (error) {
       console.error("Error fetching paginated data:", error)
     }
@@ -173,7 +165,7 @@ define( [
       pid: null,
       topic: null,
     }
-    console.log("Topic context cleared")
+    // console.log("Topic context cleared")
   }
 
   // Set current topic context
@@ -183,7 +175,7 @@ define( [
       pid: pid,
       topic: topic,
     }
-    console.log("Topic context set:", currentTopicContext)
+    // console.log("Topic context set:", currentTopicContext)
   }
 
   // Setup event listeners
@@ -192,9 +184,10 @@ define( [
     document.getElementById("brand-filter").addEventListener("change", async () => {
       escalationsCore.page = 1
       const pcid = document.getElementById("brand-filter").value
-      const portofolios = await escalationsCore.getPortfolios(pcid)
-      escalationsCore.populateSelect("portfolio-filter", portofolios)
-      console.log("Portfolios for brand:", portofolios)
+      // const portofolios = await escalationsCore.getPortfolios(pcid)
+      // escalationsCore.populateSelect("portfolio-filter", portofolios)
+      escalationsCore.populateSelect("portfolio-filter", pcid)
+
       escalationsEvents.applyFilters(1)
     })
 
@@ -262,7 +255,7 @@ define( [
       const $this = $(this)
       const pid = $this.data("pid")
       const tid = $this.data("tid")
-      console.log("Viewing topic - tid:", tid, "pid:", pid)
+      // console.log("Viewing topic - tid:", tid, "pid:", pid)
 
       if (fetchingPosts) return alert("Please wait while we fetch remarks")
 
@@ -312,7 +305,7 @@ define( [
         return alert("Please select a topic first before replying.")
       }
 
-      console.log("Posting reply to - tid:", tid, "pid:", pid, "text:", text)
+      // console.log("Posting reply to - tid:", tid, "pid:", pid, "text:", text)
 
       if (topic.locked) {
         return alert("Cannot reply: topic is locked.")
@@ -376,7 +369,7 @@ define( [
         return alert("Please select a topic first before adding a reason.")
       }
 
-      console.log("Posting reason to - tid:", tid, "pid:", pid, "reason:", reasonVal)
+      // console.log("Posting reason to - tid:", tid, "pid:", pid, "reason:", reasonVal)
 
       if (topic.locked) {
         return alert("Cannot reply: topic is locked.")
@@ -412,7 +405,7 @@ define( [
   escalationsEvents.initialize = () => {
     escalationsEvents.init()
     escalationsEvents.setupEventListeners()
-    console.log("Escalations events initialized")
+    // console.log("Escalations events initialized")
   }
 
   return escalationsEvents

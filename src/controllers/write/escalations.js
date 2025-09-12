@@ -70,3 +70,22 @@ escalationsControllers.getAllPortfolios = async (req, res) => {
 	);
 
 };
+
+escalationsControllers.algolia = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.filters.algolia(req)
+	);
+
+};
+
+escalationsControllers.optimiseFilter = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.filters.optimiseFilter(req)
+	);
+
+};
+
