@@ -233,7 +233,9 @@ module.exports = function (Topics) {
     };
 
     topicTools.move = async function (tid, data) {
+        // console.log("data from the topic tools move topic -->",data)
         const cid = parseInt(data.cid, 10);
+        const stage = data.stage
         const topicData = await Topics.getTopicData(tid);
         if (!topicData) {
             throw new Error('[[error:no-topic]]');
@@ -281,6 +283,7 @@ module.exports = function (Topics) {
             Topics.setTopicFields(tid, {
                 cid: cid,
                 oldCid: oldCid,
+                stage:stage,
             }),
             Topics.updateCategoryTagsCount([oldCid, cid], tags),
             oldCid !== -1 ?

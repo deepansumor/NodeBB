@@ -216,7 +216,8 @@ Topics.bump = async (req, res) => {
 
 Topics.move = async (req, res) => {
     const { cid , ...rest} = req.body;
-    await api.topics.move(req, { cid, ...req.params, body:rest });
+    // console.log("data from the move topic controller 219 -->",req.body+"cid -->",cid+"ress -->",rest,{ cid, ...req.params, body:rest })
+    await api.topics.move(req, { cid, ...req.params, stage:rest.stage });
 
     helpers.formatApiResponse(200, res);
 };

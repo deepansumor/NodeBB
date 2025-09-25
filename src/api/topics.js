@@ -312,50 +312,57 @@ topicsAPI.bump = async (caller, { tid }) => {
     topics.pushUnreadCount(caller.uid);
 };
 
-topicsAPI.move = async (caller, { tid, cid }) => {
-    const canMove = await privileges.categories.isAdminOrMod(cid, caller.uid);
-    if (!canMove) {
-        throw new Error('[[error:no-privileges]]');
+topicsAPI.move = async (caller, { tid, cid, stage }) => {
+
+    try {
+        // console.log("data from the move topic api --> 317", tid, cid, stage)
+        const canMove = await privileges.categories.isAdminOrMod(cid, caller.uid);
+        if (!canMove) {
+            throw new Error('[[error:no-privileges]]');
+        }
+
+        const tids = Array.isArray(tid) ? tid : [tid];
+        const uids = await user.getUidsFromSet('users:online', 0, -1);
+        const cids = [parseInt(cid, 10)];
+
+        await batch.processArray(tids, async (tids) => {
+            await Promise.all(tids.map(async (tid) => {
+                const canMove = await privileges.topics.isAdminOrMod(tid, caller.uid);
+                if (!canMove) {
+                    throw new Error('[[error:no-privileges]]');
+                }
+                const topicData = await topics.getTopicFields(tid, ['tid', 'cid', 'mainPid', 'slug', 'deleted']);
+                if (!cids.includes(topicData.cid)) {
+                    cids.push(topicData.cid);
+                }
+                await topics.tools.move(tid, {
+                    cid,
+                    uid: caller.uid,
+                    stage
+                });
+
+                const notifyUids = await privileges.categories.filterUids('topics:read', topicData.cid, uids);
+                socketHelpers.emitToUids('event:topic_moved', topicData, notifyUids);
+                if (!topicData.deleted) {
+                    socketHelpers.sendNotificationToTopicOwner(tid, caller.uid, 'move', 'notifications:moved-your-topic');
+                    activitypubApi.announce.note(caller, { tid });
+                    const { activity } = await activitypub.mocks.activities.create(topicData.mainPid, caller.uid);
+                    await activitypub.feps.announce(topicData.mainPid, activity);
+                }
+
+                await events.log({
+                    type: `topic-move`,
+                    uid: caller.uid,
+                    ip: caller.ip,
+                    tid: tid,
+                    fromCid: topicData.cid,
+                    toCid: cid,
+                });
+            }));
+        }, { batch: 10 });
+
+        await categories.onTopicsMoved(cids);
+    } catch (error) {
+        console.log("Error while moving the topic  -->", error);
     }
-
-    const tids = Array.isArray(tid) ? tid : [tid];
-    const uids = await user.getUidsFromSet('users:online', 0, -1);
-    const cids = [parseInt(cid, 10)];
-
-    await batch.processArray(tids, async (tids) => {
-        await Promise.all(tids.map(async (tid) => {
-            const canMove = await privileges.topics.isAdminOrMod(tid, caller.uid);
-            if (!canMove) {
-                throw new Error('[[error:no-privileges]]');
-            }
-            const topicData = await topics.getTopicFields(tid, ['tid', 'cid', 'mainPid', 'slug', 'deleted']);
-            if (!cids.includes(topicData.cid)) {
-                cids.push(topicData.cid);
-            }
-            await topics.tools.move(tid, {
-                cid,
-                uid: caller.uid,
-            });
-
-            const notifyUids = await privileges.categories.filterUids('topics:read', topicData.cid, uids);
-            socketHelpers.emitToUids('event:topic_moved', topicData, notifyUids);
-            if (!topicData.deleted) {
-                socketHelpers.sendNotificationToTopicOwner(tid, caller.uid, 'move', 'notifications:moved-your-topic');
-                activitypubApi.announce.note(caller, { tid });
-                const { activity } = await activitypub.mocks.activities.create(topicData.mainPid, caller.uid);
-                await activitypub.feps.announce(topicData.mainPid, activity);
-            }
-
-            await events.log({
-                type: `topic-move`,
-                uid: caller.uid,
-                ip: caller.ip,
-                tid: tid,
-                fromCid: topicData.cid,
-                toCid: cid,
-            });
-        }));
-    }, { batch: 10 });
-
-    await categories.onTopicsMoved(cids);
 };
