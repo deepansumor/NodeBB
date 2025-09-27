@@ -2,7 +2,7 @@ const awsSdk = require('aws-sdk');
 const nconf = require('nconf');
 // const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 
-const { QueueUrl, aws_region, aws_access_key_id, aws_secret_access_key } = nconf.get("s3");
+const { queue_url, aws_region, aws_access_key_id, aws_secret_access_key } = nconf.get("s3");
 
 
 

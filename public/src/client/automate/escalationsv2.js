@@ -7,7 +7,7 @@ define("forum/automate/escalationsv2", ["./dashboardv2/events","./dashboardv2/co
   const escalationsv2 = {}
 
   escalationsv2.init = () => {
-    console.log("Escalation Dashboard initialized")
+    // console.log("Escalation Dashboard initialized")
     const categories   = ajaxify.data.categories ||[];
     escalationsCore.categories = categories
     escalationsCore.categoryData = ajaxify.data.categoryData || [];

@@ -46,11 +46,11 @@ async function createSPAPIClient(refreshToken) {
     // },
     credentials: {
 
-      SELLING_PARTNER_APP_CLIENT_ID: sp.LWA_CLIENT_ID,     //app id
-      SELLING_PARTNER_APP_CLIENT_SECRET: sp.LWA_CLIENT_SECRET, // app secrete
+      SELLING_PARTNER_APP_CLIENT_ID: sp.lwa_client_id,     //app id
+      SELLING_PARTNER_APP_CLIENT_SECRET: sp.lwa_client_secret, // app secrete
 
-      accessKeyId: sp.AWS_ACCESS_KEY_ID || awsCreds.accessKeyId,
-      secretAccessKey: sp.AWS_ACCESS_SECRETE_KEY || awsCreds.secretAccessKey,
+      accessKeyId: sp.aws_access_key_id || awsCreds.accessKeyId,
+      secretAccessKey: sp.aws_access_secrete_key || awsCreds.secretAccessKey,
       // sessionToken: awsCreds.sessionToken,
       stsRegion: process.env.AWS_REGION || 'us-east-1',
       // sandbox: true,
@@ -68,16 +68,16 @@ spapi.getAsinData = async (asin,marketplaceId) => {
 
     // 1. Get the LWA access token
     const credentials = {
-      accessKeyId: sp.AWS_ACCESS_KEY_ID,
-      secretAccessKey: sp.AWS_ACCESS_SECRETE_KEY,
+      accessKeyId: sp.aws_access_key_id,
+      secretAccessKey: sp.aws_access_secrete_key,
       // sessionToken: process.env.AWS_SESSION_TOKEN // optional
     };
 
     const params = new URLSearchParams();
     params.append("grant_type", "refresh_token");
     params.append("refresh_token", sp.LWA_REFRESH_TOKEN);
-    params.append("client_id", sp.LWA_CLIENT_ID);
-    params.append("client_secret", sp.LWA_CLIENT_SECRET);
+    params.append("client_id", sp.lwa_client_id);
+    params.append("client_secret", sp.lwa_client_secret);
 
     const tokenResp = await axios.post(
       "https://api.amazon.com/auth/o2/token",

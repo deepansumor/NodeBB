@@ -13,7 +13,7 @@ define("forum/auditAgent/pdp-audit", ['api'], function (api) {
 
 
     pdpAudit.init = function () {
-        console.log("Initializing audit.");
+        // console.log("Initializing audit.");
 
 
         auditForm = document.getElementById("auditForm");

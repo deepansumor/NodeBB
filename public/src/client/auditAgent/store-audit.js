@@ -4,7 +4,7 @@ define("forum/auditAgent/store-audit", ['api', 'jquery'], function (api, $) {
     const storeAudit = {};
 
     storeAudit.init = function () {
-        console.log("this is the brand store audit page");
+        // console.log("this is the brand store audit page");
 
         const auditForm = $("#auditForm");
         const startAuditBtn = $("#startAuditBtn");
@@ -22,7 +22,7 @@ define("forum/auditAgent/store-audit", ['api', 'jquery'], function (api, $) {
                     startAuditBtn.prop("disabled", true);
                     const data = await api.post(`/agent/generate-report/store/${brandName}`)
 
-                    console.log("api response:", data || "");
+                    // console.log("api response:", data || "");
 
 
 
@@ -34,7 +34,7 @@ define("forum/auditAgent/store-audit", ['api', 'jquery'], function (api, $) {
 
                     const audit = data.recentData[0] || {};
                     const auditId = audit.auditId || "";
-                    console.log("auditId:", auditId);
+                    // console.log("auditId:", auditId);
 
                     if (audit.status == "completed") {
                         window.location.href = `/agents/brand-summary?auditId=${auditId}`;

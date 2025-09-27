@@ -153,7 +153,7 @@
             <h2 class="fw-semibold mb-4">Quick Access</h2>
             <div class="row g-4">
                 <div class="col-md-4">
-                    <a href="/escalations" class="text-decoration-none text-dark h-100 d-block">
+                    <a href="/V2/escalations" class="text-decoration-none text-dark h-100 d-block">
                         <div class="card-ev p-4  h-100">
                              <div class="w-100 rounded-md">
                                 <img src="/assets/images/escalation.png"
@@ -170,7 +170,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <a href="/thresholds" class="text-decoration-none text-dark h-100 d-block">
+                    <a href="/P-thresholds" class="text-decoration-none text-dark h-100 d-block">
                         <div class="card-ev p-4  h-100">
                            <div class="w-100">
                                 <img src="/assets/images/thresholds.jpeg"

@@ -1,12 +1,4 @@
-// define("forum/automate/portfolio/state", [], function () {
-//   return {
-//     accounts: [],
-//     currentAccount: null,
-//     searchTerm: "",
-//     selectedPortfolios: [],
-//     hasUnsavedChanges: false
-//   };
-// });
+
 
 
 define("forum/automate/portfolio/state", [], function () {

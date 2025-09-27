@@ -4,7 +4,7 @@ define("forum/auditAgent/dashboard", ["api"], function (api) {
   const dashboard = {};
 
   dashboard.init = function () {
-    console.log("this is the dashboard page");
+    // console.log("this is the dashboard page");
 
     const totalAudits = document.getElementById("totalAudits");
     const container = document.querySelector(".card-body.pt-3");
@@ -106,7 +106,7 @@ define("forum/auditAgent/dashboard", ["api"], function (api) {
           response = await api.get("/agent/report");
         }
 
-        console.log(`${type.toUpperCase()} API Data:`, response);
+        // console.log(`${type.toUpperCase()} API Data:`, response);
         renderAudits(response || []);
       } catch (error) {
         console.error("Error fetching audits:", error);

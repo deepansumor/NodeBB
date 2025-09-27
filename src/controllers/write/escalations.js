@@ -53,32 +53,32 @@ escalationsControllers.getTotalCount = async (req, res) => {
 
 };
 
-escalationsControllers.filterData = async (req, res) => {
-	helpers.formatApiResponse(
-		200,
-		res,
-		await api.escalations.filters.get(req)
-	);
+// escalationsControllers.filterData = async (req, res) => {
+// 	helpers.formatApiResponse(
+// 		200,
+// 		res,
+// 		await api.escalations.filters.get(req)
+// 	);
 
-};
+// };
 
-escalationsControllers.getAllPortfolios = async (req, res) => {
-	helpers.formatApiResponse(
-		200,
-		res,
-		await api.escalations.filters.getAllPortfolios(req)
-	);
+// escalationsControllers.getAllPortfolios = async (req, res) => {
+// 	helpers.formatApiResponse(
+// 		200,
+// 		res,
+// 		await api.escalations.filters.getAllPortfolios(req)
+// 	);
 
-};
+// };
 
-escalationsControllers.algolia = async (req, res) => {
-	helpers.formatApiResponse(
-		200,
-		res,
-		await api.escalations.filters.algolia(req)
-	);
+// escalationsControllers.algolia = async (req, res) => {
+// 	helpers.formatApiResponse(
+// 		200,
+// 		res,
+// 		await api.escalations.filters.algolia(req)
+// 	);
 
-};
+// };
 
 escalationsControllers.optimiseFilter = async (req, res) => {
 	helpers.formatApiResponse(

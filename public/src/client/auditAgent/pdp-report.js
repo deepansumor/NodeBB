@@ -25,7 +25,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
 // progess bar
     function createProgressBar(percentage, className) {
-        console.log("progress bar");
+        // console.log("progress bar");
         return `
             <div class="progress ${className}">
                 <div class="progress-bar" role="progressbar" style="width: ${percentage}%" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100"></div>
@@ -35,7 +35,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
 // check list 
     function createCriteriaItem(criterion) {
-        console.log("create criteria item");
+        // console.log("create criteria item");
         const statusClass = criterion.passed ? "text-success" : "text-danger";
 
         return `
@@ -48,7 +48,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
 
     function renderResults() {
-        console.log("rendering results");
+        // console.log("rendering results");
         if (!productData) {
             console.error("No data.");
             return;
@@ -63,7 +63,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
 // product info brand , audit date etc 
     function renderProductInfo() {
-        console.log("rendering product info");
+        // console.log("rendering product info");
         const productNameEl = document.getElementById("productName");
         const productInfoEl = document.getElementById("productInfo");
 
@@ -75,7 +75,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
 // category grid title, image etc
     function renderCategoryGrid() {
-        console.log("rendering category grid");
+        // console.log("rendering category grid");
         const categoryGrid = document.getElementById("categoryGrid");
         if (!categoryGrid || !productData || !productData.results) return;
 
@@ -115,7 +115,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
     // rendering suggestion
     function generateSuggestionHTML(suggestions) {
-        console.log("generating suggestion HTML");
+        // console.log("generating suggestion HTML");
 
 
         let html = '';
@@ -162,7 +162,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
     // render category 
     function renderCategoryDetails() {
-        console.log("rendering category details");
+        // console.log("rendering category details");
         const categoryDetails = document.getElementById("categoryDetails");
         if (!categoryDetails || !productData || !productData.reports) return;
 
@@ -254,7 +254,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
     //render overall score
     function renderOverallScore() {
-        console.log("rendering overall score");
+        // console.log("rendering overall score");
         const scoreCircle = document.getElementById("overallScoreCircle");
         if (!scoreCircle || !productData) return;
 
@@ -272,7 +272,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
     // render category scores
     function renderCategoryScores() {
-        console.log("rendering category scores");
+        // console.log("rendering category scores");
         const categoryScores = document.getElementById("categoryScores");
         if (!categoryScores || !productData || !productData.results) return;
 
@@ -296,7 +296,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
     // rener priority issues
     function renderPriorityIssues() {
-        console.log("rendering priority issues");
+        // console.log("rendering priority issues");
         const priorityIssues = document.getElementById("priorityIssues");
         if (!priorityIssues || !productData || !productData.priority_issues) return;
 
@@ -330,7 +330,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
     // pdf download
     function downloadFromS3() {
-        console.log("download button clicked");
+        // console.log("download button clicked");
         const brand = productData.brand;
         const asin = productData.asin;
         const date = productData.lastUpdated
@@ -348,7 +348,7 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
     // active category 
     const setActiveCategory = (categoryId) => {
-        console.log("setting active category:", categoryId);
+        // console.log("setting active category:", categoryId);
         activeCategory = categoryId;
         renderCategoryGrid();
         renderCategoryDetails();
@@ -357,10 +357,10 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
     // init
     pdpReport.init = function () {
-        console.log("Initializing pdp report page.");
+        // console.log("Initializing pdp report page.");
         let key = ajaxify.data.key;
         let asin = ajaxify.data.asin;
-        console.log("key is :", key);
+        // console.log("key is :", key);
 
         auditResults = document.getElementById("auditResults");
         let viewAmazon = document.getElementById("myLink");
@@ -371,13 +371,13 @@ define("forum/auditAgent/pdp-report", ['api'], function (api) {
 
         // render the api data
         async function render() {
-            console.log("rendering render function");
+            // console.log("rendering render function");
 
 
             try {
 
                 const apiResponseData = ajaxify.data.report ? ajaxify.data.report : await api.post(`/agent/generate-report/${asin}`);
-                console.log("Api response data for the pdp report page:", apiResponseData, ajaxify.data.report);
+                // console.log("Api response data for the pdp report page:", apiResponseData, ajaxify.data.report);
 
                 if (apiResponseData) {
                     productData = {

@@ -2,12 +2,12 @@ define("forum/auditAgent/store-summary", ["api"], function (api) {
   const storeSummary = {};
 
   storeSummary.init = async function () {
-    console.log("this is the store summary page");
+    // console.log("this is the store summary page");
 
     const auditId = ajaxify.data.auditId || "apple_20250717"
 
     const response = await api.get(`/agent/report/brand/${auditId}`)
-    console.log("API response for store summary:", response);
+    // console.log("API response for store summary:", response);
 
     const data = response.data || "No data found";
 
@@ -176,93 +176,8 @@ brandName.innerHTML=`<p>Premium Analytics for <span class="badge text-primary fs
         return;
       }
 
-      //   list.innerHTML = products.map(p => `
-      //     <div class="card shadow-sm mb-4">
-      //       <div class="card-body">
-      //         <div class="row g-4">
-      //           <div class="col-lg-2 text-center border-end">
-      //             <p class="text-uppercase text-muted small mb-1">Overall Score</p>
-      //             <h3 class="fw-bold text-success">${p.overallScore.toFixed(1)}</h3>
-      //             <p class="text-muted small">/10</p>
-      //             <span class="badge ${getScoreClass(p.overallScore)}"> 
-      //               ${p.overallScore >= 8 ? "Excellent" : p.overallScore >= 7 ? "Good" : p.overallScore >= 6 ? "Fair" : "Needs Work"}
-      //             </span>
-      //           </div>
-      //           <div class="col-lg-4">
-      //             <h5 class="fw-semibold">${p.title}</h5>
-      //             <p class="text-muted small mb-1">ASIN: <code>${p.asin}</code></p>
-      //             <span class="text-muted small">Last audited: ${p.lastAudited}</span>
-      //           </div>
-      //           <div class="col-lg-5">
-      //             <h6 class="text-muted mb-3">Performance Breakdown</h6>
-      //             <div class="row g-3">
-      //               ${Object.entries(p.categoryScores).map(([cat, score]) => `
-      // <strong class="${getScoreClass(score ?? 0)}">${score !== null && score !== undefined ? score.toFixed(1) : "N/A"}</strong>
-      //                   <div class="text-muted small">${cat}</div>
-      //                   <div class="progress bg-secondary">
-      //                     <div class="progress-bar ${getScoreClass(score)}" style="width: ${score * 10}%"></div>
-      //                   </div>
-      //                 </div>
-      //               `).join('')}
-      //             </div>
-      //           </div>
-      //           <div class="col-lg-1 d-flex align-items-center justify-content-center">
-      //             <a href="${p._key}" class="btn btn-sm btn-outline-primary">
-      //               View <i class="fas fa-arrow-right ms-1"></i>
-      //             </a>
-      //           </div>
-      //         </div>
-      //       </div>
-      //     </div>
-      //   `).join('');
-
-      //  list.innerHTML = products.map(p => `
-      //   <div class="card shadow-sm rounded-4 p-3 mb-4">
-      //     <div class="row align-items-center g-3">
-
-      //       <!-- Overall Score Section -->
-      //       <div class="col-md-auto text-center">
-      //         <div class="bg-light rounded-3 px-3 py-2">
-      //           <p class="text-muted small mb-1">OVERALL SCORE</p>
-      //           <h3 class="fw-bold ${getScoreClass(p.overallScore)} mb-0">${p.overallScore.toFixed(1)}</h3>
-      //           <span class="text-muted small">/10</span><br>
-      //           <span class="text-muted small">${p.overallScore >= 8 ? "Excellent" : p.overallScore >= 7 ? "Good" : p.overallScore >= 6 ? "Fair" : "Needs Work"}</span>
-      //         </div>
-      //       </div>
-
-      //       <!-- Product Info Section -->
-      //       <div class="col-md">
-      //         <h5 class="fw-semibold mb-1">${p.title}</h5>
-      //         <p class="mb-1">ASIN: <code class="text-danger">${p.asin}</code></p>
-      //         <p class="text-muted small mb-0">Last audited: ${p.lastAudited}</p>
-      //       </div>
-
-      //       <!-- Score Breakdown -->
-      //       <div class="col-12 mt-3">
-      //         <h6 class="text-muted mb-2"><i class="fas fa-chart-bar me-1"></i> Performance Breakdown</h6>
-      //         <div class="d-flex flex-wrap gap-3">
-      //           ${Object.entries(p.categoryScores).map(([cat, score]) => `
-      //             <div class="border rounded-3 p-2 px-3 text-center" style="min-width: 110px;">
-      //               <div class="fw-bold ${getScoreClass(score ?? 0)}">${score !== null && score !== undefined ? score.toFixed(1) : "N/A"}</div>
-      //               <div class="text-muted small mb-1 text-capitalize">${cat}</div>
-      //               <div class="progress bg-light" style="height: 5px;">
-      //                 <div class="progress-bar ${getScoreClass(score)}" style="width: ${score * 10}%"></div>
-      //               </div>
-      //             </div>
-      //           `).join('')}
-      //         </div>
-      //       </div>
-
-      //       <!-- Button Section (Far Right) -->
-      //       <div class="col-md-auto ms-auto mt-3 mt-md-0">
-      //         <a href="/agents/pdp-report?key=${p._key}" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1">
-      //           <i class="fas fa-eye"></i> Preview Audit
-      //         </a>
-      //       </div>
-
-      //     </div>
-      //   </div>
-      // `).join('');
+   
+     
 
 
       // control title length 

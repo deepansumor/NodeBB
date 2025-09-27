@@ -7,7 +7,7 @@ const AWS = require("./aws")
 
 const nconf = require('nconf');
 
-const { QueueUrl } = nconf.get("s3");
+const { queue_url } = nconf.get("s3");
 
 
 function getBrandName(req) {
@@ -63,7 +63,7 @@ async function sendAsinsToQueue(asinList, brandName, auditId) {
   for (const asin of asinList) {
     const messageBody = { asin, brandName, auditId };
     const params = {
-      QueueUrl,
+      queue_url,
       MessageBody: JSON.stringify(messageBody)
     };
     try {
