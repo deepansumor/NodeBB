@@ -1,0 +1,280 @@
+/* Custom Colors and Utilities */
+
+
+/* new style  */
+:root {
+    --escape-dark-navy: #0E1624; /* Primary Dark Background */
+    --escape-accent-orange: #FF5E5B; /* Primary Accent Color (Orange/Coral) */
+
+    /* Re-mapping original variable names to new colors for easy substitution */
+    --escape-blue: var(--escape-accent-orange);
+    --blue-500: var(--escape-accent-orange);
+    --escape-cyan: var(--escape-dark-navy); /* Using Navy for some dark accents */
+    --escape-green: var(--escape-accent-orange); /* Using Orange for previous green spots */
+    --escape-purple: var(--escape-accent-orange); /* Using Orange for previous purple spots */
+
+    --blue-100: #FADAD9; /* Light pink/orange for secondary hero text on dark background */
+    --escape-dark: #1f2937; /* Tailwind gray-800/900 for dark text on light backgrounds */
+    --escape-darker: var(--escape-dark-navy); /* Deepest dark for footer */
+    --escape-medium-dark: #2C3E50; /* Slightly lighter navy for support cards on dark background */
+    --escape-light: #f9fafb;     /* Light section background */
+    --escape-light-gray: #e5e7eb;
+}
+
+/* Custom Background and Gradient: Solid dark navy for Hero */
+.custom-hero-bg {
+    color: black;
+    min-height: 800px;
+    // padding-top: 6rem !important;
+    padding-bottom: 5rem !important;
+    /* background-color: var(--escape-dark-navy); */
+     /* Solid Deep Navy */
+    /* Removed the old blue/cyan gradient */
+}
+
+.logo-section span{
+    color: var(--escape-accent-orange) !important;
+}
+
+#hero{
+    margin-top: 50px !important;
+}
+.text-description{
+    color: #0000009c !important;
+  
+}
+
+
+/* Custom Overlay and Min-Height */
+.custom-bg-overlay {
+    opacity: 0.1 !important;
+}
+.custom-min-height {
+    min-height: 600px;
+}
+.custom-line-height {
+    line-height: 1.25;
+}
+.custom-lead-relaxed {
+    line-height: 1.625;
+}
+
+/* Custom Colors for text and backgrounds */
+.custom-text-cyan, .custom-text-blue, .custom-text-purple, .custom-text-green {
+    color: var(--escape-accent-orange) !important; /* All primary accents are now Orange */
+}
+.custom-text-blue-100 {
+    color: var(--blue-100) !important;
+}
+.custom-bg-green, .custom-bg-cyan, .custom-bg-purple, .custom-bg-blue {
+    background-color: var(--escape-accent-orange) !important; /* All primary accent BGs are Orange */
+}
+
+.custom-bg-dark-navy {
+    background-color: var(--escape-dark-navy) !important;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+/* Custom Buttons */
+.custom-btn-outline-white {
+    border: 2px solid var(--escape-cyan) ;
+    color: black;
+    transition: all 0.15s ease-in-out;
+}
+.custom-btn-outline-white:hover {
+    background-color: var(--escape-cyan);
+    color: white; /* hover:bg-white hover:text-accent-orange */
+}
+
+.custom-btn-orrange {
+    border: 2px solid var(--escape-accent-orange);
+    color: var(--escape-accent-orange);
+    transition: all 0.15s ease-in-out;
+}
+.custom-btn-orrange:hover {
+    background-color: var(--escape-accent-orange);
+    color: white; /* hover:bg-white hover:text-accent-orange */
+}
+
+/* Custom Animation: Card Rotation/Hover */
+.custom-card-animation {
+    transform: rotate(3deg);
+    transition: transform 500ms ease-in-out;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.custom-card-animation:hover {
+    transform: rotate(0deg);
+}
+
+/* Custom Animation: Floating */
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+.custom-floating {
+    animation: floating 3s ease-in-out infinite;
+}
+
+/* Custom Animation: Fade-In */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.custom-fade-in {
+    animation: fade-in 1s ease-out;
+}
+
+
+
+/* Define new custom colors for light backgrounds */
+.custom-bg-light {
+    background-color: var(--escape-light) !important;
+}
+.custom-text-dark {
+    color: var(--escape-dark-text) !important;
+}
+
+.custom-icon-box {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem !important;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* New Accent Backgrounds (e.g., bg-accent-orange/10) */
+.bg-orange-10 {
+    background-color: rgba(255, 94, 91, 0.1) !important; /* escape-accent-orange/10 */
+}
+/* Replacing all previous accent colors with orange/10 */
+.bg-purple-10, .bg-green-10, .bg-cyan-10 {
+    background-color: rgba(255, 94, 91, 0.1) !important; /* escape-accent-orange/10 */
+}
+
+
+/* Group/Hover Styles (Kept as is) */
+.custom-group:hover .custom-scale-on-hover {
+    transform: scale(1.1);
+}
+
+.custom-hover-show {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+.custom-group:hover .custom-hover-show {
+    opacity: 1;
+}
+
+/* Custom List Style: space-y-2 on UL */
+.custom-list-style li {
+    padding-bottom: 0.5rem;
+}
+.custom-list-style li:last-child {
+    padding-bottom: 0;
+}
+/* Card Lift Animation (Kept as is) */
+.custom-hover-lift {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.custom-hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Custom CSS for How It Works Section */
+.custom-icon-circle {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50% !important;
+}
+
+/* Gradient Definitions: Using Orange and Navy combinations */
+
+/* 1. Orange to Navy */
+.custom-gradient-blue-cyan {
+    background-image: linear-gradient(to right, var(--escape-accent-orange), var(--escape-dark-navy));
+}
+
+/* 2. Navy to Orange */
+.custom-gradient-green-cyan {
+    background-image: linear-gradient(to right, var(--escape-dark-navy), var(--escape-accent-orange));
+}
+
+/* 3. Orange to Orange (Solid block of accent color for emphasis) */
+.custom-gradient-purple-blue {
+    background-image: linear-gradient(to right, var(--escape-accent-orange), var(--escape-accent-orange));
+}
+
+/* Custom CSS for Featured Pricing Card */
+
+.custom-scale-105 {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    z-index: 10;
+    position: relative;
+}
+
+/* Custom Border Color (border-escape-accent-orange) */
+.custom-border-cyan {
+    border-color: var(--escape-accent-orange) !important; /* Changed to Orange accent */
+}
+
+.custom-border-cyan.border-4 {
+    border-width: 4px !important;
+}
+
+/* Custom Background for Featured Card (using Deep Navy to contrast) */
+.custom-bg-dark {
+    background-color: var(--escape-dark-navy) !important;
+}
+
+
+.custom-bg-medium-dark {
+    background-color: rgba(255, 255, 255, 0.685);
+    border:solid 2px var(--escape-medium-dark) !important;
+}
+.custom-bg-darker {
+    background-color: var(--escape-darker) !important;
+}
+
+/* Footer Link Style (Kept as is) */
+.custom-footer-link-list > li {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.custom-border-light {
+    border-color: var(--escape-light-gray) !important;
+    border-width: 2px !important; 
+}
+.custom-border-cyan {
+    border-color: var(--escape-accent-orange) !important; /* Ensure the accent color is used */
+}
+
+.page-agents-home .brand-container {
+    display: none !important;;
+}
+
+.page-agents-home .sidebar,.bottombar-nav {
+    display: none !important;
+}
+
+.custom-orrange-text{
+    color: var(--escape-accent-orange) !important;
+}
+
+.custom-navy-blue-text{
+    color: #273959 !important;
+}
+// .template-auditAgent-agent-overview .sidebar{
+//     display: none !important;
+// }

@@ -59,6 +59,7 @@ Controllers.storeAudit = require("./auditAgent/store-audit")
 Controllers.storeSummary = require("./auditAgent/store-summary")
 Controllers.pdpReport = require("./auditAgent/pdp-report")
 Controllers.thankyou = require("./auditAgent/thank-you")
+Controllers.homepage = require("./auditAgent/home")
 
 Controllers.write = require("./write");
 

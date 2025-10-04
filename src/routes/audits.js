@@ -44,4 +44,10 @@ module.exports = function (app, name, middleware, controllers) {
         "/agents/registration-success",
         controllers.thankyou.get)
         ;
+
+    setupPageRoute(
+        app,
+        "/agents/home",
+        controllers.homepage.get)
+        ;
 }
