@@ -302,13 +302,13 @@
 						Huda Enclave, Road No. 70, Nandagiri Hills, <br>
 						Jubilee Hills, Hyderabad - 500 033</p>
 
-					<p class="company-about fadeIn custom-orrange-text"><i class="fa-solid fa-envelope custom-orrange-text"></i> <a href="mailto:info@escape-velocity.com  " class="custom-orrange-text">info@escape-velocity.com</a></p>
+					<p class="company-about fadeIn custom-orrange-text"><i class="fa-solid fa-envelope custom-orrange-text"></i> <a href="mailto:info@escape-velocity.com  " class="text-dark">info@escape-velocity.com</a></p>
 
-					<p class="company-about fadeIn "><i class="fa-solid fa-phone custom-orrange-text"></i> <a href="tel:+917386444211" class="custom-orrange-text">+91  73864 44211</a></p>
+					<p class="company-about fadeIn "><i class="fa-solid fa-phone custom-orrange-text"></i> <a href="tel:+917386444211" class="text-dark">+91  73864 44211</a></p>
 				</div>
 				<!--Legal-->
 				<div class="col-lg-4 text-lg-right">
-					<p class="company-about fadeIn mb-0 custom-orrange-text"><a href="privacy-statement.html" target="_blank"><u class="custom-orrange-text">Privacy Policy and Disclaimer</u></a></p>
+					<p class="company-about fadeIn mb-0 text-dark"><a href="https://www.escape-velocity.com/privacy-statement.html" target="_blank"><u class="text-dark">Privacy Policy and Disclaimer</u></a></p>
 					<p class="company-about fadeIn">© 2025 Escape Velocity Digital Pvt. Ltd.</p>
 				</div>
 			</div>
