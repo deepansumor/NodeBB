@@ -100,3 +100,14 @@ agents.authFinish = async (req, res) => {
     await api.agents.spapi.authFinish(req, res)
     // );
 };
+
+agents.contactus = async (req, res) => {
+
+        helpers.formatApiResponse(
+        200,
+        res,
+        await api.agents.contactus.contactus(req)
+    );
+    
+    
+};

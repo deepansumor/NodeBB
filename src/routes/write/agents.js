@@ -40,7 +40,7 @@ module.exports = function () {
     //     controllers.write.agents.forceFetchASINData
     // );
 
-     setupApiRoute(
+    setupApiRoute(
         router,
         "get",
         "/data",
@@ -102,6 +102,14 @@ module.exports = function () {
         controllers.write.agents.authFinish
     );
 
+    // setupApiRoute(
+    //     router,
+    //     "post",
+    //     "/contact-us",
+    //     controllers.write.agents.contactus
+    // );
+
+    router.post("/contact-us",controllers.write.agents.contactus)
 
     return router;
 }
