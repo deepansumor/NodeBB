@@ -310,15 +310,15 @@
 }
 
 /* Card layout */
-.card {
-  width: 100%;
-  max-width: 680px;
-  background: var(--color-surface);
-  border: 1px solid rgba(var(--muted-rgb), 0.25);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  padding: 28px;
-}
+// .card {
+//   width: 100%;
+//   max-width: 680px;
+//   background: var(--color-surface);
+//   border: 1px solid rgba(var(--muted-rgb), 0.25);
+//   border-radius: var(--radius);
+//   box-shadow: var(--shadow-lg);
+//   padding: 28px;
+// }
 
 @media (min-width: 640px) {
   .card {
