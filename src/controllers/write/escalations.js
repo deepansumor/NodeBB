@@ -15,8 +15,12 @@ escalationsControllers.getEscalations = async (req, res) => {
 		200,
 		res,
 		await api.escalations.escalations.getEscalations(req)
+
 	);
 };
+
+
+
 
 escalationsControllers.updateEscalations = async (req, res) => {
 	helpers.formatApiResponse(
@@ -52,6 +56,40 @@ escalationsControllers.getTotalCount = async (req, res) => {
 	);
 
 };
+
+escalationsControllers.getSummary = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.getSummary.getEscalationSummaries(req)
+	);
+};
+
+escalationsControllers.generateAiSummary = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.generateAiSummary.generateEscalationSummary(req)
+	);
+};
+
+escalationsControllers.getAiSummary = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.aiSummary.getEscalationSummary(req)
+	);
+};
+
+escalationsControllers.getRemarkAiSummary = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.aiSummary.getRemarkSummary(req)
+	);
+};
+
+
 
 // escalationsControllers.filterData = async (req, res) => {
 // 	helpers.formatApiResponse(

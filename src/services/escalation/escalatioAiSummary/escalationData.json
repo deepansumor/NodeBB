@@ -1,0 +1,18 @@
+[
+  {
+    "portfolio": "Amazon US - Electronics",
+    "summary": "Sales dropped by 15% this week due to incorrect PDP images. Multiple SKUs are still under review by Amazon. The design team has been notified to fix image dimensions. Customer reviews are slightly improving after last week’s updates."
+  },
+  {
+    "portfolio": "Amazon UK - Beauty",
+    "summary": "Increase in return rate due to packaging issues. Seller support escalation raised but pending resolution for 3 days. Sales stable but negative reviews rising. ACOS slightly above target because of low conversion."
+  },
+  {
+    "portfolio": "Amazon India - Home & Kitchen",
+    "summary": "Spike in out-of-stock cases during festival week caused major sales loss. The procurement team confirmed shipment delays. Marketing campaigns temporarily paused to avoid wasted ad spend. Issue expected to resolve within 48 hours."
+  },
+  {
+    "portfolio": "Amazon US - Fashion",
+    "summary": "CPC increasing sharply on branded keywords. The advertising team observed competitor hijacking of product listings. Brand protection team engaged to report violations. Overall sentiment among managers: frustrated but proactive."
+  }
+]

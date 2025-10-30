@@ -73,3 +73,29 @@ s3Api.getJson = async (key) => {
   }
  
 };
+
+
+s3Api.uploadToS3 = async( bucket, key, data, contentType = "application/json" )=>{
+  try {
+    let body = data;
+
+    // Convert JS object to JSON string automatically
+    if (typeof data === "object" && !(data instanceof Buffer)) {
+      body = JSON.stringify(data, null, 2);
+    }
+
+    const uploadParams = {
+      Bucket: bucket,
+      Key: key,
+      Body: body,
+      ContentType: contentType,
+    };
+
+    const result = await AWS.s3.upload(uploadParams).promise();
+    console.log("✅ File uploaded successfully to:", result.Location);
+    return result;
+  } catch (error) {
+    console.error("❌ Error uploading file to S3:", error);
+    throw error;
+  }
+}

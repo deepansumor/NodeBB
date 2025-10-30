@@ -102,6 +102,7 @@ module.exports = function (Topics) {
             throw new Error('[[error:no-privileges]]');
         }
         await Topics.setTopicField(tid, 'locked', lock ? 1 : 0);
+        lock && await Topics.setTopicField(tid, 'resolvedAt', new Date().toISOString().split("T")[0]);
         topicData.events = await Topics.events.log(tid, { type: lock ? 'lock' : 'unlock', uid });
         topicData.isLocked = lock; // deprecate in v2.0
         topicData.locked = lock;

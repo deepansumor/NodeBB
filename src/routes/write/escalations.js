@@ -13,7 +13,46 @@ module.exports = function () {
 		"/get-escalations",
 		[...middlewares],
 		controllers.write.escalations.getEscalations
+		// controllers.write.escalations.getEscalations
 	);
+
+	setupApiRoute(
+		router,
+		"get",
+		"/get-summary",
+		// [...middlewares],
+		// controllers.write.escalations.getEscalations
+		controllers.write.escalations.getSummary
+	);
+
+	setupApiRoute(
+		router,
+		"get",
+		"/getAiSummary",
+		// [...middlewares],
+		// controllers.write.escalations.getEscalations
+		controllers.write.escalations.getAiSummary
+	);
+
+	setupApiRoute(
+		router,
+		"get",
+		"/getRemarkAiSummary",
+		// [...middlewares],
+		// controllers.write.escalations.getEscalations
+		controllers.write.escalations.getRemarkAiSummary
+	);
+
+	setupApiRoute(
+		router,
+		"get",
+		"/gen-esc-summary",
+		// [...middlewares],
+		// controllers.write.escalations.getEscalations
+		controllers.write.escalations.generateAiSummary
+	);
+
+
 	setupApiRoute(
 		router,
 		"post",
@@ -53,6 +92,14 @@ module.exports = function () {
 		"/optimise-filter",
 		[...middlewares],
 		controllers.write.escalations.optimiseFilter
+	);
+
+	setupApiRoute(
+		router,
+		"get",
+		"/dashboard/summary/:brandId/:date",
+		[...middlewares],
+		controllers.write.escalations.getAiSummary
 	);
 
 	return router;
