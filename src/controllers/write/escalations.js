@@ -143,3 +143,20 @@ escalationsControllers.optimiseFilter = async (req, res) => {
 
 };
 
+
+escalationsControllers.getEscalationperBrand = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.filters.getEscalationperBrand(req)
+	);
+
+};
+escalationsControllers.getAwsData = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.filters.getAwsData(req)
+	);
+
+};

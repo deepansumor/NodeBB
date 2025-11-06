@@ -228,6 +228,7 @@ body {
 /* Card enhancements */
 .card {
   transition: box-shadow 0.15s ease-in-out;
+  padding: 4px !important;
 }
 
 .card:hover {
@@ -345,4 +346,13 @@ body {
     transform: translateY(-20px);
     opacity: 1;
   }
+}
+
+
+.escalationv2_page_bg{
+  background-color: #f8f9fa !important;
+}
+
+.template-automate-escalationsv2{
+  background-color: #f8f9fa !important;
 }

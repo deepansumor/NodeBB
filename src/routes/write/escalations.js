@@ -110,6 +110,21 @@ module.exports = function () {
 		[...middlewares],
 		controllers.write.escalations.optimiseFilter
 	);
+	setupApiRoute(
+		router,
+		"get",
+		"/brand-escalations",
+		[...middlewares],
+		controllers.write.escalations.getEscalationperBrand
+	);
+
+	setupApiRoute(
+		router,
+		"get",
+		"/brand/:brand/:date",
+		[...middlewares],
+		controllers.write.escalations.getAwsData
+	);
 
 	setupApiRoute(
 		router,

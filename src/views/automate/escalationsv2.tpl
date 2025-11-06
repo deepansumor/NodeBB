@@ -5,9 +5,9 @@
 <!-- Custom CSS -->
 
 
-<div class="bg-light">
+<div class="bg-light escalationv2_page_bg">
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light escalationv2_page_bg border-bottom">
         <div class="container-fluid px-4">
             <div class="navbar-brand">
                 <h1 class="h3 mb-0 text-dark fw-bold">Escalation Dashboard</h1>
@@ -19,9 +19,9 @@
         </div>
     </nav>
 
-    <div class="container-fluid p-4" id="main-content">
+    <div class="container-fluid p-4 escalationv2_page_bg" style="background-color: #f8f9fa !important;" id="main-content">
         <!-- Summary Cards -->
-        <div class="row g-4 mb-4">
+        <div class="row g-4 mb-4 escalationv2_page_bg">
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
