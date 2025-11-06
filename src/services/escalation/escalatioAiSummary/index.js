@@ -1,12 +1,12 @@
 // index.js
 const { escalationSummaryPrompt } = require("./prompts/escalationSummary");
 const { remarkSummaryPrompt } = require("./prompts/remarkSummary");
+const moment = require("moment");
 const buildGeminiPayload = require("./payload");
-const outputTemplate = require("./schema");
+const {prepareBrandDataText} = require("../.././../api/escalations/services/utils");
 const { geminiClient } = require("../../gemini/geminiClient");
 const { uploadToS3 } = require("../../../services/aws-s3");
-const fs = require("fs");
-const path = require("path");
+
 
 // Step 1: Read mock data
 // const mockData = JSON.parse(
@@ -24,25 +24,28 @@ async function generateAISummary(escalationsData, bucketName, file, type = "esca
       console.log(`\n🧠 Generating summary for brand: ${brand.brandName}`);
 
       // 🔹 Detect whether to use escalation or remark structure
-      const brandDataText = `
-Brand: ${brand.brandName}
-Date: ${brand.date}
-BrandId: ${brand.brandId}
-Total Escalations: ${brand.totalEscalations}
+//       const brandDataText = `
+// Brand: ${brand.brandName}
+// Date: ${brand.date}
+// BrandId: ${brand.brandId}
+// Total Escalations: ${brand.totalEscalations}
 
-${brand.escalations
-          .map(e => {
-            if (type === "remark") {
-              return `Portfolio: ${e.portfolioName}
-Post Content: ${typeof e.postContent === "object" ? JSON.stringify(e.postContent) : e.postContent}
-Resolved At: ${e.resolvedAt}`;
-            } else {
-              return `Portfolio: ${e.portfolioName}
-Summary: ${e.summary}`;
-            }
-          })
-          .join("\n\n")}
-`;
+// ${brand.escalations
+//           .map(e => {
+//             if (type === "remark") {
+//               return `Portfolio: ${e.portfolioName}
+// Post Content: ${typeof e.postContent === "object" ? JSON.stringify(e.postContent) : e.postContent}
+// Resolved At: ${e.resolvedAt}`;
+//             } else {
+//               return `Portfolio: ${e.portfolioName}
+// Summary: ${e.summary}`;
+//             }
+//           })
+//           .join("\n\n")}
+// `;
+
+      const brandDataText = prepareBrandDataText(brand, type);
+console.log("Brand Data Text Prepared:\n", brandDataText);
 
       // 🔹 Choose prompt dynamically
       const prompt =
@@ -79,9 +82,10 @@ Summary: ${e.summary}`;
       const finalOutput = { brandName: brand.brandName, ...aiOutput };
       console.log("Final Output Object:", finalOutput);
 
-      const date = new Date();
-      date.setDate(date.getDate() - 1);
-      const dateStr = date.toISOString().split('T')[0];
+      // const date = new Date();
+      // date.setDate(date.getDate() - 1);
+      // const dateStr = date.toISOString().split('T')[0];
+      const dateStr = moment().subtract(1, 'days').format('YYYY-MM-DD');
       const key = `emsAiSummary/${brand.brandId}/${dateStr}/${file}`;
 
       const fileData = JSON.stringify(finalOutput, null, 2);

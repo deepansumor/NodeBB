@@ -1,6 +1,8 @@
 "use strict";
 
+const moment = require("moment");
 const db = require("../../../database");
+const {groupEscalationData} = require("./utils");
 
 
 
@@ -9,10 +11,7 @@ const db = require("../../../database");
 async function getEscalationperBrand() {
   try {
 
-    const date = new Date();
-    date.setDate(date.getDate() - 1);
-    const formattedDate = date.toISOString().split('T')[0]; // "2025-10-29"
-
+    const formattedDate = moment().subtract(2, 'days').format('YYYY-MM-DD');
     console.log("formattedDate for Escalation Summary:", formattedDate);
 
     const pipeline = [
@@ -28,37 +27,9 @@ async function getEscalationperBrand() {
     const result = await db.aggregation(pipeline);
     console.log("Escalation Data Retrieved in getEscalationperBrand:", result);
 
-    const grouped = result.reduce((acc, item) => {
-      const key = `${item.pcName}-${item.pcid}`; // unique key
-      if (!acc[key]) acc[key] = [];
-      acc[key].push(item);
-      return acc;
-    }, {});
-
-    let escalationData = [];
-
-    for (const key in grouped) {
-      const items = grouped[key];
-
-      // Instead of just summary, return escalation details
-      const escalationList = items.map((item) => ({
-        pcName: item.pcName,
-        tid: item.tid,
-        summary: item.summary,
-        escalationDate: item.escalationDate,
-        portfolioName: item.portfolioName,
-        postcount: item.postcount
-      }));
-
-      escalationData.push({
-        brandName: items[0].pcName,
-        brandId: items[0].pcid,
-        totalEscalations: items.length,
-        date: items[0].escalationDate,
-        escalations: escalationList
-      });
-    }
+    const escalationData = groupEscalationData(result);
     console.log("Escalation Data -->", escalationData);
+
 
     return escalationData;
 
@@ -72,25 +43,19 @@ async function getEscalationperBrand() {
 // --- Fetch Remark Data
 async function getRemarkperBrand() {
   try {
-    // ✅ Get today's and yesterday's dates
-    const today = new Date();
-    const yesterday = new Date();
-    yesterday.setDate(today.getDate() - 1);
 
-    // ✅ Convert to ISO strings for filtering
-    const start = new Date(yesterday.setHours(0, 0, 0, 0));
-    const end = new Date(today.setHours(23, 59, 59, 999));
+    const start = moment().subtract(3, 'days').startOf('day').toISOString();  // Yesterday 00:00:00
+    const end = moment().subtract(1, 'days').endOf('day').toISOString();                          // Today 23:59:59
 
-    console.log("Start Date (Yesterday):", start.toISOString());
-    console.log("End Date (Today):", end.toISOString());
-
+    console.log("Start Date (Yesterday):", start);
+    console.log("End Date (Today):", end);
 
 
     const pipeline = [
       {
         $match: {
           _key: { $regex: "^topic" },
-          resolvedAt: { $gte: start.toISOString(), $lte: end.toISOString() },
+          resolvedAt: { $gte: start, $lte: end },
         },
       },
       {
@@ -142,45 +107,12 @@ async function getRemarkperBrand() {
     ];
 
 
-
-
     console.log("Pipeline for Remark Summary -->", pipeline);
 
     const result = await db.aggregation(pipeline);
     console.log("Remark Data Retrieved:", result);
 
-
-
-    const grouped = result.reduce((acc, item) => {
-      const key = `${item.pcName}-${item.pcid}`;
-      if (!acc[key]) acc[key] = [];
-      acc[key].push(item);
-      return acc;
-    }, {});
-
-    let escalationData = [];
-
-    for (const key in grouped) {
-      const items = grouped[key];
-
-      const escalationList = items.map(item => ({
-        pcName: item.pcName,
-        tid: item.tid,
-        resolvedAt: item.resolvedAt,
-        escalationDate: item.escalationDate,
-        portfolioName: item.portfolioName,
-        postContent: item.postContent || "No post content available",
-      }));
-
-      escalationData.push({
-        brandName: items[0].pcName,
-        brandId: items[0].pcid,
-        totalEscalations: items.length,
-        date: items[0].escalationDate,
-        escalations: escalationList,
-      });
-    }
-
+    const escalationData = groupEscalationData(result);
     console.log("Remark Data -->", escalationData);
     return escalationData;
   } catch (error) {

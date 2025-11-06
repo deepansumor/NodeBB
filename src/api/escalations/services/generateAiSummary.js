@@ -2,12 +2,15 @@
 
 const { generateAISummary } = require("../../../services/escalation/escalatioAiSummary");
 const { getEscalationperBrand, getRemarkperBrand } = require("./getSummary");
+const nconf = require("nconf");
+
+const s3 = nconf.get("s3");
 
 
 const escalationsSummaries = module.exports;
 
 // s3 bucket details 
-const bucketName = "test-220425";
+const bucketName = s3.emsSummaryBucket || "test-220425";
 
 escalationsSummaries.generateEscalationSummary = async (req, res) => {
   try {
