@@ -61,7 +61,15 @@ escalationsControllers.getSummary = async (req, res) => {
 	helpers.formatApiResponse(
 		200,
 		res,
-		await api.escalations.getSummary.getEscalationSummaries(req)
+		await api.escalations.getSummary.getEscalationperBrand(req)
+	);
+};
+
+escalationsControllers.getRemarkSummary = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.getSummary.getRemarkperBrand(req)
 	);
 };
 
@@ -70,6 +78,14 @@ escalationsControllers.generateAiSummary = async (req, res) => {
 		200,
 		res,
 		await api.escalations.generateAiSummary.generateEscalationSummary(req)
+	);
+};
+
+escalationsControllers.generateRemarkAiSummary = async (req, res) => {
+	helpers.formatApiResponse(
+		200,
+		res,
+		await api.escalations.generateAiSummary.generateRemarkSummary(req)
 	);
 };
 

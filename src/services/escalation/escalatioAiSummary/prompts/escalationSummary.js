@@ -23,6 +23,9 @@ Your response must be ONLY valid JSON.
 
 Return exactly this format (note: do not add \`\`\`json in starting and commas after the last key):
 {
+   "brandName": "Brand name here",
+    "date": "YYYY-MM-DD",
+    brandId: "brand id here",
   "overview": "A detailed summary...",
     "recommendations": [
     "Short actionable point 1",

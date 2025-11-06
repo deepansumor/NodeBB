@@ -1,28 +1,56 @@
 "use strict";
+
 const { generateAISummary } = require("../../../services/escalation/escalatioAiSummary");
-const {uploadToS3} = require("../../../services/aws-s3");
+const { getEscalationperBrand, getRemarkperBrand } = require("./getSummary");
+
 
 const escalationsSummaries = module.exports;
 
 // s3 bucket details 
-const brandId = "brand123"; 
-const dateStr = new Date().toISOString().split("T")[0];
-const bucketName = "test-220425"; // replace with your S3 bucket name
-const key = `emsAiSummary/${brandId}/${dateStr}/escalation-summary.json`;
-
+const bucketName = "test-220425";
 
 escalationsSummaries.generateEscalationSummary = async (req, res) => {
   try {
-    const aiSummary = await generateAISummary();
-    console.log("AI Summary Generated:", aiSummary);
-    // return aiSummary;
 
-    const result = await uploadToS3(bucketName, key, aiSummary);
-    console.log("File uploaded successfully:", result.Location);
-    return result.Location;
 
-    } catch (err) {
+    const escalationData = await getEscalationperBrand();
+    console.log("Escalation Data Retrieved:", escalationData);
+
+    const uploadedSummaries = await generateAISummary(
+      escalationData,
+      bucketName,
+      "escalation-summary.json"
+    );
+
+    return {
+      message: "AI summaries generated and uploaded for all brands",
+      uploadedSummaries,
+    };
+  } catch (err) {
     console.error("Error in getEscalationSummaries:", err);
     throw err;
-    }
+  }
+};
+
+
+escalationsSummaries.generateRemarkSummary = async (req, res) => {
+  try {
+    const remarkData = await getRemarkperBrand();
+    console.log("Remarks Data Retrieved in main function:", remarkData);
+
+    const uploadedSummaries = await generateAISummary(
+      remarkData,
+      bucketName,
+      "remark-summary.json",
+      "remark"
+    );
+
+    return {
+      message: "AI summaries generated and uploaded for all brands",
+      uploadedSummaries,
+    };
+  } catch (err) {
+    console.error("Error in getEscalationSummaries:", err);
+    throw err;
+  }
 };

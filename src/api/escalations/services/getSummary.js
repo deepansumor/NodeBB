@@ -1,62 +1,195 @@
 "use strict";
 
 const db = require("../../../database");
-const COLLECTIONS = require("../../../database/mongo/collections");
-const { ObjectId } = require("mongodb");
 
-const escalationsSummaries = module.exports;
-escalationsSummaries.getEscalationSummaries = async (req, res) => {
-    try {
-        const uid = req.uid || 2;
 
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-        const skip = (page - 1) * limit;
 
-        const escalations = await db.find(
-            {
-                status: { $ne: "resolved" }
-                // locked : 1
-                // escalationDate: "2025-10-26",
-                
-            },
-            skip,
-            limit,
-            COLLECTIONS.ESCALATIONS
-        );
 
-        return escalations;
-    } catch (err) {
-        console.error("GET /escalations error:", err);
-        throw new Error(err);
+// --- Fetch Escalation Data 
+async function getEscalationperBrand() {
+  try {
+
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    const formattedDate = date.toISOString().split('T')[0]; // "2025-10-29"
+
+    console.log("formattedDate for Escalation Summary:", formattedDate);
+
+    const pipeline = [
+      {
+        $match: {
+          _key: { $regex: "^topic" },
+          // escalationDate: "2025-11-02"
+          escalationDate: formattedDate
+        }
+      }
+    ];
+
+    const result = await db.aggregation(pipeline);
+    console.log("Escalation Data Retrieved in getEscalationperBrand:", result);
+
+    const grouped = result.reduce((acc, item) => {
+      const key = `${item.pcName}-${item.pcid}`; // unique key
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(item);
+      return acc;
+    }, {});
+
+    let escalationData = [];
+
+    for (const key in grouped) {
+      const items = grouped[key];
+
+      // Instead of just summary, return escalation details
+      const escalationList = items.map((item) => ({
+        pcName: item.pcName,
+        tid: item.tid,
+        summary: item.summary,
+        escalationDate: item.escalationDate,
+        portfolioName: item.portfolioName,
+        postcount: item.postcount
+      }));
+
+      escalationData.push({
+        brandName: items[0].pcName,
+        brandId: items[0].pcid,
+        totalEscalations: items.length,
+        date: items[0].escalationDate,
+        escalations: escalationList
+      });
     }
-};
+    console.log("Escalation Data -->", escalationData);
 
-// "use strict";
-// const { generateAISummary } = require("../../../services/escalation/escalatioAiSummary");
-// const {uploadToS3} = require("../../../services/aws-s3");
+    return escalationData;
 
-// const escalationsSummaries = module.exports;
-
-// // s3 bucket details 
-// const brandId = "brand123"; 
-// const dateStr = new Date().toISOString().split("T")[0];
-// const bucketName = "test-220425"; // replace with your S3 bucket name
-// const key = `emsAiSummary/${brandId}/${dateStr}/escalation-summary.json`;
+  } catch (error) {
+    console.log("Error in getEscalationperBrand API -->", error);
+  }
+}
 
 
-// escalationsSummaries.getEscalationSummaries = async (req, res) => {
-//   try {
-//     const aiSummary = await generateAISummary();
-//     console.log("AI Summary Generated:", aiSummary);
-//     // return aiSummary;
 
-//     const result = await uploadToS3(bucketName, key, aiSummary);
-//     console.log("File uploaded successfully:", result.Location);
-//     return result.Location;
+// --- Fetch Remark Data
+async function getRemarkperBrand() {
+  try {
+    // ✅ Get today's and yesterday's dates
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
 
-//     } catch (err) {
-//     console.error("Error in getEscalationSummaries:", err);
-//     throw err;
-//     }
-// };
+    // ✅ Convert to ISO strings for filtering
+    const start = new Date(yesterday.setHours(0, 0, 0, 0));
+    const end = new Date(today.setHours(23, 59, 59, 999));
+
+    console.log("Start Date (Yesterday):", start.toISOString());
+    console.log("End Date (Today):", end.toISOString());
+
+
+
+    const pipeline = [
+      {
+        $match: {
+          _key: { $regex: "^topic" },
+          resolvedAt: { $gte: start.toISOString(), $lte: end.toISOString() },
+        },
+      },
+      {
+        $lookup: {
+          from: "objects",
+          let: { topicTid: "$tid" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $regexMatch: { input: "$_key", regex: "^post" } },
+                    { $eq: [{ $toString: "$$topicTid" }, "$tid"] },
+                  ],
+                },
+              },
+            },
+            { $sort: { timestamp: -1 } },
+            { $project: { _id: 0, content: 1, timestamp: 1 } },
+            { $limit: 1 },
+          ],
+          as: "postData",
+        },
+      },
+      // ❗ Only keep topics that have at least one post
+      {
+        $match: {
+          postData: { $ne: [] },
+        },
+      },
+      // Expand postData array
+      {
+        $unwind: "$postData",
+      },
+      // Project only topics that have content
+      {
+        $project: {
+          _id: 0,
+          tid: 1,
+          pcid: 1,
+          pcName: 1,
+          portfolioName: 1,
+          resolvedAt: 1,
+          escalationDate: 1,
+          postContent: "$postData.content",
+          postTimestamp: "$postData.timestamp",
+        },
+      },
+    ];
+
+
+
+
+    console.log("Pipeline for Remark Summary -->", pipeline);
+
+    const result = await db.aggregation(pipeline);
+    console.log("Remark Data Retrieved:", result);
+
+
+
+    const grouped = result.reduce((acc, item) => {
+      const key = `${item.pcName}-${item.pcid}`;
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(item);
+      return acc;
+    }, {});
+
+    let escalationData = [];
+
+    for (const key in grouped) {
+      const items = grouped[key];
+
+      const escalationList = items.map(item => ({
+        pcName: item.pcName,
+        tid: item.tid,
+        resolvedAt: item.resolvedAt,
+        escalationDate: item.escalationDate,
+        portfolioName: item.portfolioName,
+        postContent: item.postContent || "No post content available",
+      }));
+
+      escalationData.push({
+        brandName: items[0].pcName,
+        brandId: items[0].pcid,
+        totalEscalations: items.length,
+        date: items[0].escalationDate,
+        escalations: escalationList,
+      });
+    }
+
+    console.log("Remark Data -->", escalationData);
+    return escalationData;
+  } catch (error) {
+    console.log("Error in getRemarkperBrand API -->", error);
+  }
+}
+
+
+
+
+
+module.exports = { getEscalationperBrand, getRemarkperBrand };

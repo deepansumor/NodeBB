@@ -28,6 +28,15 @@ module.exports = function () {
 	setupApiRoute(
 		router,
 		"get",
+		"/get-remark-summary",
+		// [...middlewares],
+		// controllers.write.escalations.getEscalations
+		controllers.write.escalations.getRemarkSummary
+	);
+
+	setupApiRoute(
+		router,
+		"get",
 		"/getAiSummary",
 		// [...middlewares],
 		// controllers.write.escalations.getEscalations
@@ -52,6 +61,14 @@ module.exports = function () {
 		controllers.write.escalations.generateAiSummary
 	);
 
+	setupApiRoute(
+		router,
+		"get",
+		"/gen-remark-summary",
+		// [...middlewares],
+		// controllers.write.escalations.getEscalations
+		controllers.write.escalations.generateRemarkAiSummary
+	);
 
 	setupApiRoute(
 		router,
