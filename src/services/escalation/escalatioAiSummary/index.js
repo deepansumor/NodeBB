@@ -3,7 +3,7 @@ const { escalationSummaryPrompt } = require("./prompts/escalationSummary");
 const { remarkSummaryPrompt } = require("./prompts/remarkSummary");
 const moment = require("moment");
 const buildGeminiPayload = require("./payload");
-const {prepareBrandDataText} = require("../.././../api/escalations/services/utils");
+const { prepareBrandDataText } = require("../.././../api/escalations/services/utils");
 const { geminiClient } = require("../../gemini/geminiClient");
 const { uploadToS3 } = require("../../../services/aws-s3");
 
@@ -24,28 +24,28 @@ async function generateAISummary(escalationsData, bucketName, file, type = "esca
       console.log(`\n🧠 Generating summary for brand: ${brand.brandName}`);
 
       // 🔹 Detect whether to use escalation or remark structure
-//       const brandDataText = `
-// Brand: ${brand.brandName}
-// Date: ${brand.date}
-// BrandId: ${brand.brandId}
-// Total Escalations: ${brand.totalEscalations}
+      //       const brandDataText = `
+      // Brand: ${brand.brandName}
+      // Date: ${brand.date}
+      // BrandId: ${brand.brandId}
+      // Total Escalations: ${brand.totalEscalations}
 
-// ${brand.escalations
-//           .map(e => {
-//             if (type === "remark") {
-//               return `Portfolio: ${e.portfolioName}
-// Post Content: ${typeof e.postContent === "object" ? JSON.stringify(e.postContent) : e.postContent}
-// Resolved At: ${e.resolvedAt}`;
-//             } else {
-//               return `Portfolio: ${e.portfolioName}
-// Summary: ${e.summary}`;
-//             }
-//           })
-//           .join("\n\n")}
-// `;
+      // ${brand.escalations
+      //           .map(e => {
+      //             if (type === "remark") {
+      //               return `Portfolio: ${e.portfolioName}
+      // Post Content: ${typeof e.postContent === "object" ? JSON.stringify(e.postContent) : e.postContent}
+      // Resolved At: ${e.resolvedAt}`;
+      //             } else {
+      //               return `Portfolio: ${e.portfolioName}
+      // Summary: ${e.summary}`;
+      //             }
+      //           })
+      //           .join("\n\n")}
+      // `;
 
       const brandDataText = prepareBrandDataText(brand, type);
-console.log("Brand Data Text Prepared:\n", brandDataText);
+      console.log("Brand Data Text Prepared:\n", brandDataText);
 
       // 🔹 Choose prompt dynamically
       const prompt =
