@@ -23,7 +23,7 @@ adminDashboardController.get = async function (req, res) {
     const tree = categories.getTree(categoryData, 0);
 
     const data = {
-        title: "Admin Dashboard",
+        title: "Overview",
         categories:tree
     }
 

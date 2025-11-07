@@ -19,7 +19,7 @@ define(["api"], (api) => {
       <h6 class="alert-heading">
         <i class="fas fa-triangle-exclamation"></i> Performance Analysis
       </h6>
-      <p class="mb-0">${resolvedEscalations?.overview}</p>
+      <p class="mb-0">${resolvedEscalations?.overview || "No Data Found" }</p>
     </div>
 
     <!-- Recommended Actions -->
@@ -30,7 +30,7 @@ define(["api"], (api) => {
       <ul class="mb-0">
         ${ resolvedEscalations?.recommendations?.map((data)=>(`
           <li>${data}</li>`
-          )).join("")
+          )).join("")  || "No Data Found"
 
       }
       </ul>

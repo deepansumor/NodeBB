@@ -9,9 +9,9 @@ define(["api"], (api) => {
     }
     table.renderTable = (currentData, tbody) => {
 
-   console.log("current data from the  render table -->",currentData)
+//    console.log("current data from the  render table -->",currentData)
 
-        if (currentData.length < 1) return tbody.innerHTML = `<tr><td class="text-center p-3">No Data found</td></tr>`
+        if (currentData.length < 1) return tbody.innerHTML = `<tr><td></td><td class="text-center p-3">No Data found</td><td></td><td></td></tr>`
 
         tbody.innerHTML = currentData
             .map((brand) => {

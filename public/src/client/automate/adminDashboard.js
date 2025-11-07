@@ -1,8 +1,7 @@
 "use strict";
 
 
-
-define("forum/automate/escalationsv2", ["./adminDashboard/detailModal", "api", "./adminDashboard/chart", "./adminDashboard/renderTable"], (modal, api, chart, table) => {
+define("forum/automate/adminDashboard", ["./adminDashboard/detailModal", "api", "./adminDashboard/chart", "./adminDashboard/renderTable"], (modal, api, chart, table) => {
     const dashboard = {}
 
     dashboard.init = () => {
@@ -81,10 +80,9 @@ define("forum/automate/escalationsv2", ["./adminDashboard/detailModal", "api", "
             const date = $(this).data('date');
             // api call
             const data = await api.get(`/automate/dashboard/summary/${brandName}/${date}`)
-            console.log("this is me doing random stuff -->128")
+           
             modal.rendarModal(brandName, data)
-            console.log("data of the detail modal", brandName,date)
-
+            
 
         });
 
@@ -105,7 +103,7 @@ define("forum/automate/escalationsv2", ["./adminDashboard/detailModal", "api", "
             const date = $(this).val();
             currentData = await api.get(`/automate/brand-escalations?date=${date}`)
             currentData = sortData(currentSort)
-            console.log("data of the api -->", currentData)
+            // console.log("data of the api -->", currentData)
             chart.renderCharts(barCtx, pieCtx, currentData);
             table.renderTable(currentData, tbody)
 

@@ -18,11 +18,11 @@ export function renderCharts(barCtx, pieCtx, brandData) {
 
     // Destroy existing charts if they exist
     if (chartInstances.barChart) {
-        console.log("Destroying existing bar chart");
+        // console.log("Destroying existing bar chart");
         chartInstances.barChart.destroy();
     }
     if (chartInstances.pieChart) {
-        console.log("Destroying existing pie chart");
+        // console.log("Destroying existing pie chart");
         chartInstances.pieChart.destroy();
     }
 
@@ -134,7 +134,7 @@ export function renderCharts(barCtx, pieCtx, brandData) {
     chartInstances.pieChart = new ApexCharts(pieCtx, pieOptions);
     chartInstances.pieChart.render();
 
-    console.log("Charts created successfully with ApexCharts:", chartInstances);
+
 }
 
 // SEPARATE COLOR GENERATION FUNCTION
