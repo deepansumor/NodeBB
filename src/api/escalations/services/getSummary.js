@@ -11,7 +11,7 @@ const {groupEscalationData} = require("./utils");
 async function getEscalationperBrand() {
   try {
 
-    const formattedDate = moment().subtract(2, 'days').format('YYYY-MM-DD');
+    const formattedDate = moment().subtract(1, 'days').format('YYYY-MM-DD');
     console.log("formattedDate for Escalation Summary:", formattedDate);
 
     const pipeline = [
