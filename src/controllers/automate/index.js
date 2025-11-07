@@ -1,9 +1,7 @@
-// "use strict";
 
-// const automateController = module.exports;
+"use strict";
 
-// automateController.get = async function (req, res, next) {
-// 	var escalationTable = {};
-// 	escalationTable.title = "escalation table";
-// 	res.render("automate/escalation", escalationTable);
-// };
+
+
+const Controllers = module.exports;
+Controllers.pdpAudit = require("./adminDashboard");

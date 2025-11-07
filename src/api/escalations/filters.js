@@ -1,6 +1,7 @@
 const db = require("../../database");
 const filters = module.exports
-
+const Aws = require("../agents/services/aws")
+const S3 = Aws.s3;
 
 filters.getTotalCount = async function (req) {
 
@@ -122,7 +123,7 @@ filters.optimiseFilter = async function (req) {
     const safeSkip = (safePage - 1) * limit;
 
     // Add pagination stages
-    pipeline.push({ $sort: {timestamp: -1 } })
+    pipeline.push({ $sort: { timestamp: -1 } })
     pipeline.push({ $skip: safeSkip });
     pipeline.push({ $limit: limit });
 
@@ -134,5 +135,92 @@ filters.optimiseFilter = async function (req) {
 
   } catch (error) {
     console.log("error in the filreter --->", error)
+  }
+}
+
+
+filters.getEscalationperBrand = async function (req) {
+  try {
+
+    const date = req.query.date || null
+    let today = date ? new Date(date) : new Date();
+
+    console.log("data from the filter -->",date,today)
+    const hours = today.getHours();
+    const minuts = today.getMinutes();
+    if (!date) {
+      if (hours >= 15 || (hours === 15 && minuts > 0)) {
+
+        today.setDate(today.getDate() - 1);
+      } else {
+        today.setDate(today.getDate() - 2);
+      }
+    }
+
+    const escalationDate = today.toISOString().split('T')[0];
+
+    const pipeline = [
+      {
+        $match: {
+          _key: { $regex: "^topic" },
+          escalationDate
+        }
+      },
+      {
+        $group: {
+          _id: { pcName: "$pcName", pcid: "$pcid" },
+          totalEscalation: { $sum: 1 },
+          date: { $first: "$escalationDate" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          name: "$_id.pcName",
+          id: "$_id.pcid",
+          totalEscalation: 1,
+          date: 1
+        }
+      }
+    ];
+
+    const result = await db.aggregation(pipeline);
+
+    console.log(result);
+    return result;
+
+  } catch (error) {
+    // add the return statement
+    console.log("Error in getEscalationperBrand API -->", error);
+    return error
+  }
+};
+
+filters.getAwsData = async function (req) {
+  try {
+    const BUCKET_NAME = "test-220425";
+    const brand = "brand123";
+    const dateStr = "2025-11-03"
+    const detailKey = `emsAiSummary/${brand}/${dateStr}/escalation-summary.json`;
+    const remarkKey = "emsAiSummary/182/2025-11-02/remark-summary.json"
+    const detailRes = await Aws.s3.getObject({
+      Bucket: BUCKET_NAME,
+      Key: detailKey,
+    }).promise();
+
+    const remarkRes = await Aws.s3.getObject({
+      Bucket: BUCKET_NAME,
+      Key: remarkKey,
+    }).promise();
+
+    const detailJson = detailRes.Body.toString("utf-8");
+
+    const result = JSON.parse(detailJson);
+    const remark = JSON.parse(remarkRes);
+    console.log(`✅ Loaded product data for ASIN: ${remark}`);
+    return { escalation: result, remark: remark };
+
+  } catch (error) {
+    console.log("error in the aws ", error)
   }
 }

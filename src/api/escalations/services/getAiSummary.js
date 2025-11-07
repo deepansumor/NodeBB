@@ -4,10 +4,11 @@ const AWS = require('../../agents/services/aws.js')
 
 
 
-const s3 = AWS.s3;
-console.log("S3 Client initialized:", s3);
+// const s3 = AWS.s3;
+// console.log("S3 Client initialized:", s3);
 
 const BUCKET_NAME = "test-220425";
+
 
 const formatDate = (date) => date.toISOString().split("T")[0];
 
@@ -16,7 +17,7 @@ const formatDate = (date) => date.toISOString().split("T")[0];
 // --- Helper to fetch and parse JSON from S3 ---
 async function fetchJsonFromS3(key) {
   try {
-    const data = await s3
+    const data = await AWS.s3
       .getObject({ Bucket: BUCKET_NAME, Key: key })
       .promise(); // ✅ Important: .promise()
 
@@ -34,25 +35,25 @@ async function fetchJsonFromS3(key) {
 // // --- 1️⃣ Fetch Escalation Summary for Yesterday ---
 const getEscalationSummary = async (req, res) => {
   try {
-    // const { brandId } = req.params;
-    const brandId = "brand123";
+    const { brandId,date } = req.params;
+    // const brandId = "brand123";
 
-    const yesterday = new Date();
+    const yesterday = new Date(date);
     yesterday.setDate(yesterday.getDate() - 1);
     const dateStr = formatDate(yesterday);
+    const detailKey = `emsAiSummary/${brandId}/${dateStr}/escalation-summary.json`;
+    const remarkKey = `emsAiSummary/${brandId}/${dateStr}/remark-summary.json`
+    console.log("the keys ",detailKey,remarkKey)
+    const detailRes = await fetchJsonFromS3(detailKey)
+     
+    const remarkRes = await fetchJsonFromS3(remarkKey)
 
-    const key = `emsAiSummary/${brandId}/${dateStr}/escalation-summary.json`;
-    const summaryData = await fetchJsonFromS3(key);
-    console.log("Fetched Escalation Summary Data:", summaryData);
-
-    if (!summaryData) {
-      return null;
-    }
-
-    return summaryData;
+  
+    // console.log(`✅ Loaded product data for ASIN: ${remark}`);
+    return { escalation: detailRes, remark: remarkRes };
 
   } catch (error) {
-    res.status(500).json({ success: false, message: "Error fetching escalation summary" });
+    console.log("error in the aws ", error)
   }
 };
 
@@ -85,6 +86,7 @@ const getRemarkSummary = async (req, res) => {
     }
 
     return results;
+   
 
   } catch (error) {
     console.error(`❌ Error fetching remark summaries:`, error);

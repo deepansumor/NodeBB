@@ -33,10 +33,16 @@ module.exports = function (app, name, middleware, controllers) {
 		controllers.escape.get
 	);
 
-		setupPageRoute(
+	setupPageRoute(
 		app,
 		"/v2/escalations",
 		accountMiddlewares,
 		controllers.escalationV2.get
+	);
+	setupPageRoute(
+		app,
+		"/v2/escalations/overview",
+		accountMiddlewares,
+		controllers.adminDashboard.get
 	);
 };

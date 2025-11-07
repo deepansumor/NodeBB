@@ -50,6 +50,7 @@ Controllers.pthreshold = require("./p-threshold");
 Controllers.escalationV2 = require("./escalationsv2")
 
 Controllers.escape = require("./escape");
+Controllers.adminDashboard = require("./automate/adminDashboard")
 
 
 Controllers.dashboard = require("./auditAgent/dashboard");
