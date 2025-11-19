@@ -19,6 +19,7 @@ define("forum/automate/portfolio/handlers", [
       // Update state
       state.setCurrentAccount(selected.meta.profileId);
       helpers.renderWaitTimeSop(selected);
+      helpers.renderCritical(selected);
 
       // Update UI
       $('#accountId').val(selected.meta.profileId || '');
@@ -165,7 +166,9 @@ define("forum/automate/portfolio/handlers", [
         stage1: parseInt($('#stage1').val(), 10),
         stage2: parseInt($('#stage2').val(), 10)
       };
-
+      account.meta.critical = {
+        critical: $('#critical').val()||""
+      };
       apiService.saveThresholds(account)
         .then(() => {
           alert("Thresholds saved successfully!") ;

@@ -69,7 +69,7 @@
       <div class="col-md-6">
         <label class="form-label">Stage 2 <span class="required-indicator">*</span></label>
         <div class="input-group">
-          <input type="number" class="form-control" placeholder="Enter days" value="7" min="1" id="stage2"  />
+          <input type="number" class="form-control" placeholder="Enter days" value="7" min="1" id="stage2" disabled />
           <span class="input-group-text">days</span>
         </div>
         <div class="invalid-feedback d-none" id="stage2Error">Stage 2 wait time is required</div>
@@ -84,6 +84,36 @@
             <li>If an escalation is not resolved within Stage 1 timeframe, it moves to Stage 2</li>
             <li>If still unresolved after Stage 2 timeframe, it escalates to Stage 3</li>
             <li>Configure appropriate wait times based on your team's response capabilities</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Critical Threshold -->
+  <div class="section-card">
+    <h6 class="card-title">Critical Threshold</h6>
+    <p class="card-description">This is critical threshold value if this threshold breach the escalation will send ops head and the brand Pocs</p>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Critical </label>
+        <div class="input-group">
+          <input type="number" class="form-control" placeholder="Enter 20/35/52.." value="30" min="10" id="critical"  />
+          <span class="input-group-text">%</span>
+        </div>
+        
+      </div>
+     
+    </div>
+    <div class="mt-3 info-box info-box-blue">
+      <div class="d-flex align-items-start">
+        <i class="bi bi-info-circle me-2 mt-1 flex-shrink-0"></i>
+        <div>
+          <p class="fw-medium mb-1 small">Critical Threshold:</p>
+          <ul class="mb-0 small ps-3">
+            <li>Critical threshold is the buffer addon with the threshold </li>
+            <li>This indicate a big change observed in that particular portfolio</li>
+            <li>Example- if we set the sales 2% and we added critical 50% , this mean the critical threshold became 3% (threshold+ critical % of threshold)</li>
           </ul>
         </div>
       </div>

@@ -102,8 +102,9 @@ function saveThresholds(account) {
     meta: {
       profileId: account.meta.profileId,
       waitTimeSop: account.meta.waitTimeSop,
+      critical : account.meta.critical || "",
       updatedAt: new Date().toISOString(),
-      updatedBy: "Current User",
+      updatedBy:  app?.user?.username||"Current User",
       portfolios: account.meta.portfolios.map(p => ({
         portfolioId: p.portfolioId,
         portfolioName: p.portfolioName,
@@ -130,6 +131,7 @@ function updateAlertsStatus(account) {
     meta: {
       profileId: account.meta.profileId,
       waitTimeSop: account.meta.waitTimeSop,
+      critical : account.meta.critical || "",
       updatedAt: new Date().toISOString(),
       updatedBy: "Current User",
       portfolios: account.meta.portfolios.map(p => ({

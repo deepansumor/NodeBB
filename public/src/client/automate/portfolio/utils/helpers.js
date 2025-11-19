@@ -120,6 +120,14 @@ function renderWaitTimeSop(account) {
   }
 }
 
+function renderCritical(account) {
+  const critical = account?.meta?.critical || {};
+
+  $('#critical').val()||"";
+
+
+}
+
 
 // update portfolio metrics
   function updatePortfolioMetric(portfolioId, metric, value) {
@@ -182,6 +190,7 @@ function renderWaitTimeSop(account) {
     useDefaults,
     applyToAll,
     renderWaitTimeSop,
+    renderCritical,
     updatePortfolioMetric,
     togglePortfolioExpanded,
     togglePortfolioEnabled,
