@@ -69,7 +69,7 @@
       <div class="col-md-6">
         <label class="form-label">Stage 2 <span class="required-indicator">*</span></label>
         <div class="input-group">
-          <input type="number" class="form-control" placeholder="Enter days" value="7" min="1" id="stage2" disabled />
+          <input type="number" class="form-control" placeholder="Enter days"  id="stage2" disabled />
           <span class="input-group-text">days</span>
         </div>
         <div class="invalid-feedback d-none" id="stage2Error">Stage 2 wait time is required</div>
@@ -98,7 +98,7 @@
       <div class="col-md-6">
         <label class="form-label">Critical </label>
         <div class="input-group">
-          <input type="number" class="form-control" placeholder="Enter 20/35/52.." value="30" min="10" id="critical"  />
+          <input type="number" class="form-control" placeholder="Enter 20/35/52.." id="critical"  />
           <span class="input-group-text">%</span>
         </div>
         

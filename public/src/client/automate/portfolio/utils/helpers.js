@@ -116,14 +116,14 @@ function renderWaitTimeSop(account) {
     $('#stage2').prop('disabled', true);
   } else {
     $('#stage1').prop('disabled', false);
-    $('#stage2').prop('disabled', false);
+    // $('#stage2').prop('disabled', false);
   }
 }
 
 function renderCritical(account) {
   const critical = account?.meta?.critical || {};
 
-  $('#critical').val()||"";
+  $('#critical').val(critical?.critical)||"";
 
 
 }
